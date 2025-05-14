@@ -1,0 +1,45 @@
+type ExamType @model @auth(rules: [{allow: public, operations: [read]}]) {
+  id: ID!
+  name: String!
+  description: String
+  questions: [Question] @hasMany
+}
+
+type Question @model @auth(rules: [{allow: public, operations: [read]}]) {
+  id: ID!
+  text: String!
+  options: [Option]
+  correctAnswer: String!
+  explanation: String
+  difficulty: String
+  examTypeID: ID! @index(name: "byExamType")
+  isAIGenerated: Boolean
+  topic: String
+}
+
+type Option {
+  id: String!
+  text: String!
+}
+
+type User @model @auth(rules: [{allow: owner}]) {
+  id: ID!
+  email: String!
+  name: String
+  examAttempts: [ExamAttempt] @hasMany
+}
+
+type ExamAttempt @model @auth(rules: [{allow: owner}]) {
+  id: ID!
+  userID: ID! @index(name: "byUser")
+  examTypeID: ID! @index(name: "byExamType")
+  score: Float
+  completedAt: AWSDateTime
+  answers: [Answer]
+}
+
+type Answer {
+  questionID: ID!
+  selectedOption: String
+  isCorrect: Boolean
+}
