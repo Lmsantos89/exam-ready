@@ -8,7 +8,7 @@ const bedrockRuntime = new AWS.BedrockRuntime({
 /**
  * Generates a certification exam question using Amazon Bedrock
  */
-exports.handler = async (event, context) => {
+exports.handler = async (event) => {
   try {
     // Parse request body
     const body = JSON.parse(event.body || '{}');
@@ -19,7 +19,8 @@ exports.handler = async (event, context) => {
         statusCode: 400,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': '*'
         },
         body: JSON.stringify({ error: 'examType is required' })
       };
@@ -94,7 +95,8 @@ Format the response as a JSON object with the following structure:
       statusCode: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*'
       },
       body: JSON.stringify({
         id: questionId,
@@ -111,7 +113,8 @@ Format the response as a JSON object with the following structure:
       statusCode: 500,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*'
       },
       body: JSON.stringify({ error: 'Failed to generate question' })
     };

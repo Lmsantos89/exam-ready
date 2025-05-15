@@ -7,7 +7,7 @@
             "UserPoolId"
           ],
           "category": "auth",
-          "resourceName": "examready71adb0ce"
+          "resourceName": "examreadyb0985a08"
         }
       ],
       "output": {
@@ -16,7 +16,7 @@
             {
               "authenticationType": "AMAZON_COGNITO_USER_POOLS",
               "userPoolConfig": {
-                "userPoolId": "authexamready71adb0ce"
+                "userPoolId": "authexamreadyb0985a08"
               }
             }
           ],
@@ -33,7 +33,7 @@
     }
   },
   "auth": {
-    "examready71adb0ce": {
+    "examreadyb0985a08": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -61,7 +61,7 @@
     }
   },
   "function": {
-    "generateQuestion": {
+    "generateQuestionNew": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
@@ -75,19 +75,19 @@
     }
   },
   "parameters": {
-    "AMPLIFY_function_generateQuestion_deploymentBucketName": {
+    "AMPLIFY_function_generateQuestionNew_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "generateQuestion"
+          "resourceName": "generateQuestionNew"
         }
       ]
     },
-    "AMPLIFY_function_generateQuestion_s3Key": {
+    "AMPLIFY_function_generateQuestionNew_s3Key": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "generateQuestion"
+          "resourceName": "generateQuestionNew"
         }
       ]
     },

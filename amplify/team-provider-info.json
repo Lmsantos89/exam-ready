@@ -1,34 +1,34 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-examready-dev-27887-authRole",
-      "UnauthRoleArn": "arn:aws:iam::715841336373:role/amplify-examready-dev-27887-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::715841336373:role/amplify-examready-dev-27887-authRole",
+      "AuthRoleName": "amplify-examready-dev-53a12-authRole",
+      "UnauthRoleArn": "arn:aws:iam::715841336373:role/amplify-examready-dev-53a12-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::715841336373:role/amplify-examready-dev-53a12-authRole",
       "Region": "eu-central-1",
-      "DeploymentBucketName": "amplify-examready-dev-27887-deployment",
-      "UnauthRoleName": "amplify-examready-dev-27887-unauthRole",
-      "StackName": "amplify-examready-dev-27887",
-      "StackId": "arn:aws:cloudformation:eu-central-1:715841336373:stack/amplify-examready-dev-27887/6b47ab40-3102-11f0-92f7-02e9b8671fcf",
-      "AmplifyAppId": "d24wqtqr2yl1qp"
+      "DeploymentBucketName": "amplify-examready-dev-53a12-deployment",
+      "UnauthRoleName": "amplify-examready-dev-53a12-unauthRole",
+      "StackName": "amplify-examready-dev-53a12",
+      "StackId": "arn:aws:cloudformation:eu-central-1:715841336373:stack/amplify-examready-dev-53a12/14751510-311f-11f0-afd5-02ebb8a4e56f",
+      "AmplifyAppId": "d3t3higj0c0xfm"
     },
     "categories": {
       "auth": {
-        "examready71adb0ce": {}
+        "examreadyb0985a08": {}
       },
       "function": {
-        "generateQuestion": {
-          "deploymentBucketName": "amplify-examready-dev-27887-deployment",
-          "s3Key": "amplify-builds/generateQuestion-39337a516c376f2f3445-build.zip"
+        "generateQuestionNew": {
+          "deploymentBucketName": "amplify-examready-dev-53a12-deployment",
+          "s3Key": "amplify-builds/generateQuestionNew-357334736561314d4239-build.zip"
+        }
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d3t3higj0c0xfm",
+          "type": "manual"
         }
       },
       "api": {
         "examready": {}
-      },
-      "hosting": {
-        "amplifyhosting": {
-          "appId": "d24wqtqr2yl1qp",
-          "type": "manual"
-        }
       }
     }
   }

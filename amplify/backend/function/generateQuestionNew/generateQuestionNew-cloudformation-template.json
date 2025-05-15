@@ -47,12 +47,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "generateQuestion",
+            "generateQuestionNew",
             {
               "Fn::Join": [
                 "",
                 [
-                  "generateQuestion",
+                  "generateQuestionNew",
                   "-",
                   {
                     "Ref": "env"
@@ -89,12 +89,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "examreadyLambdaRoleaf7bb2a2",
+            "examreadyLambdaRole6125f934",
             {
               "Fn::Join": [
                 "",
                 [
-                  "examreadyLambdaRoleaf7bb2a2",
+                  "examreadyLambdaRole6125f934",
                   "-",
                   {
                     "Ref": "env"
@@ -142,7 +142,8 @@
               "Action": [
                 "logs:CreateLogGroup",
                 "logs:CreateLogStream",
-                "logs:PutLogEvents"
+                "logs:PutLogEvents",
+                "bedrock:InvokeModel"
               ],
               "Resource": {
                 "Fn::Sub": [
@@ -160,13 +161,6 @@
                   }
                 ]
               }
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "bedrock:InvokeModel"
-              ],
-              "Resource": "*"
             }
           ]
         }
