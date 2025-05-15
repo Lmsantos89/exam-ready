@@ -86,6 +86,8 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
       await Auth.signOut();
       setIsAuthenticated(false);
       setUser(null);
+      // Redirect to home page after signing out
+      window.location.href = '/';
     } catch (error) {
       console.error('Error signing out:', error);
     }
