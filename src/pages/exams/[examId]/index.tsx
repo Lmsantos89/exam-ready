@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import AuthRequired from '../../../components/AuthRequired';
 
 // Mock exam data
 const MOCK_EXAMS = {
@@ -86,7 +87,11 @@ export default function Exam() {
   }, [currentExam, examCompleted]);
   
   if (!currentExam) {
-    return <div className="p-8 text-center">Loading exam...</div>;
+    return (
+      <AuthRequired>
+        <div className="p-8 text-center">Loading exam...</div>
+      </AuthRequired>
+    );
   }
   
   const currentQuestion = currentExam.questions[currentQuestionIndex];
@@ -138,10 +143,11 @@ export default function Exam() {
   if (examCompleted) {
     const score = calculateScore();
     return (
-      <div className="min-h-screen bg-gray-50 p-8">
-        <Head>
-          <title>Exam Results | ExamReady</title>
-        </Head>
+      <AuthRequired>
+        <div className="min-h-screen bg-gray-50 p-8">
+          <Head>
+            <title>Exam Results | ExamReady</title>
+          </Head>
         
         <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow">
           <h1 className="text-2xl font-bold mb-6">Exam Results: {currentExam.title}</h1>
@@ -199,14 +205,16 @@ export default function Exam() {
           </div>
         </div>
       </div>
+      </AuthRequired>
     );
   }
   
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Head>
-        <title>{currentExam.title} | ExamReady</title>
-      </Head>
+    <AuthRequired>
+      <div className="min-h-screen bg-gray-50">
+        <Head>
+          <title>{currentExam.title} | ExamReady</title>
+        </Head>
       
       <div className="p-4 bg-white shadow fixed top-0 left-0 right-0 z-10">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
@@ -307,5 +315,6 @@ export default function Exam() {
         </div>
       </main>
     </div>
+    </AuthRequired>
   );
 }

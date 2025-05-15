@@ -4,6 +4,7 @@ import Head from 'next/head';
 import AIQuestionGenerator from '../../../components/AIQuestionGenerator';
 import { getExamById, getQuestionsByExamId, saveQuestion } from '../../../services/exams/examService';
 import Link from 'next/link';
+import AuthRequired from '../../../components/AuthRequired';
 
 export default function PracticeMode() {
   const router = useRouter();
@@ -134,10 +135,11 @@ export default function PracticeMode() {
   // Rest of the component remains the same...
   
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Head>
-        <title>Practice Mode: {currentExam.name} | ExamReady</title>
-      </Head>
+    <AuthRequired>
+      <div className="min-h-screen bg-gray-50">
+        <Head>
+          <title>Practice Mode: {currentExam.name} | ExamReady</title>
+        </Head>
       
       <div className="p-4 bg-white shadow fixed top-0 left-0 right-0 z-10">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
@@ -271,5 +273,6 @@ export default function PracticeMode() {
         </div>
       </main>
     </div>
+    </AuthRequired>
   );
 }

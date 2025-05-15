@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { getExams } from '../../services/exams/examService';
+import ExamLink from '../../components/ExamLink';
 
 export default function Exams() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -74,12 +75,12 @@ export default function Exams() {
                     </div>
                   </div>
                   <div className="flex gap-3">
-                    <Link href={`/exams/${exam.id}`} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-medium">
+                    <ExamLink href={`/exams/${exam.id}`} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-medium text-center">
                       Start Exam
-                    </Link>
-                    <Link href={`/exams/${exam.id}/practice`} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-medium">
+                    </ExamLink>
+                    <ExamLink href={`/exams/${exam.id}/practice`} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-medium text-center">
                       Practice Mode
-                    </Link>
+                    </ExamLink>
                   </div>
                 </div>
               </div>
