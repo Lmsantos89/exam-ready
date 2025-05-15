@@ -61,6 +61,7 @@ export const onCreateExamType = /* GraphQL */ `subscription OnCreateExamType($fi
     }
     createdAt
     updatedAt
+    owner
     __typename
   }
 }
@@ -79,6 +80,7 @@ export const onUpdateExamType = /* GraphQL */ `subscription OnUpdateExamType($fi
     }
     createdAt
     updatedAt
+    owner
     __typename
   }
 }
@@ -97,6 +99,7 @@ export const onDeleteExamType = /* GraphQL */ `subscription OnDeleteExamType($fi
     }
     createdAt
     updatedAt
+    owner
     __typename
   }
 }
@@ -122,6 +125,7 @@ export const onCreateQuestion = /* GraphQL */ `subscription OnCreateQuestion($fi
     createdAt
     updatedAt
     examTypeQuestionsId
+    owner
     __typename
   }
 }
@@ -147,6 +151,7 @@ export const onUpdateQuestion = /* GraphQL */ `subscription OnUpdateQuestion($fi
     createdAt
     updatedAt
     examTypeQuestionsId
+    owner
     __typename
   }
 }
@@ -172,6 +177,7 @@ export const onDeleteQuestion = /* GraphQL */ `subscription OnDeleteQuestion($fi
     createdAt
     updatedAt
     examTypeQuestionsId
+    owner
     __typename
   }
 }

@@ -1,4 +1,9 @@
-const AWS = require('aws-sdk');
+/* Amplify Params - DO NOT EDIT
+	API_GENERATEQUESTIONAPI_APIID
+	API_GENERATEQUESTIONAPI_APINAME
+	ENV
+	REGION
+Amplify Params - DO NOT EDIT */const AWS = require('aws-sdk');
 
 // Initialize the Bedrock client
 const bedrockRuntime = new AWS.BedrockRuntime({

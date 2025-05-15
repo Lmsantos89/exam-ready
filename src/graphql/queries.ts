@@ -49,6 +49,7 @@ export const getExamType = /* GraphQL */ `query GetExamType($id: ID!) {
     }
     createdAt
     updatedAt
+    owner
     __typename
   }
 }
@@ -68,6 +69,7 @@ export const listExamTypes = /* GraphQL */ `query ListExamTypes(
       description
       createdAt
       updatedAt
+      owner
       __typename
     }
     nextToken
@@ -96,6 +98,7 @@ export const getQuestion = /* GraphQL */ `query GetQuestion($id: ID!) {
     createdAt
     updatedAt
     examTypeQuestionsId
+    owner
     __typename
   }
 }
@@ -121,6 +124,7 @@ export const listQuestions = /* GraphQL */ `query ListQuestions(
       createdAt
       updatedAt
       examTypeQuestionsId
+      owner
       __typename
     }
     nextToken
@@ -157,6 +161,7 @@ export const questionsByExamTypeID = /* GraphQL */ `query QuestionsByExamTypeID(
       createdAt
       updatedAt
       examTypeQuestionsId
+      owner
       __typename
     }
     nextToken

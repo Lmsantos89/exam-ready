@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/generateQuestion": {
+      "name": "/generateQuestion",
+      "lambdaFunction": "generateQuestionNew",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

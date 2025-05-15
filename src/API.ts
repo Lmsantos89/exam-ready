@@ -91,6 +91,7 @@ export type ModelExamTypeConditionInput = {
   not?: ModelExamTypeConditionInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
+  owner?: ModelStringInput | null,
 };
 
 export type ExamType = {
@@ -101,6 +102,7 @@ export type ExamType = {
   questions?: ModelQuestionConnection | null,
   createdAt: string,
   updatedAt: string,
+  owner?: string | null,
 };
 
 export type ModelQuestionConnection = {
@@ -123,6 +125,7 @@ export type Question = {
   createdAt: string,
   updatedAt: string,
   examTypeQuestionsId?: string | null,
+  owner?: string | null,
 };
 
 export type Option = {
@@ -173,6 +176,7 @@ export type ModelQuestionConditionInput = {
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   examTypeQuestionsId?: ModelIDInput | null,
+  owner?: ModelStringInput | null,
 };
 
 export type ModelIDInput = {
@@ -362,6 +366,7 @@ export type ModelExamTypeFilterInput = {
   and?: Array< ModelExamTypeFilterInput | null > | null,
   or?: Array< ModelExamTypeFilterInput | null > | null,
   not?: ModelExamTypeFilterInput | null,
+  owner?: ModelStringInput | null,
 };
 
 export type ModelExamTypeConnection = {
@@ -385,6 +390,7 @@ export type ModelQuestionFilterInput = {
   or?: Array< ModelQuestionFilterInput | null > | null,
   not?: ModelQuestionFilterInput | null,
   examTypeQuestionsId?: ModelIDInput | null,
+  owner?: ModelStringInput | null,
 };
 
 export enum ModelSortDirection {
@@ -475,6 +481,7 @@ export type ModelSubscriptionExamTypeFilterInput = {
   and?: Array< ModelSubscriptionExamTypeFilterInput | null > | null,
   or?: Array< ModelSubscriptionExamTypeFilterInput | null > | null,
   examTypeQuestionsId?: ModelSubscriptionIDInput | null,
+  owner?: ModelStringInput | null,
 };
 
 export type ModelSubscriptionQuestionFilterInput = {
@@ -490,6 +497,7 @@ export type ModelSubscriptionQuestionFilterInput = {
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionQuestionFilterInput | null > | null,
   or?: Array< ModelSubscriptionQuestionFilterInput | null > | null,
+  owner?: ModelStringInput | null,
 };
 
 export type ModelSubscriptionBooleanInput = {
@@ -599,6 +607,7 @@ export type CreateExamTypeMutation = {
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -619,6 +628,7 @@ export type UpdateExamTypeMutation = {
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -639,6 +649,7 @@ export type DeleteExamTypeMutation = {
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -666,6 +677,7 @@ export type CreateQuestionMutation = {
     createdAt: string,
     updatedAt: string,
     examTypeQuestionsId?: string | null,
+    owner?: string | null,
   } | null,
 };
 
@@ -693,6 +705,7 @@ export type UpdateQuestionMutation = {
     createdAt: string,
     updatedAt: string,
     examTypeQuestionsId?: string | null,
+    owner?: string | null,
   } | null,
 };
 
@@ -720,6 +733,7 @@ export type DeleteQuestionMutation = {
     createdAt: string,
     updatedAt: string,
     examTypeQuestionsId?: string | null,
+    owner?: string | null,
   } | null,
 };
 
@@ -916,6 +930,7 @@ export type GetExamTypeQuery = {
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -935,6 +950,7 @@ export type ListExamTypesQuery = {
       description?: string | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -963,6 +979,7 @@ export type GetQuestionQuery = {
     createdAt: string,
     updatedAt: string,
     examTypeQuestionsId?: string | null,
+    owner?: string | null,
   } | null,
 };
 
@@ -988,6 +1005,7 @@ export type ListQuestionsQuery = {
       createdAt: string,
       updatedAt: string,
       examTypeQuestionsId?: string | null,
+      owner?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -1017,6 +1035,7 @@ export type QuestionsByExamTypeIDQuery = {
       createdAt: string,
       updatedAt: string,
       examTypeQuestionsId?: string | null,
+      owner?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -1229,6 +1248,7 @@ export type OnCreateExamTypeSubscription = {
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -1248,6 +1268,7 @@ export type OnUpdateExamTypeSubscription = {
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -1267,6 +1288,7 @@ export type OnDeleteExamTypeSubscription = {
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -1293,6 +1315,7 @@ export type OnCreateQuestionSubscription = {
     createdAt: string,
     updatedAt: string,
     examTypeQuestionsId?: string | null,
+    owner?: string | null,
   } | null,
 };
 
@@ -1319,6 +1342,7 @@ export type OnUpdateQuestionSubscription = {
     createdAt: string,
     updatedAt: string,
     examTypeQuestionsId?: string | null,
+    owner?: string | null,
   } | null,
 };
 
@@ -1345,6 +1369,7 @@ export type OnDeleteQuestionSubscription = {
     createdAt: string,
     updatedAt: string,
     examTypeQuestionsId?: string | null,
+    owner?: string | null,
   } | null,
 };
 

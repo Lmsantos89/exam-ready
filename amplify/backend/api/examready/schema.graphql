@@ -7,14 +7,19 @@ type Todo @model {
   name: String!
   description: String
 }
-type ExamType @model @auth(rules: [{allow: public, operations: [read]}]) {
+type ExamType @model @auth(rules: [  
+  {allow: public, operations: [read]},
+  {allow: owner, operations: [create, update, delete]}]) {
   id: ID!
   name: String!
   description: String
   questions: [Question] @hasMany
 }
 
-type Question @model @auth(rules: [{allow: public, operations: [read]}]) {
+type Question @model @auth(rules: [
+  {allow: public, operations: [read]},
+  {allow: owner, operations: [create, update, delete]}
+]) {
   id: ID!
   text: String!
   options: [Option]
