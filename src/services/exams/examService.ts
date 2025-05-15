@@ -16,7 +16,36 @@ export async function getExams() {
     const response = await API.graphql<GraphQLQuery<ListExamTypesQuery>>(
       graphqlOperation(listExamTypes)
     );
-    return response.data?.listExamTypes?.items || [];
+    
+    const exams = response.data?.listExamTypes?.items || [];
+    
+    // Fetch question counts for each exam
+    const examsWithQuestionCounts = await Promise.all(
+      exams.map(async (exam) => {
+        try {
+          const questionsResponse = await API.graphql<GraphQLQuery<ListQuestionsQuery>>(
+            graphqlOperation(listQuestions, {
+              filter: { examTypeID: { eq: exam.id } }
+            })
+          );
+          
+          const questionCount = questionsResponse.data?.listQuestions?.items?.length || 0;
+          
+          return {
+            ...exam,
+            questions: {
+              items: questionsResponse.data?.listQuestions?.items || [],
+              nextToken: questionsResponse.data?.listQuestions?.nextToken
+            }
+          };
+        } catch (err) {
+          console.error(`Error fetching questions for exam ${exam.id}:`, err);
+          return exam;
+        }
+      })
+    );
+    
+    return examsWithQuestionCounts;
   } catch (error) {
     console.error('Error fetching exams:', error);
     throw error;
