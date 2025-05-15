@@ -2,7 +2,7 @@
 
 import { API, graphqlOperation } from 'aws-amplify';
 import { GraphQLQuery, GraphQLResult } from '@aws-amplify/api';
-import { listExamTypes, getExamType, listQuestions } from '../../graphql/queries';
+import { listExamTypes, getExamType, listQuestions, getQuestion, questionsByExamTypeID } from '../../graphql/queries';
 import { createQuestion } from '../../graphql/mutations';
 import { 
   ListExamTypesQuery, 
@@ -37,20 +37,69 @@ export async function getExamById(id: string) {
 
 export async function getQuestionsByExamId(examTypeID: string) {
   try {
-    const response = await API.graphql<GraphQLQuery<ListQuestionsQuery>>(
+    // Get all question IDs for this exam
+    const listResponse = await API.graphql<GraphQLQuery<ListQuestionsQuery>>(
       graphqlOperation(listQuestions, {
         filter: { examTypeID: { eq: examTypeID } }
       })
     );
-    return response.data?.listQuestions?.items || [];
+    
+    const questionIds = (listResponse.data?.listQuestions?.items || [])
+      .filter(q => q !== null)
+      .map(q => q!.id);
+    
+    // Fetch each question individually to get options
+    const fullQuestions = await Promise.all(
+      questionIds.map(async (id) => {
+        try {
+          const detailResponse = await API.graphql<GraphQLQuery<any>>(
+            graphqlOperation(getQuestion, { id })
+          ) as GraphQLResult<any>;
+          return detailResponse.data?.getQuestion;
+        } catch (err) {
+          console.error(`Error fetching question ${id}:`, err);
+          return null;
+        }
+      })
+    );
+    
+    // Filter out nulls and ensure options exist
+    return fullQuestions
+      .filter(q => q !== null)
+      .map(q => ({
+        ...q,
+        options: q.options || [
+          { id: 'a', text: 'Option A' },
+          { id: 'b', text: 'Option B' },
+          { id: 'c', text: 'Option C' },
+          { id: 'd', text: 'Option D' }
+        ]
+      }));
   } catch (error) {
     console.error('Error fetching questions:', error);
     throw error;
   }
 }
 
-export async function saveQuestion(question: any) {
+// Define a type for the question input
+interface QuestionInput {
+  text: string;
+  options: Array<{id: string; text: string}>;
+  correctAnswer: string;
+  explanation?: string;
+  difficulty?: string;
+  examTypeID: string;
+  isAIGenerated?: boolean;
+  topic?: string;
+}
+
+export async function saveQuestion(question: QuestionInput) {
   try {
+    // Ensure question has options array with 4 items
+    if (!question.options || !Array.isArray(question.options) || question.options.length !== 4) {
+      throw new Error('Questions must have exactly 4 options');
+    }
+    
     const response = await API.graphql<GraphQLQuery<CreateQuestionMutation>>({
       query: createQuestion,
       variables: { input: question },

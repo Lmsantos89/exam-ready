@@ -66,7 +66,24 @@ export default function PracticeMode() {
     );
   }
   
-  const currentQuestion = practiceQuestions[currentQuestionIndex];
+  // Filter out questions without options to prevent errors
+  const validQuestions = practiceQuestions.filter(q => q.options && Array.isArray(q.options) && q.options.length > 0);
+  
+  // If no valid questions remain after filtering, show an error
+  if (validQuestions.length === 0) {
+    return (
+      <div className="p-8 text-center">
+        <p className="text-red-500 mb-4">No valid questions found. Questions must have answer options.</p>
+        <Link href="/exams" className="text-blue-600 hover:underline">
+          Return to exams
+        </Link>
+      </div>
+    );
+  }
+  
+  // Adjust currentQuestionIndex if it's out of bounds after filtering
+  const safeIndex = Math.min(currentQuestionIndex, validQuestions.length - 1);
+  const currentQuestion = validQuestions[safeIndex];
   
   const handleAnswerSelect = (optionId) => {
     setSelectedAnswer(optionId);
@@ -80,7 +97,7 @@ export default function PracticeMode() {
     setSelectedAnswer(null);
     setShowExplanation(false);
     
-    if (currentQuestionIndex < practiceQuestions.length - 1) {
+    if (currentQuestionIndex < validQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       // If we're at the end, go back to the first question
@@ -103,8 +120,10 @@ export default function PracticeMode() {
       // Add to local state
       setPracticeQuestions([...practiceQuestions, newQuestion]);
       
-      // Move to the new question
-      setCurrentQuestionIndex(practiceQuestions.length);
+      // Move to the new question - it will be added to validQuestions if it has options
+      if (newQuestion.options && Array.isArray(newQuestion.options) && newQuestion.options.length > 0) {
+        setCurrentQuestionIndex(validQuestions.length);
+      }
       setSelectedAnswer(null);
       setShowExplanation(false);
     } catch (err) {
@@ -126,7 +145,7 @@ export default function PracticeMode() {
             <Link href="/" className="font-bold text-2xl text-blue-600 mb-2 block">ExamReady</Link>
             <h1 className="text-xl font-bold">{currentExam.name} - Practice Mode</h1>
             <div className="text-sm text-gray-500">
-              Question {currentQuestionIndex + 1} of {practiceQuestions.length}
+              Question {currentQuestionIndex + 1} of {validQuestions.length}
             </div>
           </div>
           <button
@@ -148,34 +167,40 @@ export default function PracticeMode() {
               </div>
               
               <div className="mb-8">
-                {currentQuestion.options.map(option => (
-                  <div 
-                    key={option.id}
-                    className={`p-4 border rounded mb-3 cursor-pointer ${
-                      selectedAnswer === option.id 
-                        ? 'border-blue-500 bg-blue-50' 
-                        : showExplanation && option.id === currentQuestion.correctAnswer
-                          ? 'border-green-500 bg-green-50'
-                          : showExplanation && selectedAnswer === option.id
-                            ? 'border-red-500 bg-red-50'
-                            : 'hover:bg-gray-50'
-                    }`}
-                    onClick={() => !showExplanation && handleAnswerSelect(option.id)}
-                  >
-                    <div className="flex items-center">
-                      <div className={`w-6 h-6 rounded-full border flex items-center justify-center mr-3 ${
+                {currentQuestion.options && currentQuestion.options.length > 0 ? (
+                  currentQuestion.options.map(option => (
+                    <div 
+                      key={option.id}
+                      className={`p-4 border rounded mb-3 cursor-pointer ${
                         selectedAnswer === option.id 
-                          ? 'border-blue-500 bg-blue-500 text-white' 
+                          ? 'border-blue-500 bg-blue-50' 
                           : showExplanation && option.id === currentQuestion.correctAnswer
-                            ? 'border-green-500 bg-green-500 text-white'
-                            : 'border-gray-300'
-                      }`}>
-                        {option.id.toUpperCase()}
+                            ? 'border-green-500 bg-green-50'
+                            : showExplanation && selectedAnswer === option.id
+                              ? 'border-red-500 bg-red-50'
+                              : 'hover:bg-gray-50'
+                      }`}
+                      onClick={() => !showExplanation && handleAnswerSelect(option.id)}
+                    >
+                      <div className="flex items-center">
+                        <div className={`w-6 h-6 rounded-full border flex items-center justify-center mr-3 ${
+                          selectedAnswer === option.id 
+                            ? 'border-blue-500 bg-blue-500 text-white' 
+                            : showExplanation && option.id === currentQuestion.correctAnswer
+                              ? 'border-green-500 bg-green-500 text-white'
+                              : 'border-gray-300'
+                        }`}>
+                          {option.id.toUpperCase()}
+                        </div>
+                        <div>{option.text}</div>
                       </div>
-                      <div>{option.text}</div>
                     </div>
+                  ))
+                ) : (
+                  <div className="p-4 border rounded mb-3 bg-yellow-50 text-yellow-700">
+                    This question is missing answer options. Please contact an administrator.
                   </div>
-                ))}
+                )}
               </div>
               
               {showExplanation ? (
@@ -221,7 +246,7 @@ export default function PracticeMode() {
             <div className="bg-white p-6 rounded-lg shadow mt-6">
               <h2 className="text-xl font-semibold mb-4">Question Navigator</h2>
               <div className="flex flex-wrap gap-2">
-                {practiceQuestions.map((q, index) => (
+                {validQuestions.map((q, index) => (
                   <button
                     key={q.id}
                     onClick={() => {
