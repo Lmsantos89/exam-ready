@@ -49,7 +49,6 @@ export const getExamType = /* GraphQL */ `query GetExamType($id: ID!) {
     }
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -69,7 +68,6 @@ export const listExamTypes = /* GraphQL */ `query ListExamTypes(
       description
       createdAt
       updatedAt
-      owner
       __typename
     }
     nextToken

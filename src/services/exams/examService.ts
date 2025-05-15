@@ -1,11 +1,13 @@
+// src/services/exams/examService.ts
+
 import { API, graphqlOperation } from 'aws-amplify';
 import { GraphQLQuery, GraphQLResult } from '@aws-amplify/api';
-import { listExamTypes, getExamType } from '../../graphql/queries';
-import { createExamType, createQuestion } from '../../graphql/mutations';
+import { listExamTypes, getExamType, listQuestions } from '../../graphql/queries';
+import { createQuestion } from '../../graphql/mutations';
 import { 
   ListExamTypesQuery, 
   GetExamTypeQuery,
-  CreateExamTypeMutation,
+  ListQuestionsQuery,
   CreateQuestionMutation
 } from '../../API';
 
@@ -33,41 +35,27 @@ export async function getExamById(id: string) {
   }
 }
 
-export async function createExam(exam: any) {
+export async function getQuestionsByExamId(examTypeID: string) {
   try {
-    // Define a custom mutation that doesn't request the questions field
-    const createExamTypeCustom = /* GraphQL */ `
-      mutation CreateExamType($input: CreateExamTypeInput!) {
-        createExamType(input: $input) {
-          id
-          name
-          description
-          createdAt
-          updatedAt
-          owner
-        }
-      }
-    `;
-
-    // Use AMAZON_COGNITO_USER_POOLS as the authentication type
-    const response = await API.graphql({
-      query: createExamTypeCustom, // Use the custom mutation here
-      variables: { input: exam },
-      authMode: 'AMAZON_COGNITO_USER_POOLS'
-    }) as GraphQLResult<CreateExamTypeMutation>;
-    
-    return response.data?.createExamType;
+    const response = await API.graphql<GraphQLQuery<ListQuestionsQuery>>(
+      graphqlOperation(listQuestions, {
+        filter: { examTypeID: { eq: examTypeID } }
+      })
+    );
+    return response.data?.listQuestions?.items || [];
   } catch (error) {
-    console.error('Error creating exam:', error);
+    console.error('Error fetching questions:', error);
     throw error;
   }
 }
 
 export async function saveQuestion(question: any) {
   try {
-    const response = await API.graphql<GraphQLQuery<CreateQuestionMutation>>(
-      graphqlOperation(createQuestion, { input: question })
-    ) as GraphQLResult<CreateQuestionMutation>;
+    const response = await API.graphql<GraphQLQuery<CreateQuestionMutation>>({
+      query: createQuestion,
+      variables: { input: question },
+      authMode: 'API_KEY' // Allow unauthenticated users to save questions
+    }) as GraphQLResult<CreateQuestionMutation>;
     
     return response.data?.createQuestion;
   } catch (error) {

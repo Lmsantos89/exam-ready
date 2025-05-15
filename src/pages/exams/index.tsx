@@ -88,11 +88,6 @@ export default function Exams() {
         ) : (
           <div className="text-center py-12">
             <p className="text-xl text-gray-600">No exams found matching your search.</p>
-            <p className="mt-4">
-              <Link href="/admin/exams/new" className="text-blue-600 hover:underline">
-                Create a new exam
-              </Link>
-            </p>
           </div>
         )}
       </main>

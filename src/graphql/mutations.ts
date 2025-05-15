@@ -73,7 +73,6 @@ export const createExamType = /* GraphQL */ `mutation CreateExamType(
     }
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -95,7 +94,6 @@ export const updateExamType = /* GraphQL */ `mutation UpdateExamType(
     }
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -117,7 +115,6 @@ export const deleteExamType = /* GraphQL */ `mutation DeleteExamType(
     }
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
