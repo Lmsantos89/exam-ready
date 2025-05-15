@@ -1,11 +1,13 @@
 import { Amplify } from 'aws-amplify';
-import awsconfig from '../aws-exports';
+import config from '../amplifyconfiguration.json';
 
 // Configure Amplify
 export const configureAmplify = () => {
-  // Only configure if aws-exports.js exists
-  if (awsconfig) {
-    Amplify.configure(awsconfig);
+  try {
+    Amplify.configure(config);
+    console.log('Amplify configured successfully');
+  } catch (error) {
+    console.error('Error configuring Amplify:', error);
   }
 };
 
