@@ -19,6 +19,17 @@ export default function Navbar({ isAuthenticated, user, onSignIn, onSignOut }: N
           <Link href="/" className="font-bold text-2xl text-white">
             ExamReady
           </Link>
+          
+          {isAuthenticated && (
+            <div className="ml-8 space-x-4 hidden md:flex">
+              <Link href="/exams" className="text-white hover:text-blue-300">
+                Exams
+              </Link>
+              <Link href="/dashboard" className="text-white hover:text-blue-300">
+                Dashboard
+              </Link>
+            </div>
+          )}
         </div>
         
         <div className="flex items-center gap-4">
