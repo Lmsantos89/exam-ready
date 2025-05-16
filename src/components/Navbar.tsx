@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
+import { isUserAdmin } from '../services/auth/authService';
 
 interface NavbarProps {
   isAuthenticated: boolean;
@@ -11,6 +13,20 @@ interface NavbarProps {
 export default function Navbar({ isAuthenticated, user, onSignIn, onSignOut }: NavbarProps) {
   const router = useRouter();
   const isHomePage = router.pathname === '/';
+  const [isAdmin, setIsAdmin] = useState(false);
+  
+  useEffect(() => {
+    if (isAuthenticated) {
+      const checkAdminStatus = async () => {
+        const adminStatus = await isUserAdmin();
+        setIsAdmin(adminStatus);
+      };
+      
+      checkAdminStatus();
+    } else {
+      setIsAdmin(false);
+    }
+  }, [isAuthenticated, user]);
   
   return (
     <nav className="bg-gray-800 text-white shadow-md p-4">
@@ -28,6 +44,11 @@ export default function Navbar({ isAuthenticated, user, onSignIn, onSignOut }: N
               <Link href="/dashboard" className="text-white hover:text-blue-300">
                 Dashboard
               </Link>
+              {isAdmin && (
+                <Link href="/admin" className="text-white hover:text-blue-300">
+                  Admin
+                </Link>
+              )}
             </div>
           )}
         </div>
