@@ -8,8 +8,27 @@ import {
   ListExamTypesQuery, 
   GetExamTypeQuery,
   ListQuestionsQuery,
-  CreateQuestionMutation
+  CreateQuestionMutation,
+  GetQuestionQuery,
+  QuestionsByExamTypeIDQuery
 } from '../../API';
+
+export interface ExamWithQuestions {
+  id: string;
+  name: string;
+  description?: string;
+  questions: Array<{
+    id: string;
+    text: string;
+    options: Array<{id: string; text: string}>;
+    correctAnswer: string;
+    explanation?: string;
+    difficulty?: string;
+    examTypeID: string;
+    isAIGenerated?: boolean;
+    topic?: string;
+  }>;
+}
 
 export async function getExams() {
   try {
@@ -107,6 +126,44 @@ export async function getQuestionsByExamId(examTypeID: string) {
   } catch (error) {
     console.error('Error fetching questions:', error);
     throw error;
+  }
+}
+
+export async function getFullExamWithQuestions(examId: string): Promise<ExamWithQuestions | null> {
+  try {
+    // Get exam details
+    const examResponse = await API.graphql<GraphQLQuery<GetExamTypeQuery>>(
+      graphqlOperation(getExamType, { id: examId })
+    );
+    
+    const exam = examResponse.data?.getExamType;
+    if (!exam) {
+      return null;
+    }
+    
+    // Get questions for this exam
+    const questions = await getQuestionsByExamId(examId);
+    
+    // Return formatted exam with questions
+    return {
+      id: exam.id,
+      name: exam.name,
+      description: exam.description || undefined,
+      questions: questions.map(q => ({
+        id: q.id,
+        text: q.text,
+        options: q.options || [],
+        correctAnswer: q.correctAnswer,
+        explanation: q.explanation || undefined,
+        difficulty: q.difficulty || undefined,
+        examTypeID: q.examTypeID,
+        isAIGenerated: q.isAIGenerated || false,
+        topic: q.topic || undefined
+      }))
+    };
+  } catch (error) {
+    console.error('Error fetching full exam with questions:', error);
+    return null;
   }
 }
 
