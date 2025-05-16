@@ -52,11 +52,7 @@ export default function Home() {
         </div>
       </main>
 
-      <footer className="bg-gray-800 text-white py-8">
-        <div className="container mx-auto px-4 text-center">
-          <p>© {new Date().getFullYear()} ExamReady. All rights reserved.</p>
-        </div>
-      </footer>
+      {/* Footer is now handled by AuthWrapper */}
     </div>
   );
 }

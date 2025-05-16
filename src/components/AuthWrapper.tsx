@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Auth } from 'aws-amplify';
 import Navbar from './Navbar';
+import Footer from './Footer';
 
 interface AuthWrapperProps {
   children: React.ReactNode;
@@ -223,7 +224,7 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
   }
   
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <Navbar 
         isAuthenticated={isAuthenticated}
         user={user}
@@ -231,7 +232,11 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
         onSignOut={handleSignOut}
       />
       
-      {children}
+      <main className="flex-1">
+        {children}
+      </main>
+      
+      <Footer />
     </div>
   );
 }

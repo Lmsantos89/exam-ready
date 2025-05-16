@@ -5,9 +5,11 @@ import '../lib/amplifyConfig'; // Import the Amplify configuration
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <AuthWrapper>
-      <Component {...pageProps} />
-    </AuthWrapper>
+    <div className="flex flex-col min-h-screen">
+      <AuthWrapper>
+        <Component {...pageProps} />
+      </AuthWrapper>
+    </div>
   );
 }
 
