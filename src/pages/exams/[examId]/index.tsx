@@ -216,22 +216,24 @@ export default function Exam() {
           <title>{currentExam.title} | ExamReady</title>
         </Head>
       
-      <div className="p-4 bg-white shadow fixed top-0 left-0 right-0 z-10">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <div>
-            <h1 className="text-xl font-bold">{currentExam.title}</h1>
-            <div className="text-sm text-gray-500">
-              Question {currentQuestionIndex + 1} of {currentExam.questions.length}
+      <div>
+        <div className="p-4 bg-white shadow fixed top-16 left-0 right-0 z-10">
+          <div className="max-w-6xl mx-auto flex justify-between items-center">
+            <div>
+              <h1 className="text-xl font-bold">{currentExam.title}</h1>
+              <div className="text-sm text-gray-500">
+                Question {currentQuestionIndex + 1} of {currentExam.questions.length}
+              </div>
             </div>
-          </div>
-          <div className="text-right">
-            <div className="text-xl font-mono">{formatTime(timeRemaining)}</div>
-            <div className="text-sm text-gray-500">Time Remaining</div>
+            <div className="text-right">
+              <div className="text-xl font-mono">{formatTime(timeRemaining)}</div>
+              <div className="text-sm text-gray-500">Time Remaining</div>
+            </div>
           </div>
         </div>
       </div>
       
-      <main className="container mx-auto px-4 py-24">
+      <main className="container mx-auto px-4 py-32">
         <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow">
           <div className="mb-8">
             <h2 className="text-xl font-medium mb-4">Question {currentQuestionIndex + 1}</h2>

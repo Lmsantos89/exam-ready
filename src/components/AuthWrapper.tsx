@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Auth } from 'aws-amplify';
+import Navbar from './Navbar';
 
 interface AuthWrapperProps {
   children: React.ReactNode;
@@ -223,30 +224,12 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
   
   return (
     <div>
-      {isAuthenticated ? (
-        <div className="bg-gray-800 text-white p-2">
-          <div className="container mx-auto flex justify-between items-center">
-            <div>Welcome, {user?.attributes?.email || 'User'}</div>
-            <button
-              onClick={handleSignOut}
-              className="bg-red-600 hover:bg-red-700 text-white text-sm px-3 py-1 rounded"
-            >
-              Sign Out
-            </button>
-          </div>
-        </div>
-      ) : (
-        <div className="bg-gray-800 text-white p-2">
-          <div className="container mx-auto flex justify-end">
-            <button
-              onClick={() => setShowLogin(true)}
-              className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-3 py-1 rounded"
-            >
-              Sign In
-            </button>
-          </div>
-        </div>
-      )}
+      <Navbar 
+        isAuthenticated={isAuthenticated}
+        user={user}
+        onSignIn={() => setShowLogin(true)}
+        onSignOut={handleSignOut}
+      />
       
       {children}
     </div>

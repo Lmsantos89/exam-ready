@@ -141,25 +141,26 @@ export default function PracticeMode() {
           <title>Practice Mode: {currentExam.name} | ExamReady</title>
         </Head>
       
-      <div className="p-4 bg-white shadow fixed top-0 left-0 right-0 z-10">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <div>
-            <Link href="/" className="font-bold text-2xl text-blue-600 mb-2 block">ExamReady</Link>
-            <h1 className="text-xl font-bold">{currentExam.name} - Practice Mode</h1>
-            <div className="text-sm text-gray-500">
-              Question {currentQuestionIndex + 1} of {validQuestions.length}
+      <div>
+        <div className="p-4 bg-white shadow fixed top-16 left-0 right-0 z-10">
+          <div className="max-w-6xl mx-auto flex justify-between items-center">
+            <div>
+              <h1 className="text-xl font-bold">{currentExam.name} - Practice Mode</h1>
+              <div className="text-sm text-gray-500">
+                Question {currentQuestionIndex + 1} of {validQuestions.length}
+              </div>
             </div>
+            <button
+              onClick={() => router.push('/exams')}
+              className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded text-sm"
+            >
+              Exit Practice
+            </button>
           </div>
-          <button
-            onClick={() => router.push('/exams')}
-            className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded text-sm"
-          >
-            Exit Practice
-          </button>
         </div>
       </div>
       
-      <main className="container mx-auto px-4 py-24">
+      <main className="container mx-auto px-4 py-32">
         <div className="grid md:grid-cols-3 gap-8">
           <div className="md:col-span-2">
             <div className="bg-white p-8 rounded-lg shadow mb-8">
