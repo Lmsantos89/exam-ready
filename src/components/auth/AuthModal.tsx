@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
 import VerificationForm from './VerificationForm';
+import SuccessMessage from './SuccessMessage';
 
-type AuthView = 'signin' | 'signup' | 'verification';
+type AuthView = 'signin' | 'signup' | 'verification' | 'success';
 
 interface AuthModalProps {
   onAuthenticated: (user: any) => void;
@@ -24,8 +25,7 @@ export default function AuthModal({ onAuthenticated, onCancel }: AuthModalProps)
   };
 
   const handleVerificationSuccess = () => {
-    alert('Account verified successfully! Please sign in.');
-    setCurrentView('signin');
+    setCurrentView('success');
   };
 
   return (
@@ -53,6 +53,15 @@ export default function AuthModal({ onAuthenticated, onCancel }: AuthModalProps)
             onSuccess={handleVerificationSuccess}
             onBack={() => setCurrentView('signin')}
             onClose={onCancel}
+          />
+        )}
+        
+        {currentView === 'success' && (
+          <SuccessMessage
+            message="Account Verified Successfully!"
+            subMessage="Your account has been verified. You can now sign in with your email and password."
+            onContinue={() => setCurrentView('signin')}
+            continueText="Sign In"
           />
         )}
       </div>
