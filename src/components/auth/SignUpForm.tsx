@@ -9,6 +9,7 @@ interface SignUpFormProps {
 
 export default function SignUpForm({ onSuccess, onSignInClick, onClose }: SignUpFormProps) {
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -28,10 +29,11 @@ export default function SignUpForm({ onSuccess, onSignInClick, onClose }: SignUp
     
     try {
       await Auth.signUp({
-        username: email,
+        username: email, // Cognito uses email as the username
         password,
         attributes: {
-          email
+          email,
+          preferred_username: username // Store the display username as an attribute
         }
       });
       onSuccess(email);
@@ -72,6 +74,21 @@ export default function SignUpForm({ onSuccess, onSignInClick, onClose }: SignUp
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            required
+            disabled={isSubmitting}
+          />
+        </div>
+        
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
+            Username
+          </label>
+          <input
+            id="username"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             required
             disabled={isSubmitting}

@@ -36,7 +36,7 @@ export default function Navbar({ isAuthenticated, user, onSignIn, onSignOut }: N
           
           {isAuthenticated ? (
             <div className="flex items-center gap-3">
-              <span className="text-white">Welcome, {user?.attributes?.email || 'User'}</span>
+              <span className="text-white">Welcome, {user?.attributes?.preferred_username || user?.attributes?.email || 'User'}</span>
               <button
                 onClick={onSignOut}
                 className="bg-red-600 hover:bg-red-700 text-white text-sm px-3 py-1 rounded"

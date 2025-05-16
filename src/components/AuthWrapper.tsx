@@ -21,6 +21,20 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
   async function checkAuthState() {
     try {
       const userData = await Auth.currentAuthenticatedUser();
+      
+      // Get the user attributes if not already included
+      if (!userData.attributes) {
+        try {
+          const userAttributes = await Auth.userAttributes(userData);
+          userData.attributes = {};
+          userAttributes.forEach(attr => {
+            userData.attributes[attr.Name] = attr.Value;
+          });
+        } catch (attrError) {
+          console.error('Error fetching user attributes:', attrError);
+        }
+      }
+      
       setIsAuthenticated(true);
       setUser(userData);
     } catch (error) {
@@ -43,9 +57,17 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
     }
   }
   
-  const handleAuthenticated = (user: any) => {
-    setIsAuthenticated(true);
-    setUser(user);
+  const handleAuthenticated = async (user: any) => {
+    // Ensure we have the latest user data with attributes
+    try {
+      const currentUser = await Auth.currentAuthenticatedUser();
+      setIsAuthenticated(true);
+      setUser(currentUser);
+    } catch (error) {
+      // Fallback to the provided user object if there's an error
+      setIsAuthenticated(true);
+      setUser(user);
+    }
     setShowAuthModal(false);
   };
   
