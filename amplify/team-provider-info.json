@@ -1,29 +1,29 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-examready-dev-53a12-authRole",
-      "UnauthRoleArn": "arn:aws:iam::715841336373:role/amplify-examready-dev-53a12-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::715841336373:role/amplify-examready-dev-53a12-authRole",
+      "AuthRoleName": "amplify-examready-dev-4a727-authRole",
+      "UnauthRoleArn": "arn:aws:iam::715841336373:role/amplify-examready-dev-4a727-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::715841336373:role/amplify-examready-dev-4a727-authRole",
       "Region": "eu-central-1",
-      "DeploymentBucketName": "amplify-examready-dev-53a12-deployment",
-      "UnauthRoleName": "amplify-examready-dev-53a12-unauthRole",
-      "StackName": "amplify-examready-dev-53a12",
-      "StackId": "arn:aws:cloudformation:eu-central-1:715841336373:stack/amplify-examready-dev-53a12/14751510-311f-11f0-afd5-02ebb8a4e56f",
-      "AmplifyAppId": "d3t3higj0c0xfm"
+      "DeploymentBucketName": "amplify-examready-dev-4a727-deployment",
+      "UnauthRoleName": "amplify-examready-dev-4a727-unauthRole",
+      "StackName": "amplify-examready-dev-4a727",
+      "StackId": "arn:aws:cloudformation:eu-central-1:715841336373:stack/amplify-examready-dev-4a727/93522aa0-34a1-11f0-8c6a-06d375e30ebb",
+      "AmplifyAppId": "dlqse9kr1wosw"
     },
     "categories": {
       "auth": {
-        "examreadyb0985a08": {}
+        "examready294e1df0": {}
       },
       "function": {
-        "generateQuestionNew": {
-          "deploymentBucketName": "amplify-examready-dev-53a12-deployment",
-          "s3Key": "amplify-builds/generateQuestionNew-41317768777a6172776b-build.zip"
+        "generateQuestion": {
+          "deploymentBucketName": "amplify-examready-dev-4a727-deployment",
+          "s3Key": "amplify-builds/generateQuestion-35496e307753494f7857-build.zip"
         }
       },
       "hosting": {
         "amplifyhosting": {
-          "appId": "d3t3higj0c0xfm",
+          "appId": "dlqse9kr1wosw",
           "type": "manual"
         }
       },

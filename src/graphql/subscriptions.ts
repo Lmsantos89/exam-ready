@@ -8,48 +8,6 @@ type GeneratedSubscription<InputType, OutputType> = string & {
   __generatedSubscriptionOutput: OutputType;
 };
 
-export const onCreateTodo = /* GraphQL */ `subscription OnCreateTodo($filter: ModelSubscriptionTodoFilterInput) {
-  onCreateTodo(filter: $filter) {
-    id
-    name
-    description
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnCreateTodoSubscriptionVariables,
-  APITypes.OnCreateTodoSubscription
->;
-export const onUpdateTodo = /* GraphQL */ `subscription OnUpdateTodo($filter: ModelSubscriptionTodoFilterInput) {
-  onUpdateTodo(filter: $filter) {
-    id
-    name
-    description
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnUpdateTodoSubscriptionVariables,
-  APITypes.OnUpdateTodoSubscription
->;
-export const onDeleteTodo = /* GraphQL */ `subscription OnDeleteTodo($filter: ModelSubscriptionTodoFilterInput) {
-  onDeleteTodo(filter: $filter) {
-    id
-    name
-    description
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnDeleteTodoSubscriptionVariables,
-  APITypes.OnDeleteTodoSubscription
->;
 export const onCreateExamType = /* GraphQL */ `subscription OnCreateExamType($filter: ModelSubscriptionExamTypeFilterInput) {
   onCreateExamType(filter: $filter) {
     id
@@ -57,10 +15,14 @@ export const onCreateExamType = /* GraphQL */ `subscription OnCreateExamType($fi
     description
     questions {
       nextToken
+      startedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -75,10 +37,14 @@ export const onUpdateExamType = /* GraphQL */ `subscription OnUpdateExamType($fi
     description
     questions {
       nextToken
+      startedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -93,10 +59,14 @@ export const onDeleteExamType = /* GraphQL */ `subscription OnDeleteExamType($fi
     description
     questions {
       nextToken
+      startedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -121,8 +91,10 @@ export const onCreateQuestion = /* GraphQL */ `subscription OnCreateQuestion($fi
     topic
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     examTypeQuestionsId
-    owner
     __typename
   }
 }
@@ -147,8 +119,10 @@ export const onUpdateQuestion = /* GraphQL */ `subscription OnUpdateQuestion($fi
     topic
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     examTypeQuestionsId
-    owner
     __typename
   }
 }
@@ -173,8 +147,10 @@ export const onDeleteQuestion = /* GraphQL */ `subscription OnDeleteQuestion($fi
     topic
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     examTypeQuestionsId
-    owner
     __typename
   }
 }
@@ -192,10 +168,14 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
     name
     examAttempts {
       nextToken
+      startedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     owner
     __typename
   }
@@ -214,10 +194,14 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser(
     name
     examAttempts {
       nextToken
+      startedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     owner
     __typename
   }
@@ -236,10 +220,14 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
     name
     examAttempts {
       nextToken
+      startedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     owner
     __typename
   }
@@ -266,6 +254,9 @@ export const onCreateExamAttempt = /* GraphQL */ `subscription OnCreateExamAttem
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     userExamAttemptsId
     owner
     __typename
@@ -293,6 +284,9 @@ export const onUpdateExamAttempt = /* GraphQL */ `subscription OnUpdateExamAttem
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     userExamAttemptsId
     owner
     __typename
@@ -320,6 +314,9 @@ export const onDeleteExamAttempt = /* GraphQL */ `subscription OnDeleteExamAttem
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     userExamAttemptsId
     owner
     __typename

@@ -8,57 +8,28 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
-export const createTodo = /* GraphQL */ `mutation CreateTodo(
-  $input: CreateTodoInput!
-  $condition: ModelTodoConditionInput
+export const createCertificationType = /* GraphQL */ `mutation CreateCertificationType(
+  $input: CreateCertificationTypeInput!
+  $condition: ModelCertificationTypeConditionInput
 ) {
-  createTodo(input: $input, condition: $condition) {
+  createCertificationType(input: $input, condition: $condition) {
     id
     name
     description
+    provider
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
 ` as GeneratedMutation<
-  APITypes.CreateTodoMutationVariables,
-  APITypes.CreateTodoMutation
+  APITypes.CreateCertificationTypeInput,
+  APITypes.CreateCertificationTypeMutation
 >;
-export const updateTodo = /* GraphQL */ `mutation UpdateTodo(
-  $input: UpdateTodoInput!
-  $condition: ModelTodoConditionInput
-) {
-  updateTodo(input: $input, condition: $condition) {
-    id
-    name
-    description
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.UpdateTodoMutationVariables,
-  APITypes.UpdateTodoMutation
->;
-export const deleteTodo = /* GraphQL */ `mutation DeleteTodo(
-  $input: DeleteTodoInput!
-  $condition: ModelTodoConditionInput
-) {
-  deleteTodo(input: $input, condition: $condition) {
-    id
-    name
-    description
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.DeleteTodoMutationVariables,
-  APITypes.DeleteTodoMutation
->;
+
 export const createExamType = /* GraphQL */ `mutation CreateExamType(
   $input: CreateExamTypeInput!
   $condition: ModelExamTypeConditionInput
@@ -69,10 +40,14 @@ export const createExamType = /* GraphQL */ `mutation CreateExamType(
     description
     questions {
       nextToken
+      startedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -90,10 +65,14 @@ export const updateExamType = /* GraphQL */ `mutation UpdateExamType(
     description
     questions {
       nextToken
+      startedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -111,10 +90,14 @@ export const deleteExamType = /* GraphQL */ `mutation DeleteExamType(
     description
     questions {
       nextToken
+      startedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -142,8 +125,10 @@ export const createQuestion = /* GraphQL */ `mutation CreateQuestion(
     topic
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     examTypeQuestionsId
-    owner
     __typename
   }
 }
@@ -171,8 +156,10 @@ export const updateQuestion = /* GraphQL */ `mutation UpdateQuestion(
     topic
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     examTypeQuestionsId
-    owner
     __typename
   }
 }
@@ -200,8 +187,10 @@ export const deleteQuestion = /* GraphQL */ `mutation DeleteQuestion(
     topic
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     examTypeQuestionsId
-    owner
     __typename
   }
 }
@@ -219,10 +208,14 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
     name
     examAttempts {
       nextToken
+      startedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     owner
     __typename
   }
@@ -241,10 +234,14 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
     name
     examAttempts {
       nextToken
+      startedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     owner
     __typename
   }
@@ -263,10 +260,14 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
     name
     examAttempts {
       nextToken
+      startedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     owner
     __typename
   }
@@ -293,6 +294,9 @@ export const createExamAttempt = /* GraphQL */ `mutation CreateExamAttempt(
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     userExamAttemptsId
     owner
     __typename
@@ -320,6 +324,9 @@ export const updateExamAttempt = /* GraphQL */ `mutation UpdateExamAttempt(
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     userExamAttemptsId
     owner
     __typename
@@ -347,6 +354,9 @@ export const deleteExamAttempt = /* GraphQL */ `mutation DeleteExamAttempt(
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     userExamAttemptsId
     owner
     __typename
@@ -355,4 +365,33 @@ export const deleteExamAttempt = /* GraphQL */ `mutation DeleteExamAttempt(
 ` as GeneratedMutation<
   APITypes.DeleteExamAttemptMutationVariables,
   APITypes.DeleteExamAttemptMutation
+>;
+
+export const createExamResult = /* GraphQL */ `mutation CreateExamResult(
+  $input: CreateExamResultInput!
+) {
+  createExamResult(input: $input) {
+    id
+    userId
+    examId
+    examName
+    score
+    totalQuestions
+    correctAnswers
+    timeSpent
+    date
+    questionResults {
+      questionId
+      correct
+      userAnswer
+      correctAnswer
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateExamResultInput,
+  APITypes.CreateExamResultMutation
 >;

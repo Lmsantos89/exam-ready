@@ -1,4 +1,27 @@
 {
-    "Version": 5,
-    "ElasticsearchWarning": true
+  "Version": 5,
+  "ElasticsearchWarning": true,
+  "ResolverConfig": {
+    "project": {
+      "ConflictHandler": "AUTOMERGE",
+      "ConflictDetection": "VERSION"
+    }
+  },
+  "authConfig": {
+    "defaultAuthentication": {
+      "authenticationType": "API_KEY",
+      "apiKeyConfig": {
+        "apiKeyExpirationDays": 365,
+        "description": "API key for public access"
+      }
+    },
+    "additionalAuthenticationProviders": [
+      {
+        "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+        "userPoolConfig": {
+          "userPoolId": "authexamready294e1df0"
+        }
+      }
+    ]
+  }
 }

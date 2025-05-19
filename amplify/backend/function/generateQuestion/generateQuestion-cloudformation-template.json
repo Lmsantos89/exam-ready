@@ -15,14 +15,6 @@
     },
     "s3Key": {
       "Type": "String"
-    },
-    "apigenerateQuestionApiApiName": {
-      "Type": "String",
-      "Default": "apigenerateQuestionApiApiName"
-    },
-    "apigenerateQuestionApiApiId": {
-      "Type": "String",
-      "Default": "apigenerateQuestionApiApiId"
     }
   },
   "Conditions": {
@@ -55,12 +47,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "generateQuestionNew",
+            "generateQuestion",
             {
               "Fn::Join": [
                 "",
                 [
-                  "generateQuestionNew",
+                  "generateQuestion",
                   "-",
                   {
                     "Ref": "env"
@@ -77,12 +69,6 @@
             },
             "REGION": {
               "Ref": "AWS::Region"
-            },
-            "API_GENERATEQUESTIONAPI_APINAME": {
-              "Ref": "apigenerateQuestionApiApiName"
-            },
-            "API_GENERATEQUESTIONAPI_APIID": {
-              "Ref": "apigenerateQuestionApiApiId"
             }
           }
         },
@@ -103,12 +89,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "examreadyLambdaRole6125f934",
+            "examreadyLambdaRolec75babcc",
             {
               "Fn::Join": [
                 "",
                 [
-                  "examreadyLambdaRole6125f934",
+                  "examreadyLambdaRolec75babcc",
                   "-",
                   {
                     "Ref": "env"
@@ -156,8 +142,7 @@
               "Action": [
                 "logs:CreateLogGroup",
                 "logs:CreateLogStream",
-                "logs:PutLogEvents",
-                "bedrock:InvokeModel"
+                "logs:PutLogEvents"
               ],
               "Resource": {
                 "Fn::Sub": [
@@ -175,55 +160,6 @@
                   }
                 ]
               }
-            }
-          ]
-        }
-      }
-    },
-    "AmplifyResourcesPolicy": {
-      "DependsOn": [
-        "LambdaExecutionRole"
-      ],
-      "Type": "AWS::IAM::Policy",
-      "Properties": {
-        "PolicyName": "amplify-lambda-execution-policy",
-        "Roles": [
-          {
-            "Ref": "LambdaExecutionRole"
-          }
-        ],
-        "PolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": [
-                "apigateway:POST",
-                "apigateway:PUT",
-                "apigateway:GET",
-                "apigateway:HEAD",
-                "apigateway:OPTIONS",
-                "apigateway:PATCH",
-                "apigateway:DELETE"
-              ],
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:apigateway:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      "::/restapis/",
-                      {
-                        "Ref": "apigenerateQuestionApiApiName"
-                      },
-                      "/*"
-                    ]
-                  ]
-                }
-              ]
             }
           ]
         }

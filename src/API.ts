@@ -2,18 +2,150 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateTodoInput = {
+export type ModelExamResultFilterInput = {
+  id?: ModelIDInput | null,
+  userId?: ModelIDInput | null,
+  examId?: ModelIDInput | null,
+  examName?: ModelStringInput | null,
+  score?: ModelIntInput | null,
+  totalQuestions?: ModelIntInput | null,
+  correctAnswers?: ModelIntInput | null,
+  timeSpent?: ModelIntInput | null,
+  date?: ModelStringInput | null,
+  and?: Array< ModelExamResultFilterInput | null > | null,
+  or?: Array< ModelExamResultFilterInput | null > | null,
+  not?: ModelExamResultFilterInput | null,
+};
+
+export type ModelIntInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
+export type ListExamResultsQueryVariables = {
+  filter?: ModelExamResultFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListExamResultsQuery = {
+  listExamResults?: {
+    __typename: "ModelExamResultConnection",
+    items: Array<{
+      __typename: "ExamResult",
+      id: string,
+      userId: string,
+      examId: string,
+      examName: string,
+      score: number,
+      totalQuestions: number,
+      correctAnswers: number,
+      timeSpent: number,
+      date: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null>,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type CreateExamResultInput = {
+  id?: string | null,
+  userId: string,
+  examId: string,
+  examName: string,
+  score: number,
+  totalQuestions: number,
+  correctAnswers: number,
+  timeSpent: number,
+  date: string,
+  questionResults?: Array<QuestionResultInput | null> | null,
+};
+
+export type QuestionResultInput = {
+  questionId: string,
+  correct: boolean,
+  userAnswer: string,
+  correctAnswer: string,
+};
+
+export type CreateExamResultMutation = {
+  createExamResult?: {
+    __typename: "ExamResult",
+    id: string,
+    userId: string,
+    examId: string,
+    examName: string,
+    score: number,
+    totalQuestions: number,
+    correctAnswers: number,
+    timeSpent: number,
+    date: string,
+    questionResults?: Array<{
+      questionId: string,
+      correct: boolean,
+      userAnswer: string,
+      correctAnswer: string,
+    } | null> | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateCertificationTypeInput = {
   id?: string | null,
   name: string,
   description?: string | null,
+  provider: string,
+  _version?: number | null,
 };
 
-export type ModelTodoConditionInput = {
+export type ModelCertificationTypeConditionInput = {
   name?: ModelStringInput | null,
   description?: ModelStringInput | null,
-  and?: Array< ModelTodoConditionInput | null > | null,
-  or?: Array< ModelTodoConditionInput | null > | null,
-  not?: ModelTodoConditionInput | null,
+  provider?: ModelStringInput | null,
+  and?: Array< ModelCertificationTypeConditionInput | null > | null,
+  or?: Array< ModelCertificationTypeConditionInput | null > | null,
+  not?: ModelCertificationTypeConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
+};
+
+export type CreateCertificationTypeMutation = {
+  createCertificationType?: {
+    __typename: "CertificationType",
+    id: string,
+    name: string,
+    description?: string | null,
+    provider: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type CreateExamTypeInput = {
+  id?: string | null,
+  name: string,
+  description?: string | null,
+  _version?: number | null,
+};
+
+export type ModelExamTypeConditionInput = {
+  name?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  and?: Array< ModelExamTypeConditionInput | null > | null,
+  or?: Array< ModelExamTypeConditionInput | null > | null,
+  not?: ModelExamTypeConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
 };
@@ -58,39 +190,11 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
-export type Todo = {
-  __typename: "Todo",
-  id: string,
-  name: string,
-  description?: string | null,
-  createdAt: string,
-  updatedAt: string,
-};
-
-export type UpdateTodoInput = {
-  id: string,
-  name?: string | null,
-  description?: string | null,
-};
-
-export type DeleteTodoInput = {
-  id: string,
-};
-
-export type CreateExamTypeInput = {
-  id?: string | null,
-  name: string,
-  description?: string | null,
-};
-
-export type ModelExamTypeConditionInput = {
-  name?: ModelStringInput | null,
-  description?: ModelStringInput | null,
-  and?: Array< ModelExamTypeConditionInput | null > | null,
-  or?: Array< ModelExamTypeConditionInput | null > | null,
-  not?: ModelExamTypeConditionInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
+export type ModelBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
 };
 
 export type ExamType = {
@@ -101,12 +205,16 @@ export type ExamType = {
   questions?: ModelQuestionConnection | null,
   createdAt: string,
   updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
 };
 
 export type ModelQuestionConnection = {
   __typename: "ModelQuestionConnection",
   items:  Array<Question | null >,
   nextToken?: string | null,
+  startedAt?: number | null,
 };
 
 export type Question = {
@@ -122,8 +230,10 @@ export type Question = {
   topic?: string | null,
   createdAt: string,
   updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
   examTypeQuestionsId?: string | null,
-  owner?: string | null,
 };
 
 export type Option = {
@@ -136,10 +246,12 @@ export type UpdateExamTypeInput = {
   id: string,
   name?: string | null,
   description?: string | null,
+  _version?: number | null,
 };
 
 export type DeleteExamTypeInput = {
   id: string,
+  _version?: number | null,
 };
 
 export type CreateQuestionInput = {
@@ -152,6 +264,7 @@ export type CreateQuestionInput = {
   examTypeID: string,
   isAIGenerated?: boolean | null,
   topic?: string | null,
+  _version?: number | null,
   examTypeQuestionsId?: string | null,
 };
 
@@ -171,10 +284,10 @@ export type ModelQuestionConditionInput = {
   and?: Array< ModelQuestionConditionInput | null > | null,
   or?: Array< ModelQuestionConditionInput | null > | null,
   not?: ModelQuestionConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   examTypeQuestionsId?: ModelIDInput | null,
-  owner?: ModelStringInput | null,
 };
 
 export type ModelIDInput = {
@@ -193,13 +306,6 @@ export type ModelIDInput = {
   size?: ModelSizeInput | null,
 };
 
-export type ModelBooleanInput = {
-  ne?: boolean | null,
-  eq?: boolean | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-};
-
 export type UpdateQuestionInput = {
   id: string,
   text?: string | null,
@@ -210,17 +316,20 @@ export type UpdateQuestionInput = {
   examTypeID?: string | null,
   isAIGenerated?: boolean | null,
   topic?: string | null,
+  _version?: number | null,
   examTypeQuestionsId?: string | null,
 };
 
 export type DeleteQuestionInput = {
   id: string,
+  _version?: number | null,
 };
 
 export type CreateUserInput = {
   id?: string | null,
   email: string,
   name?: string | null,
+  _version?: number | null,
 };
 
 export type ModelUserConditionInput = {
@@ -229,6 +338,7 @@ export type ModelUserConditionInput = {
   and?: Array< ModelUserConditionInput | null > | null,
   or?: Array< ModelUserConditionInput | null > | null,
   not?: ModelUserConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   owner?: ModelStringInput | null,
@@ -242,6 +352,9 @@ export type User = {
   examAttempts?: ModelExamAttemptConnection | null,
   createdAt: string,
   updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
   owner?: string | null,
 };
 
@@ -249,6 +362,7 @@ export type ModelExamAttemptConnection = {
   __typename: "ModelExamAttemptConnection",
   items:  Array<ExamAttempt | null >,
   nextToken?: string | null,
+  startedAt?: number | null,
 };
 
 export type ExamAttempt = {
@@ -261,6 +375,9 @@ export type ExamAttempt = {
   answers?:  Array<Answer | null > | null,
   createdAt: string,
   updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
   userExamAttemptsId?: string | null,
   owner?: string | null,
 };
@@ -276,10 +393,12 @@ export type UpdateUserInput = {
   id: string,
   email?: string | null,
   name?: string | null,
+  _version?: number | null,
 };
 
 export type DeleteUserInput = {
   id: string,
+  _version?: number | null,
 };
 
 export type CreateExamAttemptInput = {
@@ -289,6 +408,7 @@ export type CreateExamAttemptInput = {
   score?: number | null,
   completedAt?: string | null,
   answers?: Array< AnswerInput | null > | null,
+  _version?: number | null,
   userExamAttemptsId?: string | null,
 };
 
@@ -306,6 +426,7 @@ export type ModelExamAttemptConditionInput = {
   and?: Array< ModelExamAttemptConditionInput | null > | null,
   or?: Array< ModelExamAttemptConditionInput | null > | null,
   not?: ModelExamAttemptConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   userExamAttemptsId?: ModelIDInput | null,
@@ -331,28 +452,13 @@ export type UpdateExamAttemptInput = {
   score?: number | null,
   completedAt?: string | null,
   answers?: Array< AnswerInput | null > | null,
+  _version?: number | null,
   userExamAttemptsId?: string | null,
 };
 
 export type DeleteExamAttemptInput = {
   id: string,
-};
-
-export type ModelTodoFilterInput = {
-  id?: ModelIDInput | null,
-  name?: ModelStringInput | null,
-  description?: ModelStringInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-  and?: Array< ModelTodoFilterInput | null > | null,
-  or?: Array< ModelTodoFilterInput | null > | null,
-  not?: ModelTodoFilterInput | null,
-};
-
-export type ModelTodoConnection = {
-  __typename: "ModelTodoConnection",
-  items:  Array<Todo | null >,
-  nextToken?: string | null,
+  _version?: number | null,
 };
 
 export type ModelExamTypeFilterInput = {
@@ -364,12 +470,14 @@ export type ModelExamTypeFilterInput = {
   and?: Array< ModelExamTypeFilterInput | null > | null,
   or?: Array< ModelExamTypeFilterInput | null > | null,
   not?: ModelExamTypeFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelExamTypeConnection = {
   __typename: "ModelExamTypeConnection",
   items:  Array<ExamType | null >,
   nextToken?: string | null,
+  startedAt?: number | null,
 };
 
 export type ModelQuestionFilterInput = {
@@ -386,8 +494,8 @@ export type ModelQuestionFilterInput = {
   and?: Array< ModelQuestionFilterInput | null > | null,
   or?: Array< ModelQuestionFilterInput | null > | null,
   not?: ModelQuestionFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
   examTypeQuestionsId?: ModelIDInput | null,
-  owner?: ModelStringInput | null,
 };
 
 export enum ModelSortDirection {
@@ -405,6 +513,7 @@ export type ModelUserFilterInput = {
   and?: Array< ModelUserFilterInput | null > | null,
   or?: Array< ModelUserFilterInput | null > | null,
   not?: ModelUserFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
   owner?: ModelStringInput | null,
 };
 
@@ -412,6 +521,7 @@ export type ModelUserConnection = {
   __typename: "ModelUserConnection",
   items:  Array<User | null >,
   nextToken?: string | null,
+  startedAt?: number | null,
 };
 
 export type ModelExamAttemptFilterInput = {
@@ -425,18 +535,21 @@ export type ModelExamAttemptFilterInput = {
   and?: Array< ModelExamAttemptFilterInput | null > | null,
   or?: Array< ModelExamAttemptFilterInput | null > | null,
   not?: ModelExamAttemptFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
   userExamAttemptsId?: ModelIDInput | null,
   owner?: ModelStringInput | null,
 };
 
-export type ModelSubscriptionTodoFilterInput = {
+export type ModelSubscriptionExamTypeFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   name?: ModelSubscriptionStringInput | null,
   description?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionTodoFilterInput | null > | null,
-  or?: Array< ModelSubscriptionTodoFilterInput | null > | null,
+  and?: Array< ModelSubscriptionExamTypeFilterInput | null > | null,
+  or?: Array< ModelSubscriptionExamTypeFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
+  examTypeQuestionsId?: ModelSubscriptionIDInput | null,
 };
 
 export type ModelSubscriptionIDInput = {
@@ -469,17 +582,6 @@ export type ModelSubscriptionStringInput = {
   notIn?: Array< string | null > | null,
 };
 
-export type ModelSubscriptionExamTypeFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  name?: ModelSubscriptionStringInput | null,
-  description?: ModelSubscriptionStringInput | null,
-  createdAt?: ModelSubscriptionStringInput | null,
-  updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionExamTypeFilterInput | null > | null,
-  or?: Array< ModelSubscriptionExamTypeFilterInput | null > | null,
-  examTypeQuestionsId?: ModelSubscriptionIDInput | null,
-};
-
 export type ModelSubscriptionQuestionFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   text?: ModelSubscriptionStringInput | null,
@@ -493,7 +595,7 @@ export type ModelSubscriptionQuestionFilterInput = {
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionQuestionFilterInput | null > | null,
   or?: Array< ModelSubscriptionQuestionFilterInput | null > | null,
-  owner?: ModelStringInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionBooleanInput = {
@@ -509,6 +611,7 @@ export type ModelSubscriptionUserFilterInput = {
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionUserFilterInput | null > | null,
   or?: Array< ModelSubscriptionUserFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
   userExamAttemptsId?: ModelSubscriptionIDInput | null,
   owner?: ModelStringInput | null,
 };
@@ -523,6 +626,7 @@ export type ModelSubscriptionExamAttemptFilterInput = {
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionExamAttemptFilterInput | null > | null,
   or?: Array< ModelSubscriptionExamAttemptFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
   owner?: ModelStringInput | null,
 };
 
@@ -536,54 +640,6 @@ export type ModelSubscriptionFloatInput = {
   between?: Array< number | null > | null,
   in?: Array< number | null > | null,
   notIn?: Array< number | null > | null,
-};
-
-export type CreateTodoMutationVariables = {
-  input: CreateTodoInput,
-  condition?: ModelTodoConditionInput | null,
-};
-
-export type CreateTodoMutation = {
-  createTodo?:  {
-    __typename: "Todo",
-    id: string,
-    name: string,
-    description?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type UpdateTodoMutationVariables = {
-  input: UpdateTodoInput,
-  condition?: ModelTodoConditionInput | null,
-};
-
-export type UpdateTodoMutation = {
-  updateTodo?:  {
-    __typename: "Todo",
-    id: string,
-    name: string,
-    description?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type DeleteTodoMutationVariables = {
-  input: DeleteTodoInput,
-  condition?: ModelTodoConditionInput | null,
-};
-
-export type DeleteTodoMutation = {
-  deleteTodo?:  {
-    __typename: "Todo",
-    id: string,
-    name: string,
-    description?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
 };
 
 export type CreateExamTypeMutationVariables = {
@@ -600,9 +656,13 @@ export type CreateExamTypeMutation = {
     questions?:  {
       __typename: "ModelQuestionConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
@@ -620,9 +680,13 @@ export type UpdateExamTypeMutation = {
     questions?:  {
       __typename: "ModelQuestionConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
@@ -640,9 +704,13 @@ export type DeleteExamTypeMutation = {
     questions?:  {
       __typename: "ModelQuestionConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
@@ -669,8 +737,10 @@ export type CreateQuestionMutation = {
     topic?: string | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     examTypeQuestionsId?: string | null,
-    owner?: string | null,
   } | null,
 };
 
@@ -697,8 +767,10 @@ export type UpdateQuestionMutation = {
     topic?: string | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     examTypeQuestionsId?: string | null,
-    owner?: string | null,
   } | null,
 };
 
@@ -725,8 +797,10 @@ export type DeleteQuestionMutation = {
     topic?: string | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     examTypeQuestionsId?: string | null,
-    owner?: string | null,
   } | null,
 };
 
@@ -744,9 +818,13 @@ export type CreateUserMutation = {
     examAttempts?:  {
       __typename: "ModelExamAttemptConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     owner?: string | null,
   } | null,
 };
@@ -765,9 +843,13 @@ export type UpdateUserMutation = {
     examAttempts?:  {
       __typename: "ModelExamAttemptConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     owner?: string | null,
   } | null,
 };
@@ -786,9 +868,13 @@ export type DeleteUserMutation = {
     examAttempts?:  {
       __typename: "ModelExamAttemptConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     owner?: string | null,
   } | null,
 };
@@ -814,6 +900,9 @@ export type CreateExamAttemptMutation = {
     } | null > | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     userExamAttemptsId?: string | null,
     owner?: string | null,
   } | null,
@@ -840,6 +929,9 @@ export type UpdateExamAttemptMutation = {
     } | null > | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     userExamAttemptsId?: string | null,
     owner?: string | null,
   } | null,
@@ -866,44 +958,11 @@ export type DeleteExamAttemptMutation = {
     } | null > | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     userExamAttemptsId?: string | null,
     owner?: string | null,
-  } | null,
-};
-
-export type GetTodoQueryVariables = {
-  id: string,
-};
-
-export type GetTodoQuery = {
-  getTodo?:  {
-    __typename: "Todo",
-    id: string,
-    name: string,
-    description?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type ListTodosQueryVariables = {
-  filter?: ModelTodoFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ListTodosQuery = {
-  listTodos?:  {
-    __typename: "ModelTodoConnection",
-    items:  Array< {
-      __typename: "Todo",
-      id: string,
-      name: string,
-      description?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
   } | null,
 };
 
@@ -920,9 +979,13 @@ export type GetExamTypeQuery = {
     questions?:  {
       __typename: "ModelQuestionConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
@@ -942,8 +1005,38 @@ export type ListExamTypesQuery = {
       description?: string | null,
       createdAt: string,
       updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
     } | null >,
     nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncExamTypesQueryVariables = {
+  filter?: ModelExamTypeFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncExamTypesQuery = {
+  syncExamTypes?:  {
+    __typename: "ModelExamTypeConnection",
+    items:  Array< {
+      __typename: "ExamType",
+      id: string,
+      name: string,
+      description?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -969,8 +1062,10 @@ export type GetQuestionQuery = {
     topic?: string | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     examTypeQuestionsId?: string | null,
-    owner?: string | null,
   } | null,
 };
 
@@ -995,10 +1090,45 @@ export type ListQuestionsQuery = {
       topic?: string | null,
       createdAt: string,
       updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       examTypeQuestionsId?: string | null,
-      owner?: string | null,
     } | null >,
     nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncQuestionsQueryVariables = {
+  filter?: ModelQuestionFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncQuestionsQuery = {
+  syncQuestions?:  {
+    __typename: "ModelQuestionConnection",
+    items:  Array< {
+      __typename: "Question",
+      id: string,
+      text: string,
+      correctAnswer: string,
+      explanation?: string | null,
+      difficulty?: string | null,
+      examTypeID: string,
+      isAIGenerated?: boolean | null,
+      topic?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      examTypeQuestionsId?: string | null,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -1025,10 +1155,13 @@ export type QuestionsByExamTypeIDQuery = {
       topic?: string | null,
       createdAt: string,
       updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       examTypeQuestionsId?: string | null,
-      owner?: string | null,
     } | null >,
     nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -1045,9 +1178,13 @@ export type GetUserQuery = {
     examAttempts?:  {
       __typename: "ModelExamAttemptConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     owner?: string | null,
   } | null,
 };
@@ -1068,9 +1205,40 @@ export type ListUsersQuery = {
       name?: string | null,
       createdAt: string,
       updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       owner?: string | null,
     } | null >,
     nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncUsersQueryVariables = {
+  filter?: ModelUserFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncUsersQuery = {
+  syncUsers?:  {
+    __typename: "ModelUserConnection",
+    items:  Array< {
+      __typename: "User",
+      id: string,
+      email: string,
+      name?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      owner?: string | null,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -1094,6 +1262,9 @@ export type GetExamAttemptQuery = {
     } | null > | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     userExamAttemptsId?: string | null,
     owner?: string | null,
   } | null,
@@ -1117,10 +1288,44 @@ export type ListExamAttemptsQuery = {
       completedAt?: string | null,
       createdAt: string,
       updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       userExamAttemptsId?: string | null,
       owner?: string | null,
     } | null >,
     nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncExamAttemptsQueryVariables = {
+  filter?: ModelExamAttemptFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncExamAttemptsQuery = {
+  syncExamAttempts?:  {
+    __typename: "ModelExamAttemptConnection",
+    items:  Array< {
+      __typename: "ExamAttempt",
+      id: string,
+      userID: string,
+      examTypeID: string,
+      score?: number | null,
+      completedAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      userExamAttemptsId?: string | null,
+      owner?: string | null,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -1144,10 +1349,14 @@ export type ExamAttemptsByUserIDQuery = {
       completedAt?: string | null,
       createdAt: string,
       updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       userExamAttemptsId?: string | null,
       owner?: string | null,
     } | null >,
     nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -1171,55 +1380,14 @@ export type ExamAttemptsByExamTypeIDQuery = {
       completedAt?: string | null,
       createdAt: string,
       updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       userExamAttemptsId?: string | null,
       owner?: string | null,
     } | null >,
     nextToken?: string | null,
-  } | null,
-};
-
-export type OnCreateTodoSubscriptionVariables = {
-  filter?: ModelSubscriptionTodoFilterInput | null,
-};
-
-export type OnCreateTodoSubscription = {
-  onCreateTodo?:  {
-    __typename: "Todo",
-    id: string,
-    name: string,
-    description?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnUpdateTodoSubscriptionVariables = {
-  filter?: ModelSubscriptionTodoFilterInput | null,
-};
-
-export type OnUpdateTodoSubscription = {
-  onUpdateTodo?:  {
-    __typename: "Todo",
-    id: string,
-    name: string,
-    description?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnDeleteTodoSubscriptionVariables = {
-  filter?: ModelSubscriptionTodoFilterInput | null,
-};
-
-export type OnDeleteTodoSubscription = {
-  onDeleteTodo?:  {
-    __typename: "Todo",
-    id: string,
-    name: string,
-    description?: string | null,
-    createdAt: string,
-    updatedAt: string,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -1236,9 +1404,13 @@ export type OnCreateExamTypeSubscription = {
     questions?:  {
       __typename: "ModelQuestionConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
@@ -1255,9 +1427,13 @@ export type OnUpdateExamTypeSubscription = {
     questions?:  {
       __typename: "ModelQuestionConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
@@ -1274,9 +1450,13 @@ export type OnDeleteExamTypeSubscription = {
     questions?:  {
       __typename: "ModelQuestionConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
@@ -1302,8 +1482,10 @@ export type OnCreateQuestionSubscription = {
     topic?: string | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     examTypeQuestionsId?: string | null,
-    owner?: string | null,
   } | null,
 };
 
@@ -1329,8 +1511,10 @@ export type OnUpdateQuestionSubscription = {
     topic?: string | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     examTypeQuestionsId?: string | null,
-    owner?: string | null,
   } | null,
 };
 
@@ -1356,8 +1540,10 @@ export type OnDeleteQuestionSubscription = {
     topic?: string | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     examTypeQuestionsId?: string | null,
-    owner?: string | null,
   } | null,
 };
 
@@ -1375,9 +1561,13 @@ export type OnCreateUserSubscription = {
     examAttempts?:  {
       __typename: "ModelExamAttemptConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     owner?: string | null,
   } | null,
 };
@@ -1396,9 +1586,13 @@ export type OnUpdateUserSubscription = {
     examAttempts?:  {
       __typename: "ModelExamAttemptConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     owner?: string | null,
   } | null,
 };
@@ -1417,9 +1611,13 @@ export type OnDeleteUserSubscription = {
     examAttempts?:  {
       __typename: "ModelExamAttemptConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     owner?: string | null,
   } | null,
 };
@@ -1445,6 +1643,9 @@ export type OnCreateExamAttemptSubscription = {
     } | null > | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     userExamAttemptsId?: string | null,
     owner?: string | null,
   } | null,
@@ -1471,6 +1672,9 @@ export type OnUpdateExamAttemptSubscription = {
     } | null > | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     userExamAttemptsId?: string | null,
     owner?: string | null,
   } | null,
@@ -1497,6 +1701,9 @@ export type OnDeleteExamAttemptSubscription = {
     } | null > | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     userExamAttemptsId?: string | null,
     owner?: string | null,
   } | null,

@@ -7,7 +7,7 @@
             "UserPoolId"
           ],
           "category": "auth",
-          "resourceName": "examreadyb0985a08"
+          "resourceName": "examready294e1df0"
         }
       ],
       "output": {
@@ -16,15 +16,15 @@
             {
               "authenticationType": "AMAZON_COGNITO_USER_POOLS",
               "userPoolConfig": {
-                "userPoolId": "authexamreadyb0985a08"
+                "userPoolId": "authexamready294e1df0"
               }
             }
           ],
           "defaultAuthentication": {
-            "apiKeyConfig": {
-              "apiKeyExpirationDays": 7
-            },
-            "authenticationType": "API_KEY"
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authexamready294e1df0"
+            }
           }
         }
       },
@@ -39,7 +39,7 @@
             "Arn"
           ],
           "category": "function",
-          "resourceName": "generateQuestionNew"
+          "resourceName": "generateQuestion"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -47,7 +47,7 @@
     }
   },
   "auth": {
-    "examreadyb0985a08": {
+    "examready294e1df0": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -75,7 +75,7 @@
     }
   },
   "function": {
-    "generateQuestionNew": {
+    "generateQuestion": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
@@ -89,19 +89,19 @@
     }
   },
   "parameters": {
-    "AMPLIFY_function_generateQuestionNew_deploymentBucketName": {
+    "AMPLIFY_function_generateQuestion_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "generateQuestionNew"
+          "resourceName": "generateQuestion"
         }
       ]
     },
-    "AMPLIFY_function_generateQuestionNew_s3Key": {
+    "AMPLIFY_function_generateQuestion_s3Key": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "generateQuestionNew"
+          "resourceName": "generateQuestion"
         }
       ]
     },

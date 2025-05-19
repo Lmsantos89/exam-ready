@@ -1,9 +1,9 @@
 {
   "version": 1,
   "paths": {
-    "/generateQuestion": {
-      "name": "/generateQuestion",
-      "lambdaFunction": "generateQuestionNew",
+    "/generate": {
+      "name": "/generate",
+      "lambdaFunction": "generateQuestion",
       "permissions": {
         "setting": "open"
       }

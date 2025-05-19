@@ -4,8 +4,11 @@
   "DynamoDBEnableServerSideEncryption": false,
   "AuthCognitoUserPoolId": {
     "Fn::GetAtt": [
-      "authexamreadyb0985a08",
+      "authexamready294e1df0",
       "Outputs.UserPoolId"
     ]
-  }
+  },
+  "AuthModeLastUpdated": "2025-05-19T11:00:00.000Z",
+  "APIKeyExpirationEpoch": 1747756800,
+  "CreateAPIKey": 1
 }

@@ -1,7 +1,7 @@
 import { API, graphqlOperation } from 'aws-amplify';
 import { GraphQLQuery, GraphQLResult } from '@aws-amplify/api';
-import { createExamType, createCertificationType, createQuestion, deleteQuestion } from '../../graphql/mutations';
-import { listCertificationTypes, getExamType, listQuestions, questionsByExamTypeID } from '../../graphql/queries';
+import { createExamType, createQuestion, deleteQuestion, createCertificationType } from '../../graphql/mutations';
+import { getExamType, listQuestions, questionsByExamTypeID } from '../../graphql/queries';
 
 // Types
 interface ExamInput {
