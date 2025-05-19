@@ -2,136 +2,6 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type ModelExamResultFilterInput = {
-  id?: ModelIDInput | null,
-  userId?: ModelIDInput | null,
-  examId?: ModelIDInput | null,
-  examName?: ModelStringInput | null,
-  score?: ModelIntInput | null,
-  totalQuestions?: ModelIntInput | null,
-  correctAnswers?: ModelIntInput | null,
-  timeSpent?: ModelIntInput | null,
-  date?: ModelStringInput | null,
-  and?: Array< ModelExamResultFilterInput | null > | null,
-  or?: Array< ModelExamResultFilterInput | null > | null,
-  not?: ModelExamResultFilterInput | null,
-};
-
-export type ModelIntInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-};
-
-export type ListExamResultsQueryVariables = {
-  filter?: ModelExamResultFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ListExamResultsQuery = {
-  listExamResults?: {
-    __typename: "ModelExamResultConnection",
-    items: Array<{
-      __typename: "ExamResult",
-      id: string,
-      userId: string,
-      examId: string,
-      examName: string,
-      score: number,
-      totalQuestions: number,
-      correctAnswers: number,
-      timeSpent: number,
-      date: string,
-      createdAt: string,
-      updatedAt: string,
-    } | null>,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type CreateExamResultInput = {
-  id?: string | null,
-  userId: string,
-  examId: string,
-  examName: string,
-  score: number,
-  totalQuestions: number,
-  correctAnswers: number,
-  timeSpent: number,
-  date: string,
-  questionResults?: Array<QuestionResultInput | null> | null,
-};
-
-export type QuestionResultInput = {
-  questionId: string,
-  correct: boolean,
-  userAnswer: string,
-  correctAnswer: string,
-};
-
-export type CreateExamResultMutation = {
-  createExamResult?: {
-    __typename: "ExamResult",
-    id: string,
-    userId: string,
-    examId: string,
-    examName: string,
-    score: number,
-    totalQuestions: number,
-    correctAnswers: number,
-    timeSpent: number,
-    date: string,
-    questionResults?: Array<{
-      questionId: string,
-      correct: boolean,
-      userAnswer: string,
-      correctAnswer: string,
-    } | null> | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type CreateCertificationTypeInput = {
-  id?: string | null,
-  name: string,
-  description?: string | null,
-  provider: string,
-  _version?: number | null,
-};
-
-export type ModelCertificationTypeConditionInput = {
-  name?: ModelStringInput | null,
-  description?: ModelStringInput | null,
-  provider?: ModelStringInput | null,
-  and?: Array< ModelCertificationTypeConditionInput | null > | null,
-  or?: Array< ModelCertificationTypeConditionInput | null > | null,
-  not?: ModelCertificationTypeConditionInput | null,
-  _deleted?: ModelBooleanInput | null,
-};
-
-export type CreateCertificationTypeMutation = {
-  createCertificationType?: {
-    __typename: "CertificationType",
-    id: string,
-    name: string,
-    description?: string | null,
-    provider: string,
-    createdAt: string,
-    updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-  } | null,
-};
-
 export type CreateExamTypeInput = {
   id?: string | null,
   name: string,
@@ -233,7 +103,6 @@ export type Question = {
   _version: number,
   _deleted?: boolean | null,
   _lastChangedAt: number,
-  examTypeQuestionsId?: string | null,
 };
 
 export type Option = {
@@ -265,7 +134,6 @@ export type CreateQuestionInput = {
   isAIGenerated?: boolean | null,
   topic?: string | null,
   _version?: number | null,
-  examTypeQuestionsId?: string | null,
 };
 
 export type OptionInput = {
@@ -287,7 +155,6 @@ export type ModelQuestionConditionInput = {
   _deleted?: ModelBooleanInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
-  examTypeQuestionsId?: ModelIDInput | null,
 };
 
 export type ModelIDInput = {
@@ -317,7 +184,6 @@ export type UpdateQuestionInput = {
   isAIGenerated?: boolean | null,
   topic?: string | null,
   _version?: number | null,
-  examTypeQuestionsId?: string | null,
 };
 
 export type DeleteQuestionInput = {
@@ -495,7 +361,6 @@ export type ModelQuestionFilterInput = {
   or?: Array< ModelQuestionFilterInput | null > | null,
   not?: ModelQuestionFilterInput | null,
   _deleted?: ModelBooleanInput | null,
-  examTypeQuestionsId?: ModelIDInput | null,
 };
 
 export enum ModelSortDirection {
@@ -549,7 +414,6 @@ export type ModelSubscriptionExamTypeFilterInput = {
   and?: Array< ModelSubscriptionExamTypeFilterInput | null > | null,
   or?: Array< ModelSubscriptionExamTypeFilterInput | null > | null,
   _deleted?: ModelBooleanInput | null,
-  examTypeQuestionsId?: ModelSubscriptionIDInput | null,
 };
 
 export type ModelSubscriptionIDInput = {
@@ -740,7 +604,6 @@ export type CreateQuestionMutation = {
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
-    examTypeQuestionsId?: string | null,
   } | null,
 };
 
@@ -770,7 +633,6 @@ export type UpdateQuestionMutation = {
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
-    examTypeQuestionsId?: string | null,
   } | null,
 };
 
@@ -800,7 +662,6 @@ export type DeleteQuestionMutation = {
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
-    examTypeQuestionsId?: string | null,
   } | null,
 };
 
@@ -1065,7 +926,6 @@ export type GetQuestionQuery = {
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
-    examTypeQuestionsId?: string | null,
   } | null,
 };
 
@@ -1093,7 +953,6 @@ export type ListQuestionsQuery = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-      examTypeQuestionsId?: string | null,
     } | null >,
     nextToken?: string | null,
     startedAt?: number | null,
@@ -1125,7 +984,6 @@ export type SyncQuestionsQuery = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-      examTypeQuestionsId?: string | null,
     } | null >,
     nextToken?: string | null,
     startedAt?: number | null,
@@ -1158,7 +1016,6 @@ export type QuestionsByExamTypeIDQuery = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-      examTypeQuestionsId?: string | null,
     } | null >,
     nextToken?: string | null,
     startedAt?: number | null,
@@ -1485,7 +1342,6 @@ export type OnCreateQuestionSubscription = {
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
-    examTypeQuestionsId?: string | null,
   } | null,
 };
 
@@ -1514,7 +1370,6 @@ export type OnUpdateQuestionSubscription = {
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
-    examTypeQuestionsId?: string | null,
   } | null,
 };
 
@@ -1543,7 +1398,6 @@ export type OnDeleteQuestionSubscription = {
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
-    examTypeQuestionsId?: string | null,
   } | null,
 };
 

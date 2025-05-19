@@ -8,28 +8,6 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
-export const createCertificationType = /* GraphQL */ `mutation CreateCertificationType(
-  $input: CreateCertificationTypeInput!
-  $condition: ModelCertificationTypeConditionInput
-) {
-  createCertificationType(input: $input, condition: $condition) {
-    id
-    name
-    description
-    provider
-    createdAt
-    updatedAt
-    _version
-    _deleted
-    _lastChangedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.CreateCertificationTypeInput,
-  APITypes.CreateCertificationTypeMutation
->;
-
 export const createExamType = /* GraphQL */ `mutation CreateExamType(
   $input: CreateExamTypeInput!
   $condition: ModelExamTypeConditionInput
@@ -128,7 +106,6 @@ export const createQuestion = /* GraphQL */ `mutation CreateQuestion(
     _version
     _deleted
     _lastChangedAt
-    examTypeQuestionsId
     __typename
   }
 }
@@ -159,7 +136,6 @@ export const updateQuestion = /* GraphQL */ `mutation UpdateQuestion(
     _version
     _deleted
     _lastChangedAt
-    examTypeQuestionsId
     __typename
   }
 }
@@ -190,7 +166,6 @@ export const deleteQuestion = /* GraphQL */ `mutation DeleteQuestion(
     _version
     _deleted
     _lastChangedAt
-    examTypeQuestionsId
     __typename
   }
 }
@@ -365,33 +340,4 @@ export const deleteExamAttempt = /* GraphQL */ `mutation DeleteExamAttempt(
 ` as GeneratedMutation<
   APITypes.DeleteExamAttemptMutationVariables,
   APITypes.DeleteExamAttemptMutation
->;
-
-export const createExamResult = /* GraphQL */ `mutation CreateExamResult(
-  $input: CreateExamResultInput!
-) {
-  createExamResult(input: $input) {
-    id
-    userId
-    examId
-    examName
-    score
-    totalQuestions
-    correctAnswers
-    timeSpent
-    date
-    questionResults {
-      questionId
-      correct
-      userAnswer
-      correctAnswer
-    }
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.CreateExamResultInput,
-  APITypes.CreateExamResultMutation
 >;

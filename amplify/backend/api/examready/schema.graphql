@@ -1,11 +1,17 @@
-type ExamType @model @auth(rules: [{allow: public, operations: [read]}]) {
+type ExamType @model @auth(rules: [
+  {allow: public, operations: [read]},
+  {allow: groups, groups: ["admin"], operations: [create, update, delete, read]}
+]) {
   id: ID!
   name: String!
   description: String
-  questions: [Question] @hasMany
+  questions: [Question] @hasMany(indexName: "byExamType", fields: ["id"])
 }
 
-type Question @model @auth(rules: [{allow: public, operations: [read]}]) {
+type Question @model @auth(rules: [
+  {allow: public, operations: [read]},
+  {allow: groups, groups: ["admin"], operations: [create, update, delete, read]}
+]) {
   id: ID!
   text: String!
   options: [Option]

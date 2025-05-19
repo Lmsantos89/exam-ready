@@ -1,6 +1,6 @@
 import { API, graphqlOperation } from 'aws-amplify';
 import { GraphQLQuery, GraphQLResult } from '@aws-amplify/api';
-import { createExamType, createQuestion, deleteQuestion, createCertificationType } from '../../graphql/mutations';
+import { createExamType, createQuestion, deleteQuestion } from '../../graphql/mutations';
 import { getExamType, listQuestions, questionsByExamTypeID } from '../../graphql/queries';
 
 // Types
@@ -69,17 +69,17 @@ export async function createCertification(certData: CertificationInput): Promise
   try {
     const input = {
       name: certData.name,
-      description: certData.description || null,
-      provider: certData.provider,
+      description: `Provider: ${certData.provider}. ${certData.description || ''}`,
+      // We'll store provider info in the description since ExamType doesn't have a provider field
     };
 
     const response = await API.graphql({
-      query: createCertificationType,
+      query: createExamType,
       variables: { input },
       authMode: 'AMAZON_COGNITO_USER_POOLS', // Requires authenticated user
     }) as GraphQLResult<any>;
 
-    return response.data?.createCertificationType;
+    return response.data?.createExamType;
   } catch (error) {
     console.error('Error creating certification:', error);
     throw new Error('Failed to create certification. Please try again.');

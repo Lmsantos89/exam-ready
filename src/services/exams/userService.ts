@@ -1,7 +1,5 @@
 import { API, graphqlOperation } from 'aws-amplify';
 import { GraphQLQuery, GraphQLResult } from '@aws-amplify/api';
-import { listExamResults } from '../../graphql/queries';
-import { createExamResult } from '../../graphql/mutations';
 
 // Define types for exam results
 export interface ExamResult {

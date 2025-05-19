@@ -8,35 +8,6 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
-export const listExamResults = /* GraphQL */ `query ListExamResults(
-  $filter: ModelExamResultFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listExamResults(filter: $filter, limit: $limit, nextToken: $nextToken) {
-    items {
-      id
-      userId
-      examId
-      examName
-      score
-      totalQuestions
-      correctAnswers
-      timeSpent
-      date
-      createdAt
-      updatedAt
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.ListExamResultsQueryVariables,
-  APITypes.ListExamResultsQuery
->;
-
 export const getExamType = /* GraphQL */ `query GetExamType($id: ID!) {
   getExamType(id: $id) {
     id
@@ -137,7 +108,6 @@ export const getQuestion = /* GraphQL */ `query GetQuestion($id: ID!) {
     _version
     _deleted
     _lastChangedAt
-    examTypeQuestionsId
     __typename
   }
 }
@@ -165,7 +135,6 @@ export const listQuestions = /* GraphQL */ `query ListQuestions(
       _version
       _deleted
       _lastChangedAt
-      examTypeQuestionsId
       __typename
     }
     nextToken
@@ -203,7 +172,6 @@ export const syncQuestions = /* GraphQL */ `query SyncQuestions(
       _version
       _deleted
       _lastChangedAt
-      examTypeQuestionsId
       __typename
     }
     nextToken
@@ -243,7 +211,6 @@ export const questionsByExamTypeID = /* GraphQL */ `query QuestionsByExamTypeID(
       _version
       _deleted
       _lastChangedAt
-      examTypeQuestionsId
       __typename
     }
     nextToken

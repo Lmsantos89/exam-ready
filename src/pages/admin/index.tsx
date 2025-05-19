@@ -8,7 +8,7 @@ import { getCertifications, getExams } from '../../services/exams/adminService';
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('exams');
-  const [certifications, setCertifications] = useState<Array<{ id: string; name: string }>>([]);
+  const [certifications, setCertifications] = useState<Array<{ id: string; name: string; description?: string; provider?: string }>>([]);
   const [exams, setExams] = useState<Array<any>>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
@@ -169,9 +169,55 @@ export default function AdminDashboard() {
               )}
               
               {activeTab === 'certifications' && (
-                <CreateCertificationForm 
-                  onCertificationCreated={handleCertificationCreated} 
-                />
+                <div>
+                  <CreateCertificationForm 
+                    onCertificationCreated={handleCertificationCreated} 
+                  />
+                  
+                  <div className="mt-8">
+                    <h2 className="text-xl font-semibold mb-4">Existing Certifications</h2>
+                    {certifications.length === 0 ? (
+                      <div className="bg-white p-6 rounded-lg shadow text-center text-gray-500">
+                        No certifications created yet. Use the form above to create your first certification.
+                      </div>
+                    ) : (
+                      <div className="bg-white p-6 rounded-lg shadow">
+                        <div className="overflow-x-auto">
+                          <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                              <tr>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                  Certification Name
+                                </th>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                  Provider
+                                </th>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                  Description
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                              {certifications.map((cert) => (
+                                <tr key={cert.id}>
+                                  <td className="px-6 py-4 whitespace-nowrap">
+                                    <div className="text-sm font-medium text-gray-900">{cert.name}</div>
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap">
+                                    <div className="text-sm text-gray-500">{cert.provider || 'Unknown'}</div>
+                                  </td>
+                                  <td className="px-6 py-4">
+                                    <div className="text-sm text-gray-500">{cert.description || 'No description'}</div>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
               )}
             </div>
           )}

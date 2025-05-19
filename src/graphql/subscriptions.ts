@@ -94,7 +94,6 @@ export const onCreateQuestion = /* GraphQL */ `subscription OnCreateQuestion($fi
     _version
     _deleted
     _lastChangedAt
-    examTypeQuestionsId
     __typename
   }
 }
@@ -122,7 +121,6 @@ export const onUpdateQuestion = /* GraphQL */ `subscription OnUpdateQuestion($fi
     _version
     _deleted
     _lastChangedAt
-    examTypeQuestionsId
     __typename
   }
 }
@@ -150,7 +148,6 @@ export const onDeleteQuestion = /* GraphQL */ `subscription OnDeleteQuestion($fi
     _version
     _deleted
     _lastChangedAt
-    examTypeQuestionsId
     __typename
   }
 }

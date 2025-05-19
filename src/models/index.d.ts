@@ -82,7 +82,6 @@ type EagerQuestion = {
   readonly topic?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-  readonly examTypeQuestionsId?: string | null;
 }
 
 type LazyQuestion = {
@@ -101,7 +100,6 @@ type LazyQuestion = {
   readonly topic?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-  readonly examTypeQuestionsId?: string | null;
 }
 
 export declare type Question = LazyLoading extends LazyLoadingDisabled ? EagerQuestion : LazyQuestion
