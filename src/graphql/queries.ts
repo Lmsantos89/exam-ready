@@ -8,12 +8,13 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
-export const getExamType = /* GraphQL */ `query GetExamType($id: ID!) {
-  getExamType(id: $id) {
+export const getCertification = /* GraphQL */ `query GetCertification($id: ID!) {
+  getCertification(id: $id) {
     id
     name
     description
-    questions {
+    provider
+    exams {
       nextToken
       startedAt
       __typename
@@ -27,19 +28,20 @@ export const getExamType = /* GraphQL */ `query GetExamType($id: ID!) {
   }
 }
 ` as GeneratedQuery<
-  APITypes.GetExamTypeQueryVariables,
-  APITypes.GetExamTypeQuery
+  APITypes.GetCertificationQueryVariables,
+  APITypes.GetCertificationQuery
 >;
-export const listExamTypes = /* GraphQL */ `query ListExamTypes(
-  $filter: ModelExamTypeFilterInput
+export const listCertifications = /* GraphQL */ `query ListCertifications(
+  $filter: ModelCertificationFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  listExamTypes(filter: $filter, limit: $limit, nextToken: $nextToken) {
+  listCertifications(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
       name
       description
+      provider
       createdAt
       updatedAt
       _version
@@ -53,16 +55,16 @@ export const listExamTypes = /* GraphQL */ `query ListExamTypes(
   }
 }
 ` as GeneratedQuery<
-  APITypes.ListExamTypesQueryVariables,
-  APITypes.ListExamTypesQuery
+  APITypes.ListCertificationsQueryVariables,
+  APITypes.ListCertificationsQuery
 >;
-export const syncExamTypes = /* GraphQL */ `query SyncExamTypes(
-  $filter: ModelExamTypeFilterInput
+export const syncCertifications = /* GraphQL */ `query SyncCertifications(
+  $filter: ModelCertificationFilterInput
   $limit: Int
   $nextToken: String
   $lastSync: AWSTimestamp
 ) {
-  syncExamTypes(
+  syncCertifications(
     filter: $filter
     limit: $limit
     nextToken: $nextToken
@@ -72,6 +74,7 @@ export const syncExamTypes = /* GraphQL */ `query SyncExamTypes(
       id
       name
       description
+      provider
       createdAt
       updatedAt
       _version
@@ -85,8 +88,125 @@ export const syncExamTypes = /* GraphQL */ `query SyncExamTypes(
   }
 }
 ` as GeneratedQuery<
-  APITypes.SyncExamTypesQueryVariables,
-  APITypes.SyncExamTypesQuery
+  APITypes.SyncCertificationsQueryVariables,
+  APITypes.SyncCertificationsQuery
+>;
+export const getExam = /* GraphQL */ `query GetExam($id: ID!) {
+  getExam(id: $id) {
+    id
+    name
+    description
+    passingScore
+    timeLimit
+    certificationID
+    questions {
+      nextToken
+      startedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.GetExamQueryVariables, APITypes.GetExamQuery>;
+export const listExams = /* GraphQL */ `query ListExams(
+  $filter: ModelExamFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listExams(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      description
+      passingScore
+      timeLimit
+      certificationID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.ListExamsQueryVariables, APITypes.ListExamsQuery>;
+export const syncExams = /* GraphQL */ `query SyncExams(
+  $filter: ModelExamFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncExams(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      name
+      description
+      passingScore
+      timeLimit
+      certificationID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.SyncExamsQueryVariables, APITypes.SyncExamsQuery>;
+export const examsByCertificationID = /* GraphQL */ `query ExamsByCertificationID(
+  $certificationID: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelExamFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  examsByCertificationID(
+    certificationID: $certificationID
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      name
+      description
+      passingScore
+      timeLimit
+      certificationID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ExamsByCertificationIDQueryVariables,
+  APITypes.ExamsByCertificationIDQuery
 >;
 export const getQuestion = /* GraphQL */ `query GetQuestion($id: ID!) {
   getQuestion(id: $id) {
@@ -100,7 +220,7 @@ export const getQuestion = /* GraphQL */ `query GetQuestion($id: ID!) {
     correctAnswer
     explanation
     difficulty
-    examTypeID
+    examID
     isAIGenerated
     topic
     createdAt
@@ -127,7 +247,7 @@ export const listQuestions = /* GraphQL */ `query ListQuestions(
       correctAnswer
       explanation
       difficulty
-      examTypeID
+      examID
       isAIGenerated
       topic
       createdAt
@@ -164,7 +284,7 @@ export const syncQuestions = /* GraphQL */ `query SyncQuestions(
       correctAnswer
       explanation
       difficulty
-      examTypeID
+      examID
       isAIGenerated
       topic
       createdAt
@@ -183,15 +303,15 @@ export const syncQuestions = /* GraphQL */ `query SyncQuestions(
   APITypes.SyncQuestionsQueryVariables,
   APITypes.SyncQuestionsQuery
 >;
-export const questionsByExamTypeID = /* GraphQL */ `query QuestionsByExamTypeID(
-  $examTypeID: ID!
+export const questionsByExamID = /* GraphQL */ `query QuestionsByExamID(
+  $examID: ID!
   $sortDirection: ModelSortDirection
   $filter: ModelQuestionFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  questionsByExamTypeID(
-    examTypeID: $examTypeID
+  questionsByExamID(
+    examID: $examID
     sortDirection: $sortDirection
     filter: $filter
     limit: $limit
@@ -203,7 +323,7 @@ export const questionsByExamTypeID = /* GraphQL */ `query QuestionsByExamTypeID(
       correctAnswer
       explanation
       difficulty
-      examTypeID
+      examID
       isAIGenerated
       topic
       createdAt
@@ -219,8 +339,8 @@ export const questionsByExamTypeID = /* GraphQL */ `query QuestionsByExamTypeID(
   }
 }
 ` as GeneratedQuery<
-  APITypes.QuestionsByExamTypeIDQueryVariables,
-  APITypes.QuestionsByExamTypeIDQuery
+  APITypes.QuestionsByExamIDQueryVariables,
+  APITypes.QuestionsByExamIDQuery
 >;
 export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
   getUser(id: $id) {
@@ -300,7 +420,7 @@ export const getExamAttempt = /* GraphQL */ `query GetExamAttempt($id: ID!) {
   getExamAttempt(id: $id) {
     id
     userID
-    examTypeID
+    examID
     score
     completedAt
     answers {
@@ -332,7 +452,7 @@ export const listExamAttempts = /* GraphQL */ `query ListExamAttempts(
     items {
       id
       userID
-      examTypeID
+      examID
       score
       completedAt
       createdAt
@@ -368,7 +488,7 @@ export const syncExamAttempts = /* GraphQL */ `query SyncExamAttempts(
     items {
       id
       userID
-      examTypeID
+      examID
       score
       completedAt
       createdAt
@@ -406,7 +526,7 @@ export const examAttemptsByUserID = /* GraphQL */ `query ExamAttemptsByUserID(
     items {
       id
       userID
-      examTypeID
+      examID
       score
       completedAt
       createdAt
@@ -427,15 +547,15 @@ export const examAttemptsByUserID = /* GraphQL */ `query ExamAttemptsByUserID(
   APITypes.ExamAttemptsByUserIDQueryVariables,
   APITypes.ExamAttemptsByUserIDQuery
 >;
-export const examAttemptsByExamTypeID = /* GraphQL */ `query ExamAttemptsByExamTypeID(
-  $examTypeID: ID!
+export const examAttemptsByExamID = /* GraphQL */ `query ExamAttemptsByExamID(
+  $examID: ID!
   $sortDirection: ModelSortDirection
   $filter: ModelExamAttemptFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  examAttemptsByExamTypeID(
-    examTypeID: $examTypeID
+  examAttemptsByExamID(
+    examID: $examID
     sortDirection: $sortDirection
     filter: $filter
     limit: $limit
@@ -444,7 +564,7 @@ export const examAttemptsByExamTypeID = /* GraphQL */ `query ExamAttemptsByExamT
     items {
       id
       userID
-      examTypeID
+      examID
       score
       completedAt
       createdAt
@@ -462,6 +582,6 @@ export const examAttemptsByExamTypeID = /* GraphQL */ `query ExamAttemptsByExamT
   }
 }
 ` as GeneratedQuery<
-  APITypes.ExamAttemptsByExamTypeIDQueryVariables,
-  APITypes.ExamAttemptsByExamTypeIDQuery
+  APITypes.ExamAttemptsByExamIDQueryVariables,
+  APITypes.ExamAttemptsByExamIDQuery
 >;

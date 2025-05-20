@@ -18,7 +18,7 @@
       "function": {
         "generateQuestion": {
           "deploymentBucketName": "amplify-examready-dev-4a727-deployment",
-          "s3Key": "amplify-builds/generateQuestion-35496e307753494f7857-build.zip"
+          "s3Key": "amplify-builds/generateQuestion-756d484a303257694943-build.zip"
         }
       },
       "hosting": {

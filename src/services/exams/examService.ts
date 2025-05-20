@@ -2,21 +2,24 @@
 
 import { API, graphqlOperation } from 'aws-amplify';
 import { GraphQLQuery, GraphQLResult } from '@aws-amplify/api';
-import { listExamTypes, getExamType, listQuestions, getQuestion, questionsByExamTypeID } from '../../graphql/queries';
+import { listExams, getExam, listQuestions, getQuestion, questionsByExamID } from '../../graphql/queries';
 import { createQuestion } from '../../graphql/mutations';
 import { 
-  ListExamTypesQuery, 
-  GetExamTypeQuery,
+  ListExamsQuery, 
+  GetExamQuery,
   ListQuestionsQuery,
   CreateQuestionMutation,
   GetQuestionQuery,
-  QuestionsByExamTypeIDQuery
+  QuestionsByExamIDQuery
 } from '../../API';
 
 export interface ExamWithQuestions {
   id: string;
   name: string;
   description?: string;
+  certificationID: string;
+  passingScore?: number;
+  timeLimit?: number;
   questions: Array<{
     id: string;
     text: string;
@@ -24,7 +27,7 @@ export interface ExamWithQuestions {
     correctAnswer: string;
     explanation?: string;
     difficulty?: string;
-    examTypeID: string;
+    examID: string;
     isAIGenerated?: boolean;
     topic?: string;
   }>;
@@ -32,11 +35,11 @@ export interface ExamWithQuestions {
 
 export async function getExams() {
   try {
-    const response = await API.graphql<GraphQLQuery<ListExamTypesQuery>>(
-      graphqlOperation(listExamTypes)
+    const response = await API.graphql<GraphQLQuery<ListExamsQuery>>(
+      graphqlOperation(listExams)
     );
     
-    const exams = response.data?.listExamTypes?.items || [];
+    const exams = response.data?.listExams?.items || [];
     
     // Fetch question counts for each exam
     const examsWithQuestionCounts = await Promise.all(
@@ -44,7 +47,7 @@ export async function getExams() {
         try {
           const questionsResponse = await API.graphql<GraphQLQuery<ListQuestionsQuery>>(
             graphqlOperation(listQuestions, {
-              filter: { examTypeID: { eq: exam.id } }
+              filter: { examID: { eq: exam.id } }
             })
           );
           
@@ -73,22 +76,22 @@ export async function getExams() {
 
 export async function getExamById(id: string) {
   try {
-    const response = await API.graphql<GraphQLQuery<GetExamTypeQuery>>(
-      graphqlOperation(getExamType, { id })
+    const response = await API.graphql<GraphQLQuery<GetExamQuery>>(
+      graphqlOperation(getExam, { id })
     );
-    return response.data?.getExamType;
+    return response.data?.getExam;
   } catch (error) {
     console.error('Error fetching exam:', error);
     throw error;
   }
 }
 
-export async function getQuestionsByExamId(examTypeID: string) {
+export async function getQuestionsByExamId(examID: string) {
   try {
     // Get all question IDs for this exam
     const listResponse = await API.graphql<GraphQLQuery<ListQuestionsQuery>>(
       graphqlOperation(listQuestions, {
-        filter: { examTypeID: { eq: examTypeID } }
+        filter: { examID: { eq: examID } }
       })
     );
     
@@ -132,11 +135,11 @@ export async function getQuestionsByExamId(examTypeID: string) {
 export async function getFullExamWithQuestions(examId: string): Promise<ExamWithQuestions | null> {
   try {
     // Get exam details
-    const examResponse = await API.graphql<GraphQLQuery<GetExamTypeQuery>>(
-      graphqlOperation(getExamType, { id: examId })
+    const examResponse = await API.graphql<GraphQLQuery<GetExamQuery>>(
+      graphqlOperation(getExam, { id: examId })
     );
     
-    const exam = examResponse.data?.getExamType;
+    const exam = examResponse.data?.getExam;
     if (!exam) {
       return null;
     }
@@ -149,6 +152,9 @@ export async function getFullExamWithQuestions(examId: string): Promise<ExamWith
       id: exam.id,
       name: exam.name,
       description: exam.description || undefined,
+      certificationID: exam.certificationID,
+      passingScore: exam.passingScore || undefined,
+      timeLimit: exam.timeLimit || undefined,
       questions: questions.map(q => ({
         id: q.id,
         text: q.text,
@@ -156,7 +162,7 @@ export async function getFullExamWithQuestions(examId: string): Promise<ExamWith
         correctAnswer: q.correctAnswer,
         explanation: q.explanation || undefined,
         difficulty: q.difficulty || undefined,
-        examTypeID: q.examTypeID,
+        examID: q.examID,
         isAIGenerated: q.isAIGenerated || false,
         topic: q.topic || undefined
       }))
@@ -174,7 +180,7 @@ interface QuestionInput {
   correctAnswer: string;
   explanation?: string;
   difficulty?: string;
-  examTypeID: string;
+  examID: string;
   isAIGenerated?: boolean;
   topic?: string;
 }

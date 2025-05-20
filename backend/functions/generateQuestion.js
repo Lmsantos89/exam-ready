@@ -18,21 +18,21 @@ exports.handler = async (event, context) => {
   try {
     // Parse request body
     const body = JSON.parse(event.body || '{}');
-    const { examType, topic, difficulty } = body;
+    const { exam, topic, difficulty } = body;
     
-    if (!examType) {
+    if (!exam) {
       return {
         statusCode: 400,
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*'
         },
-        body: JSON.stringify({ error: 'examType is required' })
+        body: JSON.stringify({ error: 'exam is required' })
       };
     }
     
     // Construct the prompt for the AI model
-    const prompt = `Generate a multiple-choice question for a ${examType} certification exam.
+    const prompt = `Generate a multiple-choice question for a ${exam} certification exam.
 ${topic ? `The question should be about ${topic}.` : ''}
 The question should be at ${difficulty || 'intermediate'} difficulty level.
 Format the response as a JSON object with the following structure:

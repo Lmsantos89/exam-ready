@@ -1,7 +1,7 @@
 export const schema = {
     "models": {
-        "ExamType": {
-            "name": "ExamType",
+        "Certification": {
+            "name": "Certification",
             "fields": {
                 "id": {
                     "name": "id",
@@ -24,11 +24,18 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "questions": {
-                    "name": "questions",
+                "provider": {
+                    "name": "provider",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "exams": {
+                    "name": "exams",
                     "isArray": true,
                     "type": {
-                        "model": "Question"
+                        "model": "Exam"
                     },
                     "isRequired": false,
                     "attributes": [],
@@ -36,7 +43,7 @@ export const schema = {
                     "association": {
                         "connectionType": "HAS_MANY",
                         "associatedWith": [
-                            "examTypeID"
+                            "certificationID"
                         ]
                     }
                 },
@@ -58,11 +65,134 @@ export const schema = {
                 }
             },
             "syncable": true,
-            "pluralName": "ExamTypes",
+            "pluralName": "Certifications",
             "attributes": [
                 {
                     "type": "model",
                     "properties": {}
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "read"
+                                ]
+                            },
+                            {
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "admin"
+                                ],
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "Exam": {
+            "name": "Exam",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "name": {
+                    "name": "name",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "description": {
+                    "name": "description",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "passingScore": {
+                    "name": "passingScore",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "timeLimit": {
+                    "name": "timeLimit",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "certificationID": {
+                    "name": "certificationID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "questions": {
+                    "name": "questions",
+                    "isArray": true,
+                    "type": {
+                        "model": "Question"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "examID"
+                        ]
+                    }
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "Exams",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byCertification",
+                        "fields": [
+                            "certificationID"
+                        ]
+                    }
                 },
                 {
                     "type": "auth",
@@ -141,8 +271,8 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "examTypeID": {
-                    "name": "examTypeID",
+                "examID": {
+                    "name": "examID",
                     "isArray": false,
                     "type": "ID",
                     "isRequired": true,
@@ -189,9 +319,9 @@ export const schema = {
                 {
                     "type": "key",
                     "properties": {
-                        "name": "byExamType",
+                        "name": "byExam",
                         "fields": [
-                            "examTypeID"
+                            "examID"
                         ]
                     }
                 },
@@ -326,8 +456,8 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "examTypeID": {
-                    "name": "examTypeID",
+                "examID": {
+                    "name": "examID",
                     "isArray": false,
                     "type": "ID",
                     "isRequired": true,
@@ -400,9 +530,9 @@ export const schema = {
                 {
                     "type": "key",
                     "properties": {
-                        "name": "byExamType",
+                        "name": "byExam",
                         "fields": [
-                            "examTypeID"
+                            "examID"
                         ]
                     }
                 },
@@ -486,5 +616,5 @@ export const schema = {
         }
     },
     "codegenVersion": "3.4.4",
-    "version": "b8e9d716c80117b707248a8904a691c1"
+    "version": "9bc1967bedc90c50ae215040b65835fa"
 };

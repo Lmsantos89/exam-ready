@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createCertification } from '../../services/exams/adminService';
+import { createNewCertification } from '../../services/exams/adminService';
 
 interface CreateCertificationFormProps {
   onCertificationCreated?: () => void;
@@ -18,7 +18,7 @@ const CreateCertificationForm: React.FC<CreateCertificationFormProps> = ({ onCer
     setMessage('');
     
     try {
-      const result = await createCertification({
+      const result = await createNewCertification({
         name,
         description,
         provider

@@ -8,12 +8,15 @@ type GeneratedSubscription<InputType, OutputType> = string & {
   __generatedSubscriptionOutput: OutputType;
 };
 
-export const onCreateExamType = /* GraphQL */ `subscription OnCreateExamType($filter: ModelSubscriptionExamTypeFilterInput) {
-  onCreateExamType(filter: $filter) {
+export const onCreateCertification = /* GraphQL */ `subscription OnCreateCertification(
+  $filter: ModelSubscriptionCertificationFilterInput
+) {
+  onCreateCertification(filter: $filter) {
     id
     name
     description
-    questions {
+    provider
+    exams {
       nextToken
       startedAt
       __typename
@@ -27,15 +30,18 @@ export const onCreateExamType = /* GraphQL */ `subscription OnCreateExamType($fi
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnCreateExamTypeSubscriptionVariables,
-  APITypes.OnCreateExamTypeSubscription
+  APITypes.OnCreateCertificationSubscriptionVariables,
+  APITypes.OnCreateCertificationSubscription
 >;
-export const onUpdateExamType = /* GraphQL */ `subscription OnUpdateExamType($filter: ModelSubscriptionExamTypeFilterInput) {
-  onUpdateExamType(filter: $filter) {
+export const onUpdateCertification = /* GraphQL */ `subscription OnUpdateCertification(
+  $filter: ModelSubscriptionCertificationFilterInput
+) {
+  onUpdateCertification(filter: $filter) {
     id
     name
     description
-    questions {
+    provider
+    exams {
       nextToken
       startedAt
       __typename
@@ -49,14 +55,42 @@ export const onUpdateExamType = /* GraphQL */ `subscription OnUpdateExamType($fi
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnUpdateExamTypeSubscriptionVariables,
-  APITypes.OnUpdateExamTypeSubscription
+  APITypes.OnUpdateCertificationSubscriptionVariables,
+  APITypes.OnUpdateCertificationSubscription
 >;
-export const onDeleteExamType = /* GraphQL */ `subscription OnDeleteExamType($filter: ModelSubscriptionExamTypeFilterInput) {
-  onDeleteExamType(filter: $filter) {
+export const onDeleteCertification = /* GraphQL */ `subscription OnDeleteCertification(
+  $filter: ModelSubscriptionCertificationFilterInput
+) {
+  onDeleteCertification(filter: $filter) {
     id
     name
     description
+    provider
+    exams {
+      nextToken
+      startedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteCertificationSubscriptionVariables,
+  APITypes.OnDeleteCertificationSubscription
+>;
+export const onCreateExam = /* GraphQL */ `subscription OnCreateExam($filter: ModelSubscriptionExamFilterInput) {
+  onCreateExam(filter: $filter) {
+    id
+    name
+    description
+    passingScore
+    timeLimit
+    certificationID
     questions {
       nextToken
       startedAt
@@ -71,8 +105,58 @@ export const onDeleteExamType = /* GraphQL */ `subscription OnDeleteExamType($fi
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnDeleteExamTypeSubscriptionVariables,
-  APITypes.OnDeleteExamTypeSubscription
+  APITypes.OnCreateExamSubscriptionVariables,
+  APITypes.OnCreateExamSubscription
+>;
+export const onUpdateExam = /* GraphQL */ `subscription OnUpdateExam($filter: ModelSubscriptionExamFilterInput) {
+  onUpdateExam(filter: $filter) {
+    id
+    name
+    description
+    passingScore
+    timeLimit
+    certificationID
+    questions {
+      nextToken
+      startedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateExamSubscriptionVariables,
+  APITypes.OnUpdateExamSubscription
+>;
+export const onDeleteExam = /* GraphQL */ `subscription OnDeleteExam($filter: ModelSubscriptionExamFilterInput) {
+  onDeleteExam(filter: $filter) {
+    id
+    name
+    description
+    passingScore
+    timeLimit
+    certificationID
+    questions {
+      nextToken
+      startedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteExamSubscriptionVariables,
+  APITypes.OnDeleteExamSubscription
 >;
 export const onCreateQuestion = /* GraphQL */ `subscription OnCreateQuestion($filter: ModelSubscriptionQuestionFilterInput) {
   onCreateQuestion(filter: $filter) {
@@ -86,7 +170,7 @@ export const onCreateQuestion = /* GraphQL */ `subscription OnCreateQuestion($fi
     correctAnswer
     explanation
     difficulty
-    examTypeID
+    examID
     isAIGenerated
     topic
     createdAt
@@ -113,7 +197,7 @@ export const onUpdateQuestion = /* GraphQL */ `subscription OnUpdateQuestion($fi
     correctAnswer
     explanation
     difficulty
-    examTypeID
+    examID
     isAIGenerated
     topic
     createdAt
@@ -140,7 +224,7 @@ export const onDeleteQuestion = /* GraphQL */ `subscription OnDeleteQuestion($fi
     correctAnswer
     explanation
     difficulty
-    examTypeID
+    examID
     isAIGenerated
     topic
     createdAt
@@ -240,7 +324,7 @@ export const onCreateExamAttempt = /* GraphQL */ `subscription OnCreateExamAttem
   onCreateExamAttempt(filter: $filter, owner: $owner) {
     id
     userID
-    examTypeID
+    examID
     score
     completedAt
     answers {
@@ -270,7 +354,7 @@ export const onUpdateExamAttempt = /* GraphQL */ `subscription OnUpdateExamAttem
   onUpdateExamAttempt(filter: $filter, owner: $owner) {
     id
     userID
-    examTypeID
+    examID
     score
     completedAt
     answers {
@@ -300,7 +384,7 @@ export const onDeleteExamAttempt = /* GraphQL */ `subscription OnDeleteExamAttem
   onDeleteExamAttempt(filter: $filter, owner: $owner) {
     id
     userID
-    examTypeID
+    examID
     score
     completedAt
     answers {

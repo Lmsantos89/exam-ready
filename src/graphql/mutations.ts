@@ -8,15 +8,16 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
-export const createExamType = /* GraphQL */ `mutation CreateExamType(
-  $input: CreateExamTypeInput!
-  $condition: ModelExamTypeConditionInput
+export const createCertification = /* GraphQL */ `mutation CreateCertification(
+  $input: CreateCertificationInput!
+  $condition: ModelCertificationConditionInput
 ) {
-  createExamType(input: $input, condition: $condition) {
+  createCertification(input: $input, condition: $condition) {
     id
     name
     description
-    questions {
+    provider
+    exams {
       nextToken
       startedAt
       __typename
@@ -30,18 +31,19 @@ export const createExamType = /* GraphQL */ `mutation CreateExamType(
   }
 }
 ` as GeneratedMutation<
-  APITypes.CreateExamTypeMutationVariables,
-  APITypes.CreateExamTypeMutation
+  APITypes.CreateCertificationMutationVariables,
+  APITypes.CreateCertificationMutation
 >;
-export const updateExamType = /* GraphQL */ `mutation UpdateExamType(
-  $input: UpdateExamTypeInput!
-  $condition: ModelExamTypeConditionInput
+export const updateCertification = /* GraphQL */ `mutation UpdateCertification(
+  $input: UpdateCertificationInput!
+  $condition: ModelCertificationConditionInput
 ) {
-  updateExamType(input: $input, condition: $condition) {
+  updateCertification(input: $input, condition: $condition) {
     id
     name
     description
-    questions {
+    provider
+    exams {
       nextToken
       startedAt
       __typename
@@ -55,17 +57,46 @@ export const updateExamType = /* GraphQL */ `mutation UpdateExamType(
   }
 }
 ` as GeneratedMutation<
-  APITypes.UpdateExamTypeMutationVariables,
-  APITypes.UpdateExamTypeMutation
+  APITypes.UpdateCertificationMutationVariables,
+  APITypes.UpdateCertificationMutation
 >;
-export const deleteExamType = /* GraphQL */ `mutation DeleteExamType(
-  $input: DeleteExamTypeInput!
-  $condition: ModelExamTypeConditionInput
+export const deleteCertification = /* GraphQL */ `mutation DeleteCertification(
+  $input: DeleteCertificationInput!
+  $condition: ModelCertificationConditionInput
 ) {
-  deleteExamType(input: $input, condition: $condition) {
+  deleteCertification(input: $input, condition: $condition) {
     id
     name
     description
+    provider
+    exams {
+      nextToken
+      startedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteCertificationMutationVariables,
+  APITypes.DeleteCertificationMutation
+>;
+export const createExam = /* GraphQL */ `mutation CreateExam(
+  $input: CreateExamInput!
+  $condition: ModelExamConditionInput
+) {
+  createExam(input: $input, condition: $condition) {
+    id
+    name
+    description
+    passingScore
+    timeLimit
+    certificationID
     questions {
       nextToken
       startedAt
@@ -80,8 +111,64 @@ export const deleteExamType = /* GraphQL */ `mutation DeleteExamType(
   }
 }
 ` as GeneratedMutation<
-  APITypes.DeleteExamTypeMutationVariables,
-  APITypes.DeleteExamTypeMutation
+  APITypes.CreateExamMutationVariables,
+  APITypes.CreateExamMutation
+>;
+export const updateExam = /* GraphQL */ `mutation UpdateExam(
+  $input: UpdateExamInput!
+  $condition: ModelExamConditionInput
+) {
+  updateExam(input: $input, condition: $condition) {
+    id
+    name
+    description
+    passingScore
+    timeLimit
+    certificationID
+    questions {
+      nextToken
+      startedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateExamMutationVariables,
+  APITypes.UpdateExamMutation
+>;
+export const deleteExam = /* GraphQL */ `mutation DeleteExam(
+  $input: DeleteExamInput!
+  $condition: ModelExamConditionInput
+) {
+  deleteExam(input: $input, condition: $condition) {
+    id
+    name
+    description
+    passingScore
+    timeLimit
+    certificationID
+    questions {
+      nextToken
+      startedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteExamMutationVariables,
+  APITypes.DeleteExamMutation
 >;
 export const createQuestion = /* GraphQL */ `mutation CreateQuestion(
   $input: CreateQuestionInput!
@@ -98,7 +185,7 @@ export const createQuestion = /* GraphQL */ `mutation CreateQuestion(
     correctAnswer
     explanation
     difficulty
-    examTypeID
+    examID
     isAIGenerated
     topic
     createdAt
@@ -128,7 +215,7 @@ export const updateQuestion = /* GraphQL */ `mutation UpdateQuestion(
     correctAnswer
     explanation
     difficulty
-    examTypeID
+    examID
     isAIGenerated
     topic
     createdAt
@@ -158,7 +245,7 @@ export const deleteQuestion = /* GraphQL */ `mutation DeleteQuestion(
     correctAnswer
     explanation
     difficulty
-    examTypeID
+    examID
     isAIGenerated
     topic
     createdAt
@@ -258,7 +345,7 @@ export const createExamAttempt = /* GraphQL */ `mutation CreateExamAttempt(
   createExamAttempt(input: $input, condition: $condition) {
     id
     userID
-    examTypeID
+    examID
     score
     completedAt
     answers {
@@ -288,7 +375,7 @@ export const updateExamAttempt = /* GraphQL */ `mutation UpdateExamAttempt(
   updateExamAttempt(input: $input, condition: $condition) {
     id
     userID
-    examTypeID
+    examID
     score
     completedAt
     answers {
@@ -318,7 +405,7 @@ export const deleteExamAttempt = /* GraphQL */ `mutation DeleteExamAttempt(
   deleteExamAttempt(input: $input, condition: $condition) {
     id
     userID
-    examTypeID
+    examID
     score
     completedAt
     answers {

@@ -26,8 +26,8 @@ export default function PerformanceMetrics({ examHistory }: PerformanceMetricsPr
   const bestExam = [...examHistory].sort((a, b) => b.score - a.score)[0];
   const worstExam = [...examHistory].sort((a, b) => a.score - b.score)[0];
   
-  // Group by exam type to find strongest/weakest areas
-  const examTypeScores = examHistory.reduce((acc, exam) => {
+  // Group by exam to find strongest/weakest areas
+  const examScores = examHistory.reduce((acc, exam) => {
     if (!acc[exam.examId]) {
       acc[exam.examId] = {
         name: exam.examName,
@@ -40,14 +40,14 @@ export default function PerformanceMetrics({ examHistory }: PerformanceMetricsPr
     return acc;
   }, {} as Record<string, { name: string; totalScore: number; count: number }>);
   
-  const examTypeAverages = Object.entries(examTypeScores).map(([id, data]) => ({
+  const examAverages = Object.entries(examScores).map(([id, data]) => ({
     id,
     name: data.name,
     averageScore: data.totalScore / data.count
   }));
   
-  const strongestArea = examTypeAverages.sort((a, b) => b.averageScore - a.averageScore)[0];
-  const weakestArea = examTypeAverages.sort((a, b) => a.averageScore - b.averageScore)[0];
+  const strongestArea = examAverages.sort((a, b) => b.averageScore - a.averageScore)[0];
+  const weakestArea = examAverages.sort((a, b) => a.averageScore - b.averageScore)[0];
 
   return (
     <div>
@@ -88,7 +88,7 @@ export default function PerformanceMetrics({ examHistory }: PerformanceMetricsPr
         
         <div className="border rounded-lg p-4">
           <h3 className="text-lg font-medium mb-2">Area to Improve</h3>
-          {weakestArea && examTypeAverages.length > 1 ? (
+          {weakestArea && examAverages.length > 1 ? (
             <>
               <div className="text-red-600 font-medium">{weakestArea.name}</div>
               <div className="text-sm text-gray-500">Average Score: {weakestArea.averageScore.toFixed(1)}%</div>

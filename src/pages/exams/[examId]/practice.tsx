@@ -111,7 +111,7 @@ export default function PracticeMode() {
       // Save the generated question to the database
       const questionToSave = {
         ...newQuestion,
-        examTypeID: examId,
+        examID: examId,
         isAIGenerated: true
       };
       
@@ -242,7 +242,7 @@ export default function PracticeMode() {
           
           <div>
             <AIQuestionGenerator 
-              examType={currentExam.name}
+              examId={currentExam.name}
               onQuestionGenerated={handleAddQuestion}
             />
             

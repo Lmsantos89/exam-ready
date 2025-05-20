@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { generateQuestion, QuestionGenerationParams } from '../services/ai/questionGenerator';
 
 interface AIQuestionGeneratorProps {
-  examType: string;
+  examId: string;
   onQuestionGenerated: (question: any) => void;
 }
 
-export default function AIQuestionGenerator({ examType, onQuestionGenerated }: AIQuestionGeneratorProps) {
+export default function AIQuestionGenerator({ examId, onQuestionGenerated }: AIQuestionGeneratorProps) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [topic, setTopic] = useState('');
   const [difficulty, setDifficulty] = useState<'beginner' | 'intermediate' | 'advanced'>('intermediate');
@@ -18,7 +18,7 @@ export default function AIQuestionGenerator({ examType, onQuestionGenerated }: A
     
     try {
       const params: QuestionGenerationParams = {
-        examType,
+        examId,
         topic: topic || undefined,
         difficulty
       };

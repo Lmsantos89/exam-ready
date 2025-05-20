@@ -4,14 +4,37 @@ import Link from 'next/link';
 import AdminRequired from '../../components/AdminRequired';
 import CreateExamForm from '../../components/admin/CreateExamForm';
 import CreateCertificationForm from '../../components/admin/CreateCertificationForm';
-import { getCertifications, getExams } from '../../services/exams/adminService';
+import EditExamModal from '../../components/admin/EditExamModal';
+import EditCertificationModal from '../../components/admin/EditCertificationModal';
+import ConfirmationModal from '../../components/admin/ConfirmationModal';
+import { 
+  getCertifications, 
+  getExams, 
+  updateExistingExam, 
+  deleteExistingExam,
+  updateExistingCertification,
+  deleteExistingCertification
+} from '../../services/exams/adminService';
 
 export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState('exams');
-  const [certifications, setCertifications] = useState<Array<{ id: string; name: string; description?: string; provider?: string }>>([]);
+  const [activeTab, setActiveTab] = useState('certifications');
+  const [certifications, setCertifications] = useState<Array<{ id: string; name: string; description?: string; provider: string }>>([]);
   const [exams, setExams] = useState<Array<any>>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [actionError, setActionError] = useState('');
+  const [actionSuccess, setActionSuccess] = useState('');
+  
+  // Edit modal states
+  const [isEditExamModalOpen, setIsEditExamModalOpen] = useState(false);
+  const [isEditCertModalOpen, setIsEditCertModalOpen] = useState(false);
+  const [selectedExam, setSelectedExam] = useState<any>(null);
+  const [selectedCertification, setSelectedCertification] = useState<any>(null);
+  
+  // Delete confirmation modal states
+  const [isDeleteExamModalOpen, setIsDeleteExamModalOpen] = useState(false);
+  const [isDeleteCertModalOpen, setIsDeleteCertModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -51,6 +74,112 @@ export default function AdminDashboard() {
       console.error('Error refreshing exams:', err);
     }
   };
+  
+  // Edit exam handlers
+  const handleEditExam = (exam: any) => {
+    setSelectedExam(exam);
+    setIsEditExamModalOpen(true);
+    setActionError('');
+    setActionSuccess('');
+  };
+  
+  const handleSaveExam = async (examData: any) => {
+    try {
+      setActionError('');
+      setActionSuccess('');
+      await updateExistingExam(examData);
+      setIsEditExamModalOpen(false);
+      // Refresh exams list
+      const examsData = await getExams();
+      setExams(examsData);
+      setActionSuccess(`Exam "${examData.name}" updated successfully.`);
+    } catch (err) {
+      console.error('Error updating exam:', err);
+      setActionError('Failed to update exam. Please try again.');
+    }
+  };
+  
+  // Delete exam handlers
+  const handleDeleteExamClick = (exam: any) => {
+    setSelectedExam(exam);
+    setIsDeleteExamModalOpen(true);
+    setActionError('');
+    setActionSuccess('');
+  };
+  
+  const handleConfirmDeleteExam = async () => {
+    if (!selectedExam) return;
+    
+    setIsDeleting(true);
+    setActionError('');
+    setActionSuccess('');
+    try {
+      await deleteExistingExam(selectedExam.id);
+      // Refresh exams list
+      const examsData = await getExams();
+      setExams(examsData);
+      setActionSuccess(`Exam "${selectedExam.name}" deleted successfully.`);
+    } catch (err) {
+      console.error('Error deleting exam:', err);
+      setActionError('Failed to delete exam. Please try again.');
+    } finally {
+      setIsDeleting(false);
+      setIsDeleteExamModalOpen(false);
+    }
+  };
+  
+  // Edit certification handlers
+  const handleEditCertification = (cert: any) => {
+    setSelectedCertification(cert);
+    setIsEditCertModalOpen(true);
+    setActionError('');
+    setActionSuccess('');
+  };
+  
+  const handleSaveCertification = async (certData: any) => {
+    try {
+      setActionError('');
+      setActionSuccess('');
+      await updateExistingCertification(certData);
+      setIsEditCertModalOpen(false);
+      // Refresh certifications list
+      const certsData = await getCertifications();
+      setCertifications(certsData);
+      setActionSuccess(`Certification "${certData.name}" updated successfully.`);
+    } catch (err) {
+      console.error('Error updating certification:', err);
+      setActionError('Failed to update certification. Please try again.');
+    }
+  };
+  
+  // Delete certification handlers
+  const handleDeleteCertificationClick = (cert: any) => {
+    setSelectedCertification(cert);
+    setIsDeleteCertModalOpen(true);
+    setActionError('');
+    setActionSuccess('');
+  };
+  
+  const handleConfirmDeleteCertification = async () => {
+    if (!selectedCertification) return;
+    
+    setIsDeleting(true);
+    setActionError('');
+    setActionSuccess('');
+    try {
+      await deleteExistingCertification(selectedCertification.id);
+      // Refresh certifications list
+      const certsData = await getCertifications();
+      setCertifications(certsData);
+      setActionSuccess(`Certification "${selectedCertification.name}" deleted successfully.`);
+    } catch (err) {
+      console.error('Error deleting certification:', err);
+      setActionError('Failed to delete certification. Please try again.');
+    } finally {
+      setIsDeleting(false);
+      setIsDeleteCertModalOpen(false);
+    }
+  };
 
   return (
     <AdminRequired>
@@ -64,19 +193,31 @@ export default function AdminDashboard() {
             <h1 className="text-3xl font-bold">Admin Dashboard</h1>
           </div>
 
+          {actionError && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 flex justify-between">
+              <span>{actionError}</span>
+              <button onClick={() => setActionError('')} className="text-red-700">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          )}
+
+          {actionSuccess && (
+            <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 flex justify-between">
+              <span>{actionSuccess}</span>
+              <button onClick={() => setActionSuccess('')} className="text-green-700">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          )}
+
           <div className="mb-6">
             <div className="border-b border-gray-200">
               <nav className="-mb-px flex space-x-8">
-                <button
-                  onClick={() => setActiveTab('exams')}
-                  className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                    activeTab === 'exams'
-                      ? 'border-blue-500 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
-                >
-                  Manage Exams
-                </button>
                 <button
                   onClick={() => setActiveTab('certifications')}
                   className={`py-4 px-1 border-b-2 font-medium text-sm ${
@@ -86,6 +227,16 @@ export default function AdminDashboard() {
                   }`}
                 >
                   Manage Certifications
+                </button>
+                                <button
+                  onClick={() => setActiveTab('exams')}
+                  className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                    activeTab === 'exams'
+                      ? 'border-blue-500 text-blue-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  Manage Exams
                 </button>
               </nav>
             </div>
@@ -153,9 +304,23 @@ export default function AdminDashboard() {
                                     <div className="text-sm text-gray-500">{exam.timeLimit} min</div>
                                   </td>
                                   <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                    <Link href={`/admin/exams/${exam.id}/questions`} className="text-blue-600 hover:text-blue-900">
-                                      Manage Questions
-                                    </Link>
+                                    <div className="flex space-x-3">
+                                      <Link href={`/admin/exams/${exam.id}/questions`} className="text-blue-600 hover:text-blue-900">
+                                        Manage Questions
+                                      </Link>
+                                      <button 
+                                        onClick={() => handleEditExam(exam)}
+                                        className="text-indigo-600 hover:text-indigo-900"
+                                      >
+                                        Edit
+                                      </button>
+                                      <button 
+                                        onClick={() => handleDeleteExamClick(exam)}
+                                        className="text-red-600 hover:text-red-900"
+                                      >
+                                        Delete
+                                      </button>
+                                    </div>
                                   </td>
                                 </tr>
                               ))}
@@ -195,6 +360,9 @@ export default function AdminDashboard() {
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                   Description
                                 </th>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                  Actions
+                                </th>
                               </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
@@ -208,6 +376,22 @@ export default function AdminDashboard() {
                                   </td>
                                   <td className="px-6 py-4">
                                     <div className="text-sm text-gray-500">{cert.description || 'No description'}</div>
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                    <div className="flex space-x-3">
+                                      <button 
+                                        onClick={() => handleEditCertification(cert)}
+                                        className="text-indigo-600 hover:text-indigo-900"
+                                      >
+                                        Edit
+                                      </button>
+                                      <button 
+                                        onClick={() => handleDeleteCertificationClick(cert)}
+                                        className="text-red-600 hover:text-red-900"
+                                      >
+                                        Delete
+                                      </button>
+                                    </div>
                                   </td>
                                 </tr>
                               ))}
@@ -223,6 +407,43 @@ export default function AdminDashboard() {
           )}
         </main>
       </div>
+      
+      {/* Edit Exam Modal */}
+      <EditExamModal
+        exam={selectedExam}
+        certifications={certifications}
+        isOpen={isEditExamModalOpen}
+        onClose={() => setIsEditExamModalOpen(false)}
+        onSave={handleSaveExam}
+      />
+      
+      {/* Edit Certification Modal */}
+      <EditCertificationModal
+        certification={selectedCertification}
+        isOpen={isEditCertModalOpen}
+        onClose={() => setIsEditCertModalOpen(false)}
+        onSave={handleSaveCertification}
+      />
+      
+      {/* Delete Exam Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isDeleteExamModalOpen}
+        title="Delete Exam"
+        message={`Are you sure you want to delete the exam "${selectedExam?.name}"? This action cannot be undone.`}
+        onConfirm={handleConfirmDeleteExam}
+        onCancel={() => setIsDeleteExamModalOpen(false)}
+        isDeleting={isDeleting}
+      />
+      
+      {/* Delete Certification Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isDeleteCertModalOpen}
+        title="Delete Certification"
+        message={`Are you sure you want to delete the certification "${selectedCertification?.name}"? This action cannot be undone.`}
+        onConfirm={handleConfirmDeleteCertification}
+        onCancel={() => setIsDeleteCertModalOpen(false)}
+        isDeleting={isDeleting}
+      />
     </AdminRequired>
   );
 }

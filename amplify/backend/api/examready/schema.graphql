@@ -1,11 +1,25 @@
-type ExamType @model @auth(rules: [
+type Certification @model @auth(rules: [
   {allow: public, operations: [read]},
   {allow: groups, groups: ["admin"], operations: [create, update, delete, read]}
 ]) {
   id: ID!
   name: String!
   description: String
-  questions: [Question] @hasMany(indexName: "byExamType", fields: ["id"])
+  provider: String
+  exams: [Exam] @hasMany(indexName: "byCertification", fields: ["id"])
+}
+
+type Exam @model @auth(rules: [
+  {allow: public, operations: [read]},
+  {allow: groups, groups: ["admin"], operations: [create, update, delete, read]}
+]) {
+  id: ID!
+  name: String!
+  description: String
+  passingScore: Float
+  timeLimit: Int
+  certificationID: ID! @index(name: "byCertification")
+  questions: [Question] @hasMany(indexName: "byExam", fields: ["id"])
 }
 
 type Question @model @auth(rules: [
@@ -18,7 +32,7 @@ type Question @model @auth(rules: [
   correctAnswer: String!
   explanation: String
   difficulty: String
-  examTypeID: ID! @index(name: "byExamType")
+  examID: ID! @index(name: "byExam")
   isAIGenerated: Boolean
   topic: String
 }
@@ -38,7 +52,7 @@ type User @model @auth(rules: [{allow: owner}]) {
 type ExamAttempt @model @auth(rules: [{allow: owner}]) {
   id: ID!
   userID: ID! @index(name: "byUser")
-  examTypeID: ID! @index(name: "byExamType")
+  examID: ID! @index(name: "byExam")
   score: Float
   completedAt: AWSDateTime
   answers: [Answer]

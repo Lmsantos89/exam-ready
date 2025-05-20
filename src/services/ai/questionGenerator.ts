@@ -1,7 +1,7 @@
 import { API } from 'aws-amplify';
 
 export interface QuestionGenerationParams {
-  examType: string;
+  examId: string;
   topic?: string;
   difficulty?: 'beginner' | 'intermediate' | 'advanced';
 }

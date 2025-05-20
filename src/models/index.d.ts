@@ -34,36 +34,76 @@ export declare type Answer = LazyLoading extends LazyLoadingDisabled ? EagerAnsw
 
 export declare const Answer: (new (init: ModelInit<Answer>) => Answer)
 
-type EagerExamType = {
+type EagerCertification = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<ExamType, 'id'>;
+    identifier: ManagedIdentifier<Certification, 'id'>;
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
   readonly name: string;
   readonly description?: string | null;
+  readonly provider?: string | null;
+  readonly exams?: (Exam | null)[] | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyCertification = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Certification, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name: string;
+  readonly description?: string | null;
+  readonly provider?: string | null;
+  readonly exams: AsyncCollection<Exam>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Certification = LazyLoading extends LazyLoadingDisabled ? EagerCertification : LazyCertification
+
+export declare const Certification: (new (init: ModelInit<Certification>) => Certification) & {
+  copyOf(source: Certification, mutator: (draft: MutableModel<Certification>) => MutableModel<Certification> | void): Certification;
+}
+
+type EagerExam = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Exam, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name: string;
+  readonly description?: string | null;
+  readonly passingScore?: number | null;
+  readonly timeLimit?: number | null;
+  readonly certificationID: string;
   readonly questions?: (Question | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
 
-type LazyExamType = {
+type LazyExam = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<ExamType, 'id'>;
+    identifier: ManagedIdentifier<Exam, 'id'>;
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
   readonly name: string;
   readonly description?: string | null;
+  readonly passingScore?: number | null;
+  readonly timeLimit?: number | null;
+  readonly certificationID: string;
   readonly questions: AsyncCollection<Question>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
 
-export declare type ExamType = LazyLoading extends LazyLoadingDisabled ? EagerExamType : LazyExamType
+export declare type Exam = LazyLoading extends LazyLoadingDisabled ? EagerExam : LazyExam
 
-export declare const ExamType: (new (init: ModelInit<ExamType>) => ExamType) & {
-  copyOf(source: ExamType, mutator: (draft: MutableModel<ExamType>) => MutableModel<ExamType> | void): ExamType;
+export declare const Exam: (new (init: ModelInit<Exam>) => Exam) & {
+  copyOf(source: Exam, mutator: (draft: MutableModel<Exam>) => MutableModel<Exam> | void): Exam;
 }
 
 type EagerQuestion = {
@@ -77,7 +117,7 @@ type EagerQuestion = {
   readonly correctAnswer: string;
   readonly explanation?: string | null;
   readonly difficulty?: string | null;
-  readonly examTypeID: string;
+  readonly examID: string;
   readonly isAIGenerated?: boolean | null;
   readonly topic?: string | null;
   readonly createdAt?: string | null;
@@ -95,7 +135,7 @@ type LazyQuestion = {
   readonly correctAnswer: string;
   readonly explanation?: string | null;
   readonly difficulty?: string | null;
-  readonly examTypeID: string;
+  readonly examID: string;
   readonly isAIGenerated?: boolean | null;
   readonly topic?: string | null;
   readonly createdAt?: string | null;
@@ -147,7 +187,7 @@ type EagerExamAttempt = {
   };
   readonly id: string;
   readonly userID: string;
-  readonly examTypeID: string;
+  readonly examID: string;
   readonly score?: number | null;
   readonly completedAt?: string | null;
   readonly answers?: (Answer | null)[] | null;
@@ -163,7 +203,7 @@ type LazyExamAttempt = {
   };
   readonly id: string;
   readonly userID: string;
-  readonly examTypeID: string;
+  readonly examID: string;
   readonly score?: number | null;
   readonly completedAt?: string | null;
   readonly answers?: (Answer | null)[] | null;
