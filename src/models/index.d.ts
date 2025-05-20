@@ -1,6 +1,6 @@
 import { ModelInit, MutableModel, __modelMeta__, ManagedIdentifier } from "@aws-amplify/datastore";
 // @ts-ignore
-import { LazyLoading, LazyLoadingDisabled, AsyncCollection } from "@aws-amplify/datastore";
+import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@aws-amplify/datastore";
 
 
 
@@ -34,6 +34,38 @@ export declare type Answer = LazyLoading extends LazyLoadingDisabled ? EagerAnsw
 
 export declare const Answer: (new (init: ModelInit<Answer>) => Answer)
 
+type EagerProvider = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Provider, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name: string;
+  readonly website?: string | null;
+  readonly certifications?: (Certification | null)[] | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyProvider = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Provider, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name: string;
+  readonly website?: string | null;
+  readonly certifications: AsyncCollection<Certification>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Provider = LazyLoading extends LazyLoadingDisabled ? EagerProvider : LazyProvider
+
+export declare const Provider: (new (init: ModelInit<Provider>) => Provider) & {
+  copyOf(source: Provider, mutator: (draft: MutableModel<Provider>) => MutableModel<Provider> | void): Provider;
+}
+
 type EagerCertification = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<Certification, 'id'>;
@@ -42,7 +74,9 @@ type EagerCertification = {
   readonly id: string;
   readonly name: string;
   readonly description?: string | null;
-  readonly provider?: string | null;
+  readonly code?: string | null;
+  readonly providerID: string;
+  readonly provider?: Provider | null;
   readonly exams?: (Exam | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
@@ -56,7 +90,9 @@ type LazyCertification = {
   readonly id: string;
   readonly name: string;
   readonly description?: string | null;
-  readonly provider?: string | null;
+  readonly code?: string | null;
+  readonly providerID: string;
+  readonly provider: AsyncItem<Provider | undefined>;
   readonly exams: AsyncCollection<Exam>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;

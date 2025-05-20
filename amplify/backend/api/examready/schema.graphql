@@ -1,3 +1,13 @@
+type Provider @model @auth(rules: [
+  {allow: public, operations: [read]},
+  {allow: groups, groups: ["admin"], operations: [create, update, delete, read]}
+]) {
+  id: ID!
+  name: String!
+  website: String
+  certifications: [Certification] @hasMany(indexName: "byProvider", fields: ["id"])
+}
+
 type Certification @model @auth(rules: [
   {allow: public, operations: [read]},
   {allow: groups, groups: ["admin"], operations: [create, update, delete, read]}
@@ -5,7 +15,9 @@ type Certification @model @auth(rules: [
   id: ID!
   name: String!
   description: String
-  provider: String
+  code: String
+  providerID: ID! @index(name: "byProvider")
+  provider: Provider @belongsTo(fields: ["providerID"])
   exams: [Exam] @hasMany(indexName: "byCertification", fields: ["id"])
 }
 

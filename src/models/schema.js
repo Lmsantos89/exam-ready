@@ -1,5 +1,98 @@
 export const schema = {
     "models": {
+        "Provider": {
+            "name": "Provider",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "name": {
+                    "name": "name",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "website": {
+                    "name": "website",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "certifications": {
+                    "name": "certifications",
+                    "isArray": true,
+                    "type": {
+                        "model": "Certification"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "provider"
+                        ]
+                    }
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "Providers",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "read"
+                                ]
+                            },
+                            {
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "admin"
+                                ],
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
         "Certification": {
             "name": "Certification",
             "fields": {
@@ -24,12 +117,34 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "provider": {
-                    "name": "provider",
+                "code": {
+                    "name": "code",
                     "isArray": false,
                     "type": "String",
                     "isRequired": false,
                     "attributes": []
+                },
+                "providerID": {
+                    "name": "providerID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "provider": {
+                    "name": "provider",
+                    "isArray": false,
+                    "type": {
+                        "model": "Provider"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "BELONGS_TO",
+                        "targetNames": [
+                            "providerID"
+                        ]
+                    }
                 },
                 "exams": {
                     "name": "exams",
@@ -70,6 +185,15 @@ export const schema = {
                 {
                     "type": "model",
                     "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byProvider",
+                        "fields": [
+                            "providerID"
+                        ]
+                    }
                 },
                 {
                     "type": "auth",
@@ -616,5 +740,5 @@ export const schema = {
         }
     },
     "codegenVersion": "3.4.4",
-    "version": "9bc1967bedc90c50ae215040b65835fa"
+    "version": "c3af1afe6b9ed428be470f50de89d95f"
 };

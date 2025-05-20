@@ -8,6 +8,81 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
+export const createProvider = /* GraphQL */ `mutation CreateProvider(
+  $input: CreateProviderInput!
+  $condition: ModelProviderConditionInput
+) {
+  createProvider(input: $input, condition: $condition) {
+    id
+    name
+    website
+    certifications {
+      nextToken
+      startedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateProviderMutationVariables,
+  APITypes.CreateProviderMutation
+>;
+export const updateProvider = /* GraphQL */ `mutation UpdateProvider(
+  $input: UpdateProviderInput!
+  $condition: ModelProviderConditionInput
+) {
+  updateProvider(input: $input, condition: $condition) {
+    id
+    name
+    website
+    certifications {
+      nextToken
+      startedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateProviderMutationVariables,
+  APITypes.UpdateProviderMutation
+>;
+export const deleteProvider = /* GraphQL */ `mutation DeleteProvider(
+  $input: DeleteProviderInput!
+  $condition: ModelProviderConditionInput
+) {
+  deleteProvider(input: $input, condition: $condition) {
+    id
+    name
+    website
+    certifications {
+      nextToken
+      startedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteProviderMutationVariables,
+  APITypes.DeleteProviderMutation
+>;
 export const createCertification = /* GraphQL */ `mutation CreateCertification(
   $input: CreateCertificationInput!
   $condition: ModelCertificationConditionInput
@@ -16,7 +91,19 @@ export const createCertification = /* GraphQL */ `mutation CreateCertification(
     id
     name
     description
-    provider
+    code
+    providerID
+    provider {
+      id
+      name
+      website
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
     exams {
       nextToken
       startedAt
@@ -42,7 +129,19 @@ export const updateCertification = /* GraphQL */ `mutation UpdateCertification(
     id
     name
     description
-    provider
+    code
+    providerID
+    provider {
+      id
+      name
+      website
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
     exams {
       nextToken
       startedAt
@@ -68,7 +167,19 @@ export const deleteCertification = /* GraphQL */ `mutation DeleteCertification(
     id
     name
     description
-    provider
+    code
+    providerID
+    provider {
+      id
+      name
+      website
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
     exams {
       nextToken
       startedAt

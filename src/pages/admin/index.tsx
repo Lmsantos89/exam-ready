@@ -4,22 +4,28 @@ import Link from 'next/link';
 import AdminRequired from '../../components/AdminRequired';
 import CreateExamForm from '../../components/admin/CreateExamForm';
 import CreateCertificationForm from '../../components/admin/CreateCertificationForm';
+import CreateProviderForm from '../../components/admin/CreateProviderForm';
 import EditExamModal from '../../components/admin/EditExamModal';
 import EditCertificationModal from '../../components/admin/EditCertificationModal';
+import EditProviderModal from '../../components/admin/EditProviderModal';
 import ConfirmationModal from '../../components/admin/ConfirmationModal';
 import { 
   getCertifications, 
   getExams, 
+  getProviders,
   updateExistingExam, 
   deleteExistingExam,
   updateExistingCertification,
-  deleteExistingCertification
+  deleteExistingCertification,
+  updateExistingProvider,
+  deleteExistingProvider
 } from '../../services/exams/adminService';
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('certifications');
-  const [certifications, setCertifications] = useState<Array<{ id: string; name: string; description?: string; provider: string }>>([]);
+  const [certifications, setCertifications] = useState<Array<any>>([]);
   const [exams, setExams] = useState<Array<any>>([]);
+  const [providers, setProviders] = useState<Array<any>>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   const [actionError, setActionError] = useState('');
@@ -28,24 +34,29 @@ export default function AdminDashboard() {
   // Edit modal states
   const [isEditExamModalOpen, setIsEditExamModalOpen] = useState(false);
   const [isEditCertModalOpen, setIsEditCertModalOpen] = useState(false);
+  const [isEditProviderModalOpen, setIsEditProviderModalOpen] = useState(false);
   const [selectedExam, setSelectedExam] = useState<any>(null);
   const [selectedCertification, setSelectedCertification] = useState<any>(null);
+  const [selectedProvider, setSelectedProvider] = useState<any>(null);
   
   // Delete confirmation modal states
   const [isDeleteExamModalOpen, setIsDeleteExamModalOpen] = useState(false);
   const [isDeleteCertModalOpen, setIsDeleteCertModalOpen] = useState(false);
+  const [isDeleteProviderModalOpen, setIsDeleteProviderModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const [certsData, examsData] = await Promise.all([
+        const [certsData, examsData, providersData] = await Promise.all([
           getCertifications(),
-          getExams()
+          getExams(),
+          getProviders()
         ]);
         
         setCertifications(certsData);
         setExams(examsData);
+        setProviders(providersData);
       } catch (err) {
         console.error('Error fetching data:', err);
         setError('Failed to load data');
@@ -72,6 +83,15 @@ export default function AdminDashboard() {
       setExams(examsData);
     } catch (err) {
       console.error('Error refreshing exams:', err);
+    }
+  };
+
+  const handleProviderCreated = async () => {
+    try {
+      const providersData = await getProviders();
+      setProviders(providersData);
+    } catch (err) {
+      console.error('Error refreshing providers:', err);
     }
   };
   
@@ -181,6 +201,68 @@ export default function AdminDashboard() {
     }
   };
 
+  // Edit provider handlers
+  const handleEditProvider = (provider: any) => {
+    setSelectedProvider(provider);
+    setIsEditProviderModalOpen(true);
+    setActionError('');
+    setActionSuccess('');
+  };
+  
+  const handleSaveProvider = async (providerData: any) => {
+    try {
+      setActionError('');
+      setActionSuccess('');
+      await updateExistingProvider(providerData);
+      setIsEditProviderModalOpen(false);
+      // Refresh providers list
+      const providersData = await getProviders();
+      setProviders(providersData);
+      setActionSuccess(`Provider "${providerData.name}" updated successfully.`);
+      // Also refresh certifications as they may display provider info
+      const certsData = await getCertifications();
+      setCertifications(certsData);
+    } catch (err) {
+      console.error('Error updating provider:', err);
+      setActionError('Failed to update provider. Please try again.');
+    }
+  };
+  
+  // Delete provider handlers
+  const handleDeleteProviderClick = (provider: any) => {
+    setSelectedProvider(provider);
+    setIsDeleteProviderModalOpen(true);
+    setActionError('');
+    setActionSuccess('');
+  };
+  
+  const handleConfirmDeleteProvider = async () => {
+    if (!selectedProvider) return;
+    
+    setIsDeleting(true);
+    setActionError('');
+    setActionSuccess('');
+    try {
+      await deleteExistingProvider(selectedProvider.id);
+      // Refresh providers list
+      const providersData = await getProviders();
+      setProviders(providersData);
+      setActionSuccess(`Provider "${selectedProvider.name}" deleted successfully.`);
+    } catch (err) {
+      console.error('Error deleting provider:', err);
+      setActionError('Failed to delete provider. Please try again.');
+    } finally {
+      setIsDeleting(false);
+      setIsDeleteProviderModalOpen(false);
+    }
+  };
+
+  // Find provider name by ID
+  const getProviderName = (providerId: string) => {
+    const provider = providers.find(p => p.id === providerId);
+    return provider ? provider.name : 'Unknown';
+  };
+
   return (
     <AdminRequired>
       <div className="min-h-screen bg-gray-50">
@@ -228,7 +310,7 @@ export default function AdminDashboard() {
                 >
                   Manage Certifications
                 </button>
-                                <button
+                <button
                   onClick={() => setActiveTab('exams')}
                   className={`py-4 px-1 border-b-2 font-medium text-sm ${
                     activeTab === 'exams'
@@ -237,6 +319,16 @@ export default function AdminDashboard() {
                   }`}
                 >
                   Manage Exams
+                </button>
+                <button
+                  onClick={() => setActiveTab('providers')}
+                  className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                    activeTab === 'providers'
+                      ? 'border-blue-500 text-blue-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  Manage Providers
                 </button>
               </nav>
             </div>
@@ -252,6 +344,79 @@ export default function AdminDashboard() {
             </div>
           ) : (
             <div>
+              {activeTab === 'providers' && (
+                <div>
+                  <CreateProviderForm 
+                    onProviderCreated={handleProviderCreated} 
+                  />
+                  
+                  <div className="mt-8">
+                    <h2 className="text-xl font-semibold mb-4">Existing Providers</h2>
+                    {providers.length === 0 ? (
+                      <div className="bg-white p-6 rounded-lg shadow text-center text-gray-500">
+                        No providers created yet. Use the form above to create your first provider.
+                      </div>
+                    ) : (
+                      <div className="bg-white p-6 rounded-lg shadow">
+                        <div className="overflow-x-auto">
+                          <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                              <tr>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                  Provider Name
+                                </th>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                  Website
+                                </th>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                  Actions
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                              {providers.map((provider) => (
+                                <tr key={provider.id}>
+                                  <td className="px-6 py-4 whitespace-nowrap">
+                                    <div className="text-sm font-medium text-gray-900">{provider.name}</div>
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap">
+                                    <div className="text-sm text-gray-500">
+                                      {provider.website ? (
+                                        <a href={provider.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                                          {provider.website}
+                                        </a>
+                                      ) : (
+                                        'No website'
+                                      )}
+                                    </div>
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                    <div className="flex space-x-3">
+                                      <button 
+                                        onClick={() => handleEditProvider(provider)}
+                                        className="text-indigo-600 hover:text-indigo-900"
+                                      >
+                                        Edit
+                                      </button>
+                                      <button 
+                                        onClick={() => handleDeleteProviderClick(provider)}
+                                        className="text-red-600 hover:text-red-900"
+                                      >
+                                        Delete
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+              
               {activeTab === 'exams' && (
                 <div>
                   <CreateExamForm 
@@ -355,6 +520,9 @@ export default function AdminDashboard() {
                                   Certification Name
                                 </th>
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                  Code
+                                </th>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                   Provider
                                 </th>
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -372,7 +540,10 @@ export default function AdminDashboard() {
                                     <div className="text-sm font-medium text-gray-900">{cert.name}</div>
                                   </td>
                                   <td className="px-6 py-4 whitespace-nowrap">
-                                    <div className="text-sm text-gray-500">{cert.provider || 'Unknown'}</div>
+                                    <div className="text-sm text-gray-500">{cert.code || 'N/A'}</div>
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap">
+                                    <div className="text-sm text-gray-500">{getProviderName(cert.providerID)}</div>
                                   </td>
                                   <td className="px-6 py-4">
                                     <div className="text-sm text-gray-500">{cert.description || 'No description'}</div>
@@ -424,6 +595,14 @@ export default function AdminDashboard() {
         onClose={() => setIsEditCertModalOpen(false)}
         onSave={handleSaveCertification}
       />
+
+      {/* Edit Provider Modal */}
+      <EditProviderModal
+        provider={selectedProvider}
+        isOpen={isEditProviderModalOpen}
+        onClose={() => setIsEditProviderModalOpen(false)}
+        onSave={handleSaveProvider}
+      />
       
       {/* Delete Exam Confirmation Modal */}
       <ConfirmationModal
@@ -442,6 +621,16 @@ export default function AdminDashboard() {
         message={`Are you sure you want to delete the certification "${selectedCertification?.name}"? This action cannot be undone.`}
         onConfirm={handleConfirmDeleteCertification}
         onCancel={() => setIsDeleteCertModalOpen(false)}
+        isDeleting={isDeleting}
+      />
+
+      {/* Delete Provider Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isDeleteProviderModalOpen}
+        title="Delete Provider"
+        message={`Are you sure you want to delete the provider "${selectedProvider?.name}"? This action cannot be undone.`}
+        onConfirm={handleConfirmDeleteProvider}
+        onCancel={() => setIsDeleteProviderModalOpen(false)}
         isDeleting={isDeleting}
       />
     </AdminRequired>

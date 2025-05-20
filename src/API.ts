@@ -2,21 +2,19 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateCertificationInput = {
+export type CreateProviderInput = {
   id?: string | null,
   name: string,
-  description?: string | null,
-  provider?: string | null,
+  website?: string | null,
   _version?: number | null,
 };
 
-export type ModelCertificationConditionInput = {
+export type ModelProviderConditionInput = {
   name?: ModelStringInput | null,
-  description?: ModelStringInput | null,
-  provider?: ModelStringInput | null,
-  and?: Array< ModelCertificationConditionInput | null > | null,
-  or?: Array< ModelCertificationConditionInput | null > | null,
-  not?: ModelCertificationConditionInput | null,
+  website?: ModelStringInput | null,
+  and?: Array< ModelProviderConditionInput | null > | null,
+  or?: Array< ModelProviderConditionInput | null > | null,
+  not?: ModelProviderConditionInput | null,
   _deleted?: ModelBooleanInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
@@ -69,12 +67,34 @@ export type ModelBooleanInput = {
   attributeType?: ModelAttributeTypes | null,
 };
 
+export type Provider = {
+  __typename: "Provider",
+  id: string,
+  name: string,
+  website?: string | null,
+  certifications?: ModelCertificationConnection | null,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+};
+
+export type ModelCertificationConnection = {
+  __typename: "ModelCertificationConnection",
+  items:  Array<Certification | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
 export type Certification = {
   __typename: "Certification",
   id: string,
   name: string,
   description?: string | null,
-  provider?: string | null,
+  code?: string | null,
+  providerID: string,
+  provider?: Provider | null,
   exams?: ModelExamConnection | null,
   createdAt: string,
   updatedAt: string,
@@ -137,11 +157,62 @@ export type Option = {
   text: string,
 };
 
+export type UpdateProviderInput = {
+  id: string,
+  name?: string | null,
+  website?: string | null,
+  _version?: number | null,
+};
+
+export type DeleteProviderInput = {
+  id: string,
+  _version?: number | null,
+};
+
+export type CreateCertificationInput = {
+  id?: string | null,
+  name: string,
+  description?: string | null,
+  code?: string | null,
+  providerID: string,
+  _version?: number | null,
+};
+
+export type ModelCertificationConditionInput = {
+  name?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  code?: ModelStringInput | null,
+  providerID?: ModelIDInput | null,
+  and?: Array< ModelCertificationConditionInput | null > | null,
+  or?: Array< ModelCertificationConditionInput | null > | null,
+  not?: ModelCertificationConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type ModelIDInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+  size?: ModelSizeInput | null,
+};
+
 export type UpdateCertificationInput = {
   id: string,
   name?: string | null,
   description?: string | null,
-  provider?: string | null,
+  code?: string | null,
+  providerID?: string | null,
   _version?: number | null,
 };
 
@@ -196,22 +267,6 @@ export type ModelIntInput = {
   between?: Array< number | null > | null,
   attributeExists?: boolean | null,
   attributeType?: ModelAttributeTypes | null,
-};
-
-export type ModelIDInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-  size?: ModelSizeInput | null,
 };
 
 export type UpdateExamInput = {
@@ -405,11 +460,31 @@ export type DeleteExamAttemptInput = {
   _version?: number | null,
 };
 
+export type ModelProviderFilterInput = {
+  id?: ModelIDInput | null,
+  name?: ModelStringInput | null,
+  website?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelProviderFilterInput | null > | null,
+  or?: Array< ModelProviderFilterInput | null > | null,
+  not?: ModelProviderFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
+};
+
+export type ModelProviderConnection = {
+  __typename: "ModelProviderConnection",
+  items:  Array<Provider | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
 export type ModelCertificationFilterInput = {
   id?: ModelIDInput | null,
   name?: ModelStringInput | null,
   description?: ModelStringInput | null,
-  provider?: ModelStringInput | null,
+  code?: ModelStringInput | null,
+  providerID?: ModelIDInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelCertificationFilterInput | null > | null,
@@ -418,12 +493,11 @@ export type ModelCertificationFilterInput = {
   _deleted?: ModelBooleanInput | null,
 };
 
-export type ModelCertificationConnection = {
-  __typename: "ModelCertificationConnection",
-  items:  Array<Certification | null >,
-  nextToken?: string | null,
-  startedAt?: number | null,
-};
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
 
 export type ModelExamFilterInput = {
   id?: ModelIDInput | null,
@@ -439,12 +513,6 @@ export type ModelExamFilterInput = {
   not?: ModelExamFilterInput | null,
   _deleted?: ModelBooleanInput | null,
 };
-
-export enum ModelSortDirection {
-  ASC = "ASC",
-  DESC = "DESC",
-}
-
 
 export type ModelQuestionFilterInput = {
   id?: ModelIDInput | null,
@@ -499,15 +567,14 @@ export type ModelExamAttemptFilterInput = {
   owner?: ModelStringInput | null,
 };
 
-export type ModelSubscriptionCertificationFilterInput = {
+export type ModelSubscriptionProviderFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   name?: ModelSubscriptionStringInput | null,
-  description?: ModelSubscriptionStringInput | null,
-  provider?: ModelSubscriptionStringInput | null,
+  website?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionCertificationFilterInput | null > | null,
-  or?: Array< ModelSubscriptionCertificationFilterInput | null > | null,
+  and?: Array< ModelSubscriptionProviderFilterInput | null > | null,
+  or?: Array< ModelSubscriptionProviderFilterInput | null > | null,
   _deleted?: ModelBooleanInput | null,
 };
 
@@ -539,6 +606,19 @@ export type ModelSubscriptionStringInput = {
   beginsWith?: string | null,
   in?: Array< string | null > | null,
   notIn?: Array< string | null > | null,
+};
+
+export type ModelSubscriptionCertificationFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  name?: ModelSubscriptionStringInput | null,
+  description?: ModelSubscriptionStringInput | null,
+  code?: ModelSubscriptionStringInput | null,
+  providerID?: ModelSubscriptionIDInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionCertificationFilterInput | null > | null,
+  or?: Array< ModelSubscriptionCertificationFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionExamFilterInput = {
@@ -627,6 +707,78 @@ export type ModelSubscriptionExamAttemptFilterInput = {
   owner?: ModelStringInput | null,
 };
 
+export type CreateProviderMutationVariables = {
+  input: CreateProviderInput,
+  condition?: ModelProviderConditionInput | null,
+};
+
+export type CreateProviderMutation = {
+  createProvider?:  {
+    __typename: "Provider",
+    id: string,
+    name: string,
+    website?: string | null,
+    certifications?:  {
+      __typename: "ModelCertificationConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type UpdateProviderMutationVariables = {
+  input: UpdateProviderInput,
+  condition?: ModelProviderConditionInput | null,
+};
+
+export type UpdateProviderMutation = {
+  updateProvider?:  {
+    __typename: "Provider",
+    id: string,
+    name: string,
+    website?: string | null,
+    certifications?:  {
+      __typename: "ModelCertificationConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type DeleteProviderMutationVariables = {
+  input: DeleteProviderInput,
+  condition?: ModelProviderConditionInput | null,
+};
+
+export type DeleteProviderMutation = {
+  deleteProvider?:  {
+    __typename: "Provider",
+    id: string,
+    name: string,
+    website?: string | null,
+    certifications?:  {
+      __typename: "ModelCertificationConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
 export type CreateCertificationMutationVariables = {
   input: CreateCertificationInput,
   condition?: ModelCertificationConditionInput | null,
@@ -638,7 +790,19 @@ export type CreateCertificationMutation = {
     id: string,
     name: string,
     description?: string | null,
-    provider?: string | null,
+    code?: string | null,
+    providerID: string,
+    provider?:  {
+      __typename: "Provider",
+      id: string,
+      name: string,
+      website?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null,
     exams?:  {
       __typename: "ModelExamConnection",
       nextToken?: string | null,
@@ -663,7 +827,19 @@ export type UpdateCertificationMutation = {
     id: string,
     name: string,
     description?: string | null,
-    provider?: string | null,
+    code?: string | null,
+    providerID: string,
+    provider?:  {
+      __typename: "Provider",
+      id: string,
+      name: string,
+      website?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null,
     exams?:  {
       __typename: "ModelExamConnection",
       nextToken?: string | null,
@@ -688,7 +864,19 @@ export type DeleteCertificationMutation = {
     id: string,
     name: string,
     description?: string | null,
-    provider?: string | null,
+    code?: string | null,
+    providerID: string,
+    provider?:  {
+      __typename: "Provider",
+      id: string,
+      name: string,
+      website?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null,
     exams?:  {
       __typename: "ModelExamConnection",
       nextToken?: string | null,
@@ -1032,6 +1220,80 @@ export type DeleteExamAttemptMutation = {
   } | null,
 };
 
+export type GetProviderQueryVariables = {
+  id: string,
+};
+
+export type GetProviderQuery = {
+  getProvider?:  {
+    __typename: "Provider",
+    id: string,
+    name: string,
+    website?: string | null,
+    certifications?:  {
+      __typename: "ModelCertificationConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type ListProvidersQueryVariables = {
+  filter?: ModelProviderFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListProvidersQuery = {
+  listProviders?:  {
+    __typename: "ModelProviderConnection",
+    items:  Array< {
+      __typename: "Provider",
+      id: string,
+      name: string,
+      website?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncProvidersQueryVariables = {
+  filter?: ModelProviderFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncProvidersQuery = {
+  syncProviders?:  {
+    __typename: "ModelProviderConnection",
+    items:  Array< {
+      __typename: "Provider",
+      id: string,
+      name: string,
+      website?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
 export type GetCertificationQueryVariables = {
   id: string,
 };
@@ -1042,7 +1304,19 @@ export type GetCertificationQuery = {
     id: string,
     name: string,
     description?: string | null,
-    provider?: string | null,
+    code?: string | null,
+    providerID: string,
+    provider?:  {
+      __typename: "Provider",
+      id: string,
+      name: string,
+      website?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null,
     exams?:  {
       __typename: "ModelExamConnection",
       nextToken?: string | null,
@@ -1070,7 +1344,8 @@ export type ListCertificationsQuery = {
       id: string,
       name: string,
       description?: string | null,
-      provider?: string | null,
+      code?: string | null,
+      providerID: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -1097,7 +1372,37 @@ export type SyncCertificationsQuery = {
       id: string,
       name: string,
       description?: string | null,
-      provider?: string | null,
+      code?: string | null,
+      providerID: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type CertificationsByProviderIDQueryVariables = {
+  providerID: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelCertificationFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type CertificationsByProviderIDQuery = {
+  certificationsByProviderID?:  {
+    __typename: "ModelCertificationConnection",
+    items:  Array< {
+      __typename: "Certification",
+      id: string,
+      name: string,
+      description?: string | null,
+      code?: string | null,
+      providerID: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -1569,6 +1874,75 @@ export type ExamAttemptsByExamIDQuery = {
   } | null,
 };
 
+export type OnCreateProviderSubscriptionVariables = {
+  filter?: ModelSubscriptionProviderFilterInput | null,
+};
+
+export type OnCreateProviderSubscription = {
+  onCreateProvider?:  {
+    __typename: "Provider",
+    id: string,
+    name: string,
+    website?: string | null,
+    certifications?:  {
+      __typename: "ModelCertificationConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnUpdateProviderSubscriptionVariables = {
+  filter?: ModelSubscriptionProviderFilterInput | null,
+};
+
+export type OnUpdateProviderSubscription = {
+  onUpdateProvider?:  {
+    __typename: "Provider",
+    id: string,
+    name: string,
+    website?: string | null,
+    certifications?:  {
+      __typename: "ModelCertificationConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnDeleteProviderSubscriptionVariables = {
+  filter?: ModelSubscriptionProviderFilterInput | null,
+};
+
+export type OnDeleteProviderSubscription = {
+  onDeleteProvider?:  {
+    __typename: "Provider",
+    id: string,
+    name: string,
+    website?: string | null,
+    certifications?:  {
+      __typename: "ModelCertificationConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
 export type OnCreateCertificationSubscriptionVariables = {
   filter?: ModelSubscriptionCertificationFilterInput | null,
 };
@@ -1579,7 +1953,19 @@ export type OnCreateCertificationSubscription = {
     id: string,
     name: string,
     description?: string | null,
-    provider?: string | null,
+    code?: string | null,
+    providerID: string,
+    provider?:  {
+      __typename: "Provider",
+      id: string,
+      name: string,
+      website?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null,
     exams?:  {
       __typename: "ModelExamConnection",
       nextToken?: string | null,
@@ -1603,7 +1989,19 @@ export type OnUpdateCertificationSubscription = {
     id: string,
     name: string,
     description?: string | null,
-    provider?: string | null,
+    code?: string | null,
+    providerID: string,
+    provider?:  {
+      __typename: "Provider",
+      id: string,
+      name: string,
+      website?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null,
     exams?:  {
       __typename: "ModelExamConnection",
       nextToken?: string | null,
@@ -1627,7 +2025,19 @@ export type OnDeleteCertificationSubscription = {
     id: string,
     name: string,
     description?: string | null,
-    provider?: string | null,
+    code?: string | null,
+    providerID: string,
+    provider?:  {
+      __typename: "Provider",
+      id: string,
+      name: string,
+      website?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null,
     exams?:  {
       __typename: "ModelExamConnection",
       nextToken?: string | null,

@@ -8,6 +8,72 @@ type GeneratedSubscription<InputType, OutputType> = string & {
   __generatedSubscriptionOutput: OutputType;
 };
 
+export const onCreateProvider = /* GraphQL */ `subscription OnCreateProvider($filter: ModelSubscriptionProviderFilterInput) {
+  onCreateProvider(filter: $filter) {
+    id
+    name
+    website
+    certifications {
+      nextToken
+      startedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateProviderSubscriptionVariables,
+  APITypes.OnCreateProviderSubscription
+>;
+export const onUpdateProvider = /* GraphQL */ `subscription OnUpdateProvider($filter: ModelSubscriptionProviderFilterInput) {
+  onUpdateProvider(filter: $filter) {
+    id
+    name
+    website
+    certifications {
+      nextToken
+      startedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateProviderSubscriptionVariables,
+  APITypes.OnUpdateProviderSubscription
+>;
+export const onDeleteProvider = /* GraphQL */ `subscription OnDeleteProvider($filter: ModelSubscriptionProviderFilterInput) {
+  onDeleteProvider(filter: $filter) {
+    id
+    name
+    website
+    certifications {
+      nextToken
+      startedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteProviderSubscriptionVariables,
+  APITypes.OnDeleteProviderSubscription
+>;
 export const onCreateCertification = /* GraphQL */ `subscription OnCreateCertification(
   $filter: ModelSubscriptionCertificationFilterInput
 ) {
@@ -15,7 +81,19 @@ export const onCreateCertification = /* GraphQL */ `subscription OnCreateCertifi
     id
     name
     description
-    provider
+    code
+    providerID
+    provider {
+      id
+      name
+      website
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
     exams {
       nextToken
       startedAt
@@ -40,7 +118,19 @@ export const onUpdateCertification = /* GraphQL */ `subscription OnUpdateCertifi
     id
     name
     description
-    provider
+    code
+    providerID
+    provider {
+      id
+      name
+      website
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
     exams {
       nextToken
       startedAt
@@ -65,7 +155,19 @@ export const onDeleteCertification = /* GraphQL */ `subscription OnDeleteCertifi
     id
     name
     description
-    provider
+    code
+    providerID
+    provider {
+      id
+      name
+      website
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
     exams {
       nextToken
       startedAt

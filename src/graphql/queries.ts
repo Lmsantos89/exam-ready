@@ -8,12 +8,104 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
+export const getProvider = /* GraphQL */ `query GetProvider($id: ID!) {
+  getProvider(id: $id) {
+    id
+    name
+    website
+    certifications {
+      nextToken
+      startedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetProviderQueryVariables,
+  APITypes.GetProviderQuery
+>;
+export const listProviders = /* GraphQL */ `query ListProviders(
+  $filter: ModelProviderFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listProviders(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      website
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListProvidersQueryVariables,
+  APITypes.ListProvidersQuery
+>;
+export const syncProviders = /* GraphQL */ `query SyncProviders(
+  $filter: ModelProviderFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncProviders(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      name
+      website
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.SyncProvidersQueryVariables,
+  APITypes.SyncProvidersQuery
+>;
 export const getCertification = /* GraphQL */ `query GetCertification($id: ID!) {
   getCertification(id: $id) {
     id
     name
     description
-    provider
+    code
+    providerID
+    provider {
+      id
+      name
+      website
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
     exams {
       nextToken
       startedAt
@@ -41,7 +133,8 @@ export const listCertifications = /* GraphQL */ `query ListCertifications(
       id
       name
       description
-      provider
+      code
+      providerID
       createdAt
       updatedAt
       _version
@@ -74,7 +167,8 @@ export const syncCertifications = /* GraphQL */ `query SyncCertifications(
       id
       name
       description
-      provider
+      code
+      providerID
       createdAt
       updatedAt
       _version
@@ -90,6 +184,42 @@ export const syncCertifications = /* GraphQL */ `query SyncCertifications(
 ` as GeneratedQuery<
   APITypes.SyncCertificationsQueryVariables,
   APITypes.SyncCertificationsQuery
+>;
+export const certificationsByProviderID = /* GraphQL */ `query CertificationsByProviderID(
+  $providerID: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelCertificationFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  certificationsByProviderID(
+    providerID: $providerID
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      name
+      description
+      code
+      providerID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.CertificationsByProviderIDQueryVariables,
+  APITypes.CertificationsByProviderIDQuery
 >;
 export const getExam = /* GraphQL */ `query GetExam($id: ID!) {
   getExam(id: $id) {

@@ -8,12 +8,16 @@ import {
   updateExam, 
   updateCertification,
   deleteExam,
-  deleteCertification
+  deleteCertification,
+  createProvider,
+  updateProvider,
+  deleteProvider
 } from '../../graphql/mutations';
 import { 
   listExams,
   listCertifications,
-  questionsByExamID 
+  questionsByExamID,
+  listProviders
 } from '../../graphql/queries';
 
 // Types
@@ -33,24 +37,48 @@ interface ExamUpdateInput {
   timeLimit?: number;
 }
 
+interface Provider {
+  id: string;
+  name: string;
+  website?: string;
+  _version?: number;
+}
+
+interface ProviderInput {
+  name: string;
+  website?: string;
+}
+
+interface ProviderUpdateInput {
+  id: string;
+  name?: string;
+  website?: string;
+  _version?: number;
+}
+
 interface CertificationInput {
   name: string;
   description?: string;
-  provider: string;
+  code?: string;
+  providerID: string;
 }
 
 interface CertificationUpdateInput {
   id: string;
   name?: string;
   description?: string;
-  provider?: string;
+  code?: string;
+  providerID?: string;
+  _version?: number;
 }
 
 interface Certification {
   id: string;
   name: string;
   description?: string;
-  provider: string;
+  code?: string;
+  providerID: string;
+  provider?: Provider;
   _version?: number;
 }
 
@@ -78,6 +106,130 @@ interface QuestionInput {
   correctAnswer: string;
   explanation?: string;
   examID: string;
+}
+
+// Provider operations
+export async function createNewProvider(providerData: ProviderInput): Promise<any> {
+  try {
+    const input = {
+      name: providerData.name,
+      website: providerData.website || null,
+    };
+
+    const response = await API.graphql({
+      query: createProvider,
+      variables: { input },
+      authMode: 'AMAZON_COGNITO_USER_POOLS',
+    }) as GraphQLResult<any>;
+
+    return response.data?.createProvider;
+  } catch (error) {
+    console.error('Error creating provider:', error);
+    throw new Error('Failed to create provider. Please try again.');
+  }
+}
+
+export async function updateExistingProvider(providerData: ProviderUpdateInput): Promise<any> {
+  try {
+    // First, get the current version of the provider
+    const getProviderResponse = await API.graphql({
+      query: `query GetProvider($id: ID!) {
+        getProvider(id: $id) {
+          id
+          _version
+        }
+      }`,
+      variables: { id: providerData.id },
+      authMode: 'AMAZON_COGNITO_USER_POOLS',
+    }) as GraphQLResult<any>;
+    
+    const currentVersion = getProviderResponse.data?.getProvider?._version;
+    
+    if (!currentVersion) {
+      throw new Error('Could not retrieve current provider version');
+    }
+    
+    const input = {
+      id: providerData.id,
+      name: providerData.name,
+      website: providerData.website,
+      _version: currentVersion || providerData._version
+    };
+
+    const response = await API.graphql({
+      query: updateProvider,
+      variables: { input },
+      authMode: 'AMAZON_COGNITO_USER_POOLS',
+    }) as GraphQLResult<any>;
+
+    return response.data?.updateProvider;
+  } catch (error) {
+    console.error('Error updating provider:', error);
+    throw new Error('Failed to update provider. Please try again.');
+  }
+}
+
+export async function deleteExistingProvider(providerId: string): Promise<any> {
+  try {
+    // First, get the current version of the provider
+    const getProviderResponse = await API.graphql({
+      query: `query GetProvider($id: ID!) {
+        getProvider(id: $id) {
+          id
+          _version
+        }
+      }`,
+      variables: { id: providerId },
+      authMode: 'AMAZON_COGNITO_USER_POOLS',
+    }) as GraphQLResult<any>;
+    
+    const provider = getProviderResponse.data?.getProvider;
+    
+    if (!provider) {
+      throw new Error('Could not retrieve provider');
+    }
+    
+    // Delete the provider
+    const response = await API.graphql({
+      query: deleteProvider,
+      variables: { 
+        input: { 
+          id: providerId,
+          _version: provider._version
+        } 
+      },
+      authMode: 'AMAZON_COGNITO_USER_POOLS',
+    }) as GraphQLResult<any>;
+
+    return response.data?.deleteProvider;
+  } catch (error) {
+    console.error('Error deleting provider:', error);
+    throw new Error('Failed to delete provider. Please try again.');
+  }
+}
+
+export async function getProviders(): Promise<Provider[]> {
+  try {
+    const response = await API.graphql({
+      query: listProviders,
+      variables: {
+        filter: { _deleted: { ne: true } }
+      },
+      authMode: 'AMAZON_COGNITO_USER_POOLS',
+    }) as GraphQLResult<any>;
+
+    const items = response.data?.listProviders?.items || [];
+    
+    return items.map((item: any) => ({
+      id: item.id,
+      name: item.name,
+      website: item.website || '',
+      _version: item._version
+    }));
+  } catch (error) {
+    console.error('Error fetching providers:', error);
+    return [];
+  }
 }
 
 // Create a new exam
@@ -193,7 +345,8 @@ export async function createNewCertification(certData: CertificationInput): Prom
     const input = {
       name: certData.name,
       description: certData.description || null,
-      provider: certData.provider,
+      code: certData.code || null,
+      providerID: certData.providerID,
     };
 
     const response = await API.graphql({
@@ -234,8 +387,9 @@ export async function updateExistingCertification(certData: CertificationUpdateI
       id: certData.id,
       name: certData.name,
       description: certData.description,
-      provider: certData.provider,
-      _version: currentVersion
+      code: certData.code,
+      providerID: certData.providerID,
+      _version: currentVersion || certData._version
     };
 
     const response = await API.graphql({
@@ -329,7 +483,9 @@ export async function getCertifications(): Promise<Certification[]> {
       id: item.id,
       name: item.name,
       description: item.description || '',
-      provider: item.provider || 'Unknown',
+      code: item.code || '',
+      providerID: item.providerID,
+      provider: item.provider,
       _version: item._version
     }));
   } catch (error) {
@@ -340,14 +496,8 @@ export async function getCertifications(): Promise<Certification[]> {
         id: 'aws-sa',
         name: 'AWS Solutions Architect Associate',
         description: 'Certification for AWS Solutions Architect Associate',
-        provider: 'Amazon Web Services',
-        _version: 1
-      },
-      {
-        id: 'azure-admin',
-        name: 'Microsoft Azure Administrator',
-        description: 'Certification for Microsoft Azure Administrator',
-        provider: 'Microsoft',
+        code: 'SAA-C03',
+        providerID: 'aws',
         _version: 1
       }
     ];
