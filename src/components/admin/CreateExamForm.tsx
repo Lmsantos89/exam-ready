@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createExam } from '../../services/exams/adminService';
+import { createNewExam } from '../../services/exams/adminService';
 
 interface CreateExamFormProps {
   certifications: Array<{ id: string; name: string }>;
@@ -32,10 +32,10 @@ export default function CreateExamForm({ certifications, onExamCreated }: Create
         throw new Error('Invalid certification selected');
       }
 
-      await createExam({
+      await createNewExam({
         name: selectedCert.name,
         description,
-        certificationId,
+        certificationID: certificationId,
         passingScore,
         timeLimit,
       });

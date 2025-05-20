@@ -71,7 +71,10 @@ export default function ManageExamQuestions({ examId, examName }: ManageExamQues
         }
       }
       
-      await addQuestionToExam(examId, newQuestion);
+      await addQuestionToExam(examId, {
+        ...newQuestion,
+        examID: examId
+      });
       setSuccess('Question added successfully');
       setNewQuestion({
         text: '',
