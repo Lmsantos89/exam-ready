@@ -51,6 +51,7 @@ interface Certification {
   name: string;
   description?: string;
   provider: string;
+  _version?: number;
 }
 
 interface Exam {
@@ -60,6 +61,7 @@ interface Exam {
   certificationID: string;
   passingScore?: number;
   timeLimit?: number;
+  _version?: number;
 }
 
 interface Question {
@@ -166,36 +168,13 @@ export async function deleteExistingExam(examId: string): Promise<any> {
       throw new Error('Could not retrieve exam');
     }
     
-    // Get all questions for this exam
-    const questionsResponse = await API.graphql({
-      query: questionsByExamID,
-      variables: { examID: examId },
-      authMode: 'AMAZON_COGNITO_USER_POOLS',
-    }) as GraphQLResult<any>;
-    
-    const questions = questionsResponse.data?.questionsByExamID?.items || [];
-    
-    // Delete all questions for this exam
-    for (const question of questions) {
-      await API.graphql({
-        query: deleteQuestion,
-        variables: { 
-          input: { 
-            id: question.id,
-            _version: question._version 
-          } 
-        },
-        authMode: 'AMAZON_COGNITO_USER_POOLS',
-      });
-    }
-    
-    // Now delete the exam
+    // Delete the exam using the delete mutation
     const response = await API.graphql({
       query: deleteExam,
       variables: { 
         input: { 
           id: examId,
-          _version: exam._version 
+          _version: exam._version
         } 
       },
       authMode: 'AMAZON_COGNITO_USER_POOLS',
@@ -299,52 +278,28 @@ export async function deleteExistingCertification(certId: string): Promise<any> 
       throw new Error('Could not retrieve certification');
     }
     
-    // Delete all associated exams first
+    // Mark all associated exams as deleted
     const exams = certification.exams?.items || [];
     for (const exam of exams) {
-      // Get all questions for this exam
-      const questionsResponse = await API.graphql({
-        query: questionsByExamID,
-        variables: { examID: exam.id },
-        authMode: 'AMAZON_COGNITO_USER_POOLS',
-      }) as GraphQLResult<any>;
-      
-      const questions = questionsResponse.data?.questionsByExamID?.items || [];
-      
-      // Delete all questions for this exam
-      for (const question of questions) {
-        await API.graphql({
-          query: deleteQuestion,
-          variables: { 
-            input: { 
-              id: question.id,
-              _version: question._version 
-            } 
-          },
-          authMode: 'AMAZON_COGNITO_USER_POOLS',
-        });
-      }
-      
-      // Now delete the exam
       await API.graphql({
         query: deleteExam,
         variables: { 
           input: { 
             id: exam.id,
-            _version: exam._version 
+            _version: exam._version
           } 
         },
         authMode: 'AMAZON_COGNITO_USER_POOLS',
       });
     }
     
-    // Finally, delete the certification
+    // Delete the certification using the delete mutation
     const response = await API.graphql({
       query: deleteCertification,
       variables: { 
         input: { 
           id: certId,
-          _version: certification._version 
+          _version: certification._version
         } 
       },
       authMode: 'AMAZON_COGNITO_USER_POOLS',
@@ -362,6 +317,9 @@ export async function getCertifications(): Promise<Certification[]> {
   try {
     const response = await API.graphql({
       query: listCertifications,
+      variables: {
+        filter: { _deleted: { ne: true } }
+      },
       authMode: 'AMAZON_COGNITO_USER_POOLS',
     }) as GraphQLResult<any>;
 
@@ -371,7 +329,8 @@ export async function getCertifications(): Promise<Certification[]> {
       id: item.id,
       name: item.name,
       description: item.description || '',
-      provider: item.provider || 'Unknown'
+      provider: item.provider || 'Unknown',
+      _version: item._version
     }));
   } catch (error) {
     console.error('Error fetching certifications:', error);
@@ -381,13 +340,15 @@ export async function getCertifications(): Promise<Certification[]> {
         id: 'aws-sa',
         name: 'AWS Solutions Architect Associate',
         description: 'Certification for AWS Solutions Architect Associate',
-        provider: 'Amazon Web Services'
+        provider: 'Amazon Web Services',
+        _version: 1
       },
       {
         id: 'azure-admin',
         name: 'Microsoft Azure Administrator',
         description: 'Certification for Microsoft Azure Administrator',
-        provider: 'Microsoft'
+        provider: 'Microsoft',
+        _version: 1
       }
     ];
   }
@@ -398,6 +359,9 @@ export async function getExams(): Promise<Exam[]> {
   try {
     const response = await API.graphql({
       query: listExams,
+      variables: {
+        filter: { _deleted: { ne: true } }
+      },
       authMode: 'AMAZON_COGNITO_USER_POOLS',
     }) as GraphQLResult<any>;
 
@@ -409,7 +373,8 @@ export async function getExams(): Promise<Exam[]> {
       description: item.description || '',
       certificationID: item.certificationID,
       passingScore: item.passingScore || 70,
-      timeLimit: item.timeLimit || 120
+      timeLimit: item.timeLimit || 120,
+      _version: item._version
     }));
   } catch (error) {
     console.error('Error fetching exams:', error);
@@ -421,7 +386,8 @@ export async function getExams(): Promise<Exam[]> {
         description: 'Practice exam for AWS Solutions Architect Associate',
         certificationID: 'aws-sa',
         passingScore: 70,
-        timeLimit: 130
+        timeLimit: 130,
+        _version: 1
       },
       {
         id: 'azure-admin-exam',
@@ -429,7 +395,8 @@ export async function getExams(): Promise<Exam[]> {
         description: 'Practice exam for Microsoft Azure Administrator',
         certificationID: 'azure-admin',
         passingScore: 70,
-        timeLimit: 120
+        timeLimit: 120,
+        _version: 1
       }
     ];
   }
