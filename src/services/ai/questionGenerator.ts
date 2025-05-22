@@ -1,4 +1,5 @@
-import { API } from 'aws-amplify';
+// Re-export from the main services index
+import { generateQuestion } from '../index';
 
 export interface QuestionGenerationParams {
   examId: string;
@@ -19,22 +20,4 @@ export interface GeneratedQuestion {
   explanation: string;
 }
 
-/**
- * Generates a new question using Amazon Bedrock via Lambda
- * 
- * @param params Question generation parameters
- * @returns Generated question
- */
-export async function generateQuestion(params: QuestionGenerationParams): Promise<GeneratedQuestion> {
-  try {
-    // Call the Lambda function through API Gateway
-    const response = await API.post('generateQuestionApi', '/generateQuestion', {
-      body: params
-    });
-    
-    return response;
-  } catch (error) {
-    console.error('Error generating question:', error);
-    throw error;
-  }
-}
+export { generateQuestion };

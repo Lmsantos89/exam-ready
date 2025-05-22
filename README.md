@@ -1,108 +1,59 @@
-# ExamReady - AI-Powered Certification Exam Preparation
+# ExamReady
 
-ExamReady is a web application that provides mock certification exams with AI-generated practice questions to help users prepare for technical certification exams.
+AI-powered certification exam preparation platform.
 
-## Features
+## Development Environments
 
-- Practice exams for various technical certifications (AWS, Azure, GCP, CompTIA)
-- AI-generated practice questions using Amazon Bedrock
-- Exam simulation mode with timed tests
-- Practice mode with explanations and unlimited attempts
-- Performance tracking and analytics
+### Local Development (Dev)
 
-## Tech Stack
+For local development without AWS resources:
 
-### Frontend
-- Next.js (React framework)
-- Tailwind CSS for styling
-- AWS Amplify for authentication and API integration
-
-### Backend
-- AWS Lambda for serverless functions
-- Amazon DynamoDB for database
-- AWS AppSync for GraphQL API
-- Amazon Bedrock for AI question generation
-- Amazon Cognito for user authentication
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js (v14 or later)
-- npm or yarn
-- AWS account
-- AWS CLI configured locally
-
-### Installation
-
-1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/exam-ready.git
-cd exam-ready
-```
-
-2. Install dependencies
-```bash
+# Install dependencies
 npm install
+
+# Run the development server with mock services
+npm run dev:mock
 ```
 
-3. Initialize Amplify (if not already done)
-```bash
-npm install -g @aws-amplify/cli
-amplify init
-```
+This uses mock data and services for local development without requiring AWS resources.
 
-4. Add authentication
-```bash
-amplify add auth
-```
+### Staging Environment
 
-5. Add API
-```bash
-amplify add api
-```
-
-6. Push to AWS
-```bash
-amplify push
-```
-
-7. Start the development server
-```bash
-npm run dev
-```
-
-## Deployment
-
-The application can be deployed using AWS Amplify:
+For the staging environment with real AWS resources:
 
 ```bash
-amplify publish
+# Switch to staging environment
+amplify env checkout staging
+
+# Deploy resources
+amplify push -y
+
+# Run with staging configuration
+NEXT_PUBLIC_APP_ENV=staging npm run dev
 ```
 
-## AWS Services Used
+### Production Environment
 
-- **AWS Amplify**: Hosting the frontend application with CI/CD
-- **Amazon Cognito**: User authentication and management
-- **AWS AppSync**: GraphQL API for data operations
-- **Amazon DynamoDB**: NoSQL database for storing exam data
-- **AWS Lambda**: Serverless functions for backend logic
-- **Amazon Bedrock**: AI model for generating exam questions
-- **Amazon S3**: Storage for static assets
+For the production environment with real AWS resources:
 
-## Cost Optimization
+```bash
+# Switch to production environment
+amplify env checkout production
 
-For an MVP/demo, this architecture leverages several AWS free tier services:
-- AWS Lambda: 1M free requests per month
-- Amazon DynamoDB: 25GB free storage
-- Amazon Cognito: 50,000 monthly active users in the free tier
-- AWS Amplify: Free tier hosting for 12 months
-- Amazon Bedrock: Pay only for the tokens you use
+# Deploy resources
+amplify push -y
 
-## Future Enhancements
+# Build for production
+NEXT_PUBLIC_APP_ENV=production npm run build
+```
 
-- Add more certification types
-- Implement spaced repetition learning
-- Add study materials and resources
-- Develop mobile applications
-- Integrate with learning management systems
+## Project Structure
+
+- `/src/components` - React components
+- `/src/pages` - Next.js pages
+- `/src/services` - Service functions for API calls
+- `/src/mocks` - Mock data for local development
+- `/src/config` - Environment-specific configurations
+- `/src/lib` - Utility functions and libraries
+- `/src/graphql` - GraphQL queries, mutations, and subscriptions

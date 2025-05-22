@@ -1,7 +1,7 @@
+// src/lib/amplifyConfig.ts
 import { Amplify } from 'aws-amplify';
 import config from '../amplifyconfiguration.json';
 
-// Configure Amplify
 export const configureAmplify = () => {
   try {
     Amplify.configure(config);
