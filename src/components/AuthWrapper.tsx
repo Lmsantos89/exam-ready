@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Auth } from 'aws-amplify';
+import { signOut, fetchAuthSession, getCurrentUser, fetchUserAttributes } from 'aws-amplify/auth';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import AuthModal from './auth/AuthModal';
@@ -20,24 +20,47 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
   
   async function checkAuthState() {
     try {
-      const userData = await Auth.currentAuthenticatedUser();
+      // First check if we have a valid session
+      const { tokens } = await fetchAuthSession();
       
-      // Get the user attributes if not already included
-      if (!userData.attributes) {
+      if (tokens) {
+        // If we have tokens, get the current user with attributes
+        const currentUser = await getCurrentUser();
+        
         try {
-          const userAttributes = await Auth.userAttributes(userData);
-          userData.attributes = {};
-          userAttributes.forEach(attr => {
-            userData.attributes[attr.Name] = attr.Value;
-          });
+          // Fetch user attributes directly from Cognito
+          const userAttributes = await fetchUserAttributes();
+          
+          // Create a user object with attributes in the format expected by Navbar
+          const userWithAttributes = {
+            username: currentUser.username,
+            attributes: {
+              email: userAttributes.email,
+              preferred_username: userAttributes.preferred_username || userAttributes.email?.split('@')[0] || currentUser.username
+            }
+          };
+          
+          setIsAuthenticated(true);
+          setUser(userWithAttributes);
         } catch (attrError) {
           console.error('Error fetching user attributes:', attrError);
+          // Fallback to basic user object
+          setIsAuthenticated(true);
+          setUser({ 
+            username: currentUser.username,
+            attributes: {
+              email: currentUser.signInDetails?.loginId,
+              preferred_username: currentUser.username
+            }
+          });
         }
+      } else {
+        setIsAuthenticated(false);
+        setUser(null);
       }
-      
-      setIsAuthenticated(true);
-      setUser(userData);
     } catch (error) {
+      // This is expected for unauthenticated users
+      console.log('Not authenticated yet');
       setIsAuthenticated(false);
       setUser(null);
     } finally {
@@ -47,7 +70,7 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
   
   async function handleSignOut() {
     try {
-      await Auth.signOut();
+      await signOut();
       setIsAuthenticated(false);
       setUser(null);
       // Redirect to home page after signing out
@@ -58,11 +81,9 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
   }
   
   const handleAuthenticated = async (user: any) => {
-    // Ensure we have the latest user data with attributes
+    // Refresh auth state after authentication
     try {
-      const currentUser = await Auth.currentAuthenticatedUser();
-      setIsAuthenticated(true);
-      setUser(currentUser);
+      await checkAuthState();
     } catch (error) {
       // Fallback to the provided user object if there's an error
       setIsAuthenticated(true);

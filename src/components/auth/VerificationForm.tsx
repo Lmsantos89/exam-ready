@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Auth } from 'aws-amplify';
+import { confirmSignUp, resendSignUpCode } from 'aws-amplify/auth';
 
 interface VerificationFormProps {
   email: string;
@@ -19,10 +19,13 @@ export default function VerificationForm({ email, onSuccess, onBack, onClose }: 
     setIsSubmitting(true);
     
     try {
-      await Auth.confirmSignUp(email, verificationCode);
+      await confirmSignUp({
+        username: email,
+        confirmationCode: verificationCode
+      });
       onSuccess();
     } catch (error: any) {
-      setError('Failed to verify account: ' + error.message);
+      setError('Failed to verify account: ' + (error.message || 'Unknown error'));
     } finally {
       setIsSubmitting(false);
     }
@@ -32,10 +35,12 @@ export default function VerificationForm({ email, onSuccess, onBack, onClose }: 
     setError('');
     
     try {
-      await Auth.resendSignUp(email);
+      await resendSignUpCode({
+        username: email
+      });
       alert('Verification code has been resent to your email.');
     } catch (error: any) {
-      setError('Failed to resend code: ' + error.message);
+      setError('Failed to resend code: ' + (error.message || 'Unknown error'));
     }
   }
 

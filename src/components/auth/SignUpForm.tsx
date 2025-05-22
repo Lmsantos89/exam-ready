@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Auth } from 'aws-amplify';
+import { signUp } from 'aws-amplify/auth';
 
 interface SignUpFormProps {
   onSuccess: (email: string) => void;
@@ -28,17 +28,19 @@ export default function SignUpForm({ onSuccess, onSignInClick, onClose }: SignUp
     setIsSubmitting(true);
     
     try {
-      await Auth.signUp({
+      await signUp({
         username: email, // Cognito uses email as the username
         password,
-        attributes: {
-          email,
-          preferred_username: username // Store the display username as an attribute
+        options: {
+          userAttributes: {
+            email,
+            preferred_username: username // Store the display username as an attribute
+          }
         }
       });
       onSuccess(email);
     } catch (error: any) {
-      setError('Failed to sign up: ' + error.message);
+      setError('Failed to sign up: ' + (error.message || 'Unknown error'));
     } finally {
       setIsSubmitting(false);
     }

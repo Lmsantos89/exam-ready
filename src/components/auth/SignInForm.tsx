@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Auth } from 'aws-amplify';
+import { signIn } from 'aws-amplify/auth';
 
 interface SignInFormProps {
   onSuccess: (user: any) => void;
@@ -19,10 +19,19 @@ export default function SignInForm({ onSuccess, onSignUpClick, onClose }: SignIn
     setIsSubmitting(true);
     
     try {
-      const user = await Auth.signIn(email, password);
-      onSuccess(user);
+      const { isSignedIn, nextStep } = await signIn({
+        username: email,
+        password
+      });
+      
+      if (isSignedIn) {
+        onSuccess({ username: email });
+      } else if (nextStep) {
+        // Handle additional steps if needed (like MFA)
+        setError('Additional verification required. Please complete the next step.');
+      }
     } catch (error: any) {
-      setError('Failed to sign in: ' + error.message);
+      setError('Failed to sign in: ' + (error.message || 'Unknown error'));
     } finally {
       setIsSubmitting(false);
     }
