@@ -1,7 +1,10 @@
-// Service exports based on environment
-import * as mockServices from './mock/mockService';
+// Service exports using real API services
+import * as apiServices from './exams/examService';
+import * as userServices from './exams/userService';
+import * as adminServices from './exams/adminService';
+import * as aiServices from './ai/questionGenerator';
 
-// For local development, always use mock services
+// Export all services
 export const {
   // Provider services
   getProviders,
@@ -19,14 +22,31 @@ export const {
   
   // Question services
   getQuestionsByExamId,
-  
+} = apiServices;
+
+export const {
   // User services
   getCurrentUser,
   
   // Exam attempt services
   getExamAttemptsByUser,
   saveExamAttempt,
-  
+} = userServices;
+
+export const {
+  // Admin services
+  createNewProvider,
+  updateExistingProvider,
+  deleteExistingProvider,
+  createNewCertification,
+  updateExistingCertification,
+  deleteExistingCertification,
+  createNewExam,
+  updateExistingExam,
+  deleteExistingExam,
+} = adminServices;
+
+export const {
   // AI services
   generateQuestion
-} = mockServices;
+} = aiServices;

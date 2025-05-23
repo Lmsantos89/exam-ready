@@ -1,0 +1,41 @@
+[
+  {
+    "id": "q-1",
+    "examId": "exam-1",
+    "content": "Which AWS service would you use to run containers without managing servers?",
+    "options": [
+      "Amazon EC2",
+      "AWS Lambda",
+      "Amazon ECS with Fargate",
+      "Amazon S3"
+    ],
+    "correctOptionIndex": 2,
+    "explanation": "Amazon ECS with Fargate allows you to run containers without managing the underlying EC2 instances."
+  },
+  {
+    "id": "q-2",
+    "examId": "exam-1",
+    "content": "Which storage class is best for data that needs to be accessed once or twice a year with millisecond access?",
+    "options": [
+      "Amazon S3 Standard",
+      "Amazon S3 Glacier",
+      "Amazon S3 One Zone-IA",
+      "Amazon S3 Intelligent-Tiering"
+    ],
+    "correctOptionIndex": 2,
+    "explanation": "S3 One Zone-IA provides millisecond access but at a lower cost for infrequently accessed data."
+  },
+  {
+    "id": "q-3",
+    "examId": "exam-2",
+    "content": "Which AWS service would you use to store session state for a web application?",
+    "options": [
+      "Amazon S3",
+      "Amazon DynamoDB",
+      "AWS Lambda",
+      "Amazon EC2"
+    ],
+    "correctOptionIndex": 1,
+    "explanation": "DynamoDB is a good choice for storing session state due to its low latency and scalability."
+  }
+]

@@ -1,82 +1,42 @@
-import { API, graphqlOperation } from 'aws-amplify';
-import { GraphQLQuery, GraphQLResult } from '@aws-amplify/api';
+import { API, graphqlOperation, Auth } from 'aws-amplify';
+import * as queries from '../../graphql/queries';
+import * as mutations from '../../graphql/mutations';
 
-// Define types for exam results
-export interface ExamResult {
-  id: string;
-  userId: string;
-  examId: string;
-  examName: string;
-  score: number;
-  totalQuestions: number;
-  correctAnswers: number;
-  timeSpent: number; // in seconds
-  date: string;
-  questionResults?: Array<{
-    questionId: string;
-    correct: boolean;
-    userAnswer: string;
-    correctAnswer: string;
-  }>;
-}
-
-// Get user's exam history
-export async function getUserExamHistory(userId: string): Promise<ExamResult[]> {
+// Get current authenticated user
+export const getCurrentUser = async () => {
   try {
-    // For now, return mock data
-    // In a real implementation, this would query the database
-    return [
-      {
-        id: '1',
-        userId,
-        examId: 'aws-sa',
-        examName: 'AWS Solutions Architect Associate',
-        score: 85,
-        totalQuestions: 20,
-        correctAnswers: 17,
-        timeSpent: 1800, // 30 minutes
-        date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days ago
-      },
-      {
-        id: '2',
-        userId,
-        examId: 'aws-sa',
-        examName: 'AWS Solutions Architect Associate',
-        score: 70,
-        totalQuestions: 10,
-        correctAnswers: 7,
-        timeSpent: 900, // 15 minutes
-        date: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(), // 14 days ago
-      },
-      {
-        id: '3',
-        userId,
-        examId: 'azure-admin',
-        examName: 'Microsoft Azure Administrator',
-        score: 90,
-        totalQuestions: 10,
-        correctAnswers: 9,
-        timeSpent: 600, // 10 minutes
-        date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days ago
-      }
-    ];
+    const user = await Auth.currentAuthenticatedUser();
+    return user;
   } catch (error) {
-    console.error('Error fetching user exam history:', error);
-    throw error;
-  }
-}
-
-// Save exam result
-export async function saveExamResult(result: Omit<ExamResult, 'id'>): Promise<ExamResult | null> {
-  try {
-    // In a real implementation, this would save to the database
-    console.log('Saving exam result:', result);
-    return {
-      ...result,
-      id: Date.now().toString()
-    };
-  } catch (error) {
-    console.error('Error saving exam result:', error);
+    console.error('Error getting current user:', error);
     return null;
   }
-}
+};
+
+// Get exam attempts by user
+export const getExamAttemptsByUser = async (userID: string) => {
+  try {
+    const response = await API.graphql(graphqlOperation(
+      queries.listExamAttempts,
+      { filter: { userID: { eq: userID } } }
+    ));
+    return response.data.listExamAttempts.items;
+  } catch (error) {
+    console.error('Error fetching exam attempts:', error);
+    throw error;
+  }
+};
+
+// Save exam attempt
+export const saveExamAttempt = async (examAttempt: any) => {
+  try {
+    const response = await API.graphql(graphqlOperation(
+      mutations.createExamAttempt,
+      { input: examAttempt }
+    ));
+    return response.data.createExamAttempt;
+  } catch (error) {
+    console.error('Error saving exam attempt:', error);
+    throw error;
+  }
+};

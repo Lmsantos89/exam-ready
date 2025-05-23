@@ -1,59 +1,54 @@
 # ExamReady
 
-AI-powered certification exam preparation platform.
+A platform for exam preparation and certification training.
 
-## Development Environments
+## Local Development with DynamoDB Local
 
-### Local Development (Dev)
+This project can use a local DynamoDB instance to replicate the production database for development.
 
-For local development without AWS resources:
+### Setup Instructions
 
-```bash
-# Install dependencies
-npm install
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-# Run the development server with mock services
-npm run dev:mock
-```
+2. Start the local development environment with DynamoDB:
+   ```bash
+   npm run dev:local-db
+   ```
 
-This uses mock data and services for local development without requiring AWS resources.
+   This will:
+   - Start a local DynamoDB instance on port 8000
+   - Create tables matching the production schema
+   - Import sample data from the sample-data directory
+   - Start the Next.js development server with local DB configuration
 
-### Staging Environment
+3. Access the application at http://localhost:3000
 
-For the staging environment with real AWS resources:
+### Importing Production Data
 
-```bash
-# Switch to staging environment
-amplify env checkout staging
+To import real production data:
 
-# Deploy resources
-amplify push -y
+1. Export data from your production DynamoDB tables:
+   ```bash
+   aws dynamodb scan --table-name Exam > sample-data/exams.json
+   aws dynamodb scan --table-name Question > sample-data/questions.json
+   # Export other tables as needed
+   ```
 
-# Run with staging configuration
-NEXT_PUBLIC_APP_ENV=staging npm run dev
-```
+2. Format the exported data if necessary (remove AWS-specific attributes)
 
-### Production Environment
+3. Run the setup script:
+   ```bash
+   npm run dynamodb:setup
+   ```
 
-For the production environment with real AWS resources:
+### Available Scripts
 
-```bash
-# Switch to production environment
-amplify env checkout production
-
-# Deploy resources
-amplify push -y
-
-# Build for production
-NEXT_PUBLIC_APP_ENV=production npm run build
-```
-
-## Project Structure
-
-- `/src/components` - React components
-- `/src/pages` - Next.js pages
-- `/src/services` - Service functions for API calls
-- `/src/mocks` - Mock data for local development
-- `/src/config` - Environment-specific configurations
-- `/src/lib` - Utility functions and libraries
-- `/src/graphql` - GraphQL queries, mutations, and subscriptions
+- `npm run dev` - Start Next.js development server
+- `npm run dev:local-db` - Start development with local DynamoDB
+- `npm run dynamodb:start` - Start just the DynamoDB Local instance
+- `npm run dynamodb:setup` - Create tables and import data
+- `npm run build` - Build the application
+- `npm run start` - Start the production server

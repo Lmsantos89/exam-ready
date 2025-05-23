@@ -1,77 +1,153 @@
-// Mock admin service for local development
-import { mockProviders, mockCertifications, mockExams } from '../../mocks/mockData';
+import { API, graphqlOperation } from 'aws-amplify';
+import * as mutations from '../../graphql/mutations';
+import * as queries from '../../graphql/queries';
 
 // Provider functions
 export const getProviders = async () => {
-  return mockProviders;
+  try {
+    const response = await API.graphql(graphqlOperation(queries.listProviders));
+    return response.data.listProviders.items;
+  } catch (error) {
+    console.error('Error fetching providers:', error);
+    throw error;
+  }
 };
 
 export const createNewProvider = async (provider: any) => {
-  return {
-    ...provider,
-    id: `provider-${Date.now()}`,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  };
+  try {
+    const response = await API.graphql(graphqlOperation(
+      mutations.createProvider,
+      { input: provider }
+    ));
+    return response.data.createProvider;
+  } catch (error) {
+    console.error('Error creating provider:', error);
+    throw error;
+  }
 };
 
 export const updateExistingProvider = async (provider: any) => {
-  return {
-    ...provider,
-    updatedAt: new Date().toISOString()
-  };
+  try {
+    const response = await API.graphql(graphqlOperation(
+      mutations.updateProvider,
+      { input: provider }
+    ));
+    return response.data.updateProvider;
+  } catch (error) {
+    console.error('Error updating provider:', error);
+    throw error;
+  }
 };
 
 export const deleteExistingProvider = async (id: string) => {
-  return { success: true };
+  try {
+    const response = await API.graphql(graphqlOperation(
+      mutations.deleteProvider,
+      { input: { id } }
+    ));
+    return response.data.deleteProvider;
+  } catch (error) {
+    console.error('Error deleting provider:', error);
+    throw error;
+  }
 };
 
 // Certification functions
 export const getCertifications = async () => {
-  return mockCertifications;
+  try {
+    const response = await API.graphql(graphqlOperation(queries.listCertifications));
+    return response.data.listCertifications.items;
+  } catch (error) {
+    console.error('Error fetching certifications:', error);
+    throw error;
+  }
 };
 
 export const createNewCertification = async (certification: any) => {
-  return {
-    ...certification,
-    id: `cert-${Date.now()}`,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  };
+  try {
+    const response = await API.graphql(graphqlOperation(
+      mutations.createCertification,
+      { input: certification }
+    ));
+    return response.data.createCertification;
+  } catch (error) {
+    console.error('Error creating certification:', error);
+    throw error;
+  }
 };
 
 export const updateExistingCertification = async (certification: any) => {
-  return {
-    ...certification,
-    updatedAt: new Date().toISOString()
-  };
+  try {
+    const response = await API.graphql(graphqlOperation(
+      mutations.updateCertification,
+      { input: certification }
+    ));
+    return response.data.updateCertification;
+  } catch (error) {
+    console.error('Error updating certification:', error);
+    throw error;
+  }
 };
 
 export const deleteExistingCertification = async (id: string) => {
-  return { success: true };
+  try {
+    const response = await API.graphql(graphqlOperation(
+      mutations.deleteCertification,
+      { input: { id } }
+    ));
+    return response.data.deleteCertification;
+  } catch (error) {
+    console.error('Error deleting certification:', error);
+    throw error;
+  }
 };
 
 // Exam functions
 export const getExams = async () => {
-  return mockExams;
+  try {
+    const response = await API.graphql(graphqlOperation(queries.listExams));
+    return response.data.listExams.items;
+  } catch (error) {
+    console.error('Error fetching exams:', error);
+    throw error;
+  }
 };
 
 export const createNewExam = async (exam: any) => {
-  return {
-    ...exam,
-    id: `exam-${Date.now()}`,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  };
+  try {
+    const response = await API.graphql(graphqlOperation(
+      mutations.createExam,
+      { input: exam }
+    ));
+    return response.data.createExam;
+  } catch (error) {
+    console.error('Error creating exam:', error);
+    throw error;
+  }
 };
 
 export const updateExistingExam = async (exam: any) => {
-  return {
-    ...exam,
-    updatedAt: new Date().toISOString()
-  };
+  try {
+    const response = await API.graphql(graphqlOperation(
+      mutations.updateExam,
+      { input: exam }
+    ));
+    return response.data.updateExam;
+  } catch (error) {
+    console.error('Error updating exam:', error);
+    throw error;
+  }
 };
 
 export const deleteExistingExam = async (id: string) => {
-  return { success: true };
+  try {
+    const response = await API.graphql(graphqlOperation(
+      mutations.deleteExam,
+      { input: { id } }
+    ));
+    return response.data.deleteExam;
+  } catch (error) {
+    console.error('Error deleting exam:', error);
+    throw error;
+  }
 };

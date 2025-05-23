@@ -1,5 +1,4 @@
-// Re-export from the main services index
-import { generateQuestion } from '../index';
+import { API } from 'aws-amplify';
 
 export interface QuestionGenerationParams {
   examId: string;
@@ -20,4 +19,15 @@ export interface GeneratedQuestion {
   explanation: string;
 }
 
-export { generateQuestion };
+export const generateQuestion = async (params: QuestionGenerationParams): Promise<GeneratedQuestion> => {
+  try {
+    const response = await API.post('generateQuestions', '/', {
+      body: params
+    });
+    
+    return response;
+  } catch (error) {
+    console.error('Error generating question:', error);
+    throw error;
+  }
+};
