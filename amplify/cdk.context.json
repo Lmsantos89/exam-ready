@@ -1,0 +1,6 @@
+{
+  "amplify-backend-namespace": "examready-staging",
+  "amplify-backend-name": "examready",
+  "amplify-backend-type": "app",
+  "environment": "staging"
+}

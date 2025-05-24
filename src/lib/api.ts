@@ -1,11 +1,14 @@
-import { API, graphqlOperation } from 'aws-amplify';
+import { client } from './amplifyConfig';
 import * as queries from '../graphql/queries';
 import * as mutations from '../graphql/mutations';
 
 // Generic function to fetch data using GraphQL queries
 export async function fetchData(query: any, variables?: any) {
   try {
-    const response = await API.graphql(graphqlOperation(query, variables));
+    const response = await client.graphql({
+      query,
+      variables
+    });
     return response.data;
   } catch (error) {
     console.error('Error fetching data:', error);
@@ -16,9 +19,10 @@ export async function fetchData(query: any, variables?: any) {
 // Generic function to create data using GraphQL mutations
 export async function createData(mutation: any, input: any) {
   try {
-    const response = await API.graphql(
-      graphqlOperation(mutation, { input })
-    );
+    const response = await client.graphql({
+      query: mutation,
+      variables: { input }
+    });
     return response.data;
   } catch (error) {
     console.error('Error creating data:', error);
@@ -29,9 +33,10 @@ export async function createData(mutation: any, input: any) {
 // Generic function to update data using GraphQL mutations
 export async function updateData(mutation: any, input: any) {
   try {
-    const response = await API.graphql(
-      graphqlOperation(mutation, { input })
-    );
+    const response = await client.graphql({
+      query: mutation,
+      variables: { input }
+    });
     return response.data;
   } catch (error) {
     console.error('Error updating data:', error);
@@ -42,9 +47,10 @@ export async function updateData(mutation: any, input: any) {
 // Generic function to delete data using GraphQL mutations
 export async function deleteData(mutation: any, id: string) {
   try {
-    const response = await API.graphql(
-      graphqlOperation(mutation, { input: { id } })
-    );
+    const response = await client.graphql({
+      query: mutation,
+      variables: { input: { id } }
+    });
     return response.data;
   } catch (error) {
     console.error('Error deleting data:', error);

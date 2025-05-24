@@ -57,6 +57,32 @@ The application uses the following AWS resources:
 - **Database**: Amazon DynamoDB with AppSync GraphQL API
 - **AI Question Generation**: AWS Lambda function with Amazon Bedrock (Claude 3)
 
+## Amplify Gen 2
+
+This application uses AWS Amplify Gen 2 for backend infrastructure and client-side integration. Key features include:
+
+- **TypeScript-first CDK-based infrastructure** defined in the `amplify` directory
+- **Modular imports** for reduced bundle size
+- **Improved authentication** with simplified API
+- **Enhanced GraphQL client** with better TypeScript support
+
+### Client-side Usage
+
+```typescript
+// Authentication
+import { signIn, signUp, signOut } from 'aws-amplify/auth';
+
+// GraphQL API
+import { generateClient } from 'aws-amplify/api';
+const client = generateClient();
+
+// Making GraphQL queries
+const response = await client.graphql({
+  query: myQuery,
+  variables: { id: 'some-id' }
+});
+```
+
 ## Data Schema
 
 The application uses the following data models:

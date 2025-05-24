@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
-import { Auth } from 'aws-amplify';
+import { getCurrentUser, fetchUserAttributes } from 'aws-amplify/auth';
 import AuthRequired from '../components/AuthRequired';
 import { getUserExamHistory } from '../services/exams/userService';
 import ExamHistoryList from '../components/dashboard/ExamHistoryList';
@@ -16,10 +16,11 @@ export default function Dashboard() {
   useEffect(() => {
     async function fetchUserData() {
       try {
-        const userData = await Auth.currentAuthenticatedUser();
-        setUser(userData);
+        const userData = await getCurrentUser();
+        const attributes = await fetchUserAttributes();
+        setUser({ ...userData, attributes });
         
-        const history = await getUserExamHistory(userData.username);
+        const history = await getUserExamHistory(userData.userId);
         setExamHistory(history);
       } catch (err) {
         console.error('Error fetching user data:', err);

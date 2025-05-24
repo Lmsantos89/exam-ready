@@ -1,17 +1,18 @@
-import { API, graphqlOperation, Auth } from 'aws-amplify';
+import { client } from '../../lib/amplifyConfig';
+import { getCurrentUser as amplifyGetCurrentUser } from 'aws-amplify/auth';
 import * as queries from '../../graphql/queries';
 import * as mutations from '../../graphql/mutations';
 
 // Get current authenticated user
 export const getCurrentUser = async () => {
   try {
-    const user = await Auth.currentAuthenticatedUser();
+    const user = await amplifyGetCurrentUser();
     
     // Get user data from the database
-    const response = await API.graphql(graphqlOperation(
-      queries.getUser,
-      { id: user.username }
-    ));
+    const response = await client.graphql({
+      query: queries.getUser,
+      variables: { id: user.userId }
+    });
     
     return response.data.getUser;
   } catch (error) {
@@ -23,10 +24,10 @@ export const getCurrentUser = async () => {
 // Get exam attempts by user
 export const getExamAttemptsByUser = async (userID: string) => {
   try {
-    const response = await API.graphql(graphqlOperation(
-      queries.listExamAttempts,
-      { filter: { userID: { eq: userID } } }
-    ));
+    const response = await client.graphql({
+      query: queries.listExamAttempts,
+      variables: { filter: { userID: { eq: userID } } }
+    });
     return response.data.listExamAttempts.items;
   } catch (error) {
     console.error('Error fetching exam attempts:', error);
@@ -37,10 +38,10 @@ export const getExamAttemptsByUser = async (userID: string) => {
 // Save exam attempt
 export const saveExamAttempt = async (examAttempt: any) => {
   try {
-    const response = await API.graphql(graphqlOperation(
-      mutations.createExamAttempt,
-      { input: examAttempt }
-    ));
+    const response = await client.graphql({
+      query: mutations.createExamAttempt,
+      variables: { input: examAttempt }
+    });
     return response.data.createExamAttempt;
   } catch (error) {
     console.error('Error saving exam attempt:', error);

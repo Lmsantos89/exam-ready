@@ -1,17 +1,24 @@
-import { Auth } from 'aws-amplify';
+import { signUp as amplifySignUp, confirmSignUp as amplifyConfirmSignUp } from 'aws-amplify/auth';
+import { signIn as amplifySignIn, signOut as amplifySignOut } from 'aws-amplify/auth';
+import { getCurrentUser as amplifyGetCurrentUser, fetchUserAttributes } from 'aws-amplify/auth';
+import { fetchAuthSession } from 'aws-amplify/auth';
+import { resetPassword as amplifyResetPassword, confirmResetPassword as amplifyConfirmResetPassword } from 'aws-amplify/auth';
+import { updatePassword } from 'aws-amplify/auth';
 
 // Sign up a new user
 export async function signUp(email: string, password: string, name: string) {
   try {
-    const { user } = await Auth.signUp({
+    const { userId, nextStep } = await amplifySignUp({
       username: email,
       password,
-      attributes: {
-        email,
-        name
+      options: {
+        userAttributes: {
+          email,
+          name
+        }
       }
     });
-    return user;
+    return { userId, nextStep };
   } catch (error) {
     console.error('Error signing up:', error);
     throw error;
@@ -21,7 +28,10 @@ export async function signUp(email: string, password: string, name: string) {
 // Confirm sign up with verification code
 export async function confirmSignUp(email: string, code: string) {
   try {
-    return await Auth.confirmSignUp(email, code);
+    return await amplifyConfirmSignUp({
+      username: email,
+      confirmationCode: code
+    });
   } catch (error) {
     console.error('Error confirming sign up:', error);
     throw error;
@@ -31,8 +41,11 @@ export async function confirmSignUp(email: string, code: string) {
 // Sign in a user
 export async function signIn(email: string, password: string) {
   try {
-    const user = await Auth.signIn(email, password);
-    return user;
+    const { nextStep } = await amplifySignIn({
+      username: email,
+      password
+    });
+    return nextStep;
   } catch (error) {
     console.error('Error signing in:', error);
     throw error;
@@ -42,7 +55,7 @@ export async function signIn(email: string, password: string) {
 // Sign out the current user
 export async function signOut() {
   try {
-    await Auth.signOut();
+    await amplifySignOut();
   } catch (error) {
     console.error('Error signing out:', error);
     throw error;
@@ -52,8 +65,9 @@ export async function signOut() {
 // Get the current authenticated user
 export async function getCurrentUser() {
   try {
-    const user = await Auth.currentAuthenticatedUser();
-    return user;
+    const user = await amplifyGetCurrentUser();
+    const attributes = await fetchUserAttributes();
+    return { ...user, attributes };
   } catch (error) {
     console.error('Error getting current user:', error);
     return null;
@@ -63,7 +77,7 @@ export async function getCurrentUser() {
 // Check if a user is authenticated
 export async function isAuthenticated() {
   try {
-    await Auth.currentAuthenticatedUser();
+    await amplifyGetCurrentUser();
     return true;
   } catch (error) {
     return false;
@@ -73,7 +87,7 @@ export async function isAuthenticated() {
 // Get the current session
 export async function getCurrentSession() {
   try {
-    const session = await Auth.currentSession();
+    const session = await fetchAuthSession();
     return session;
   } catch (error) {
     console.error('Error getting current session:', error);
@@ -84,7 +98,9 @@ export async function getCurrentSession() {
 // Reset password
 export async function resetPassword(email: string) {
   try {
-    return await Auth.forgotPassword(email);
+    return await amplifyResetPassword({
+      username: email
+    });
   } catch (error) {
     console.error('Error resetting password:', error);
     throw error;
@@ -94,7 +110,11 @@ export async function resetPassword(email: string) {
 // Confirm new password with code
 export async function confirmResetPassword(email: string, code: string, newPassword: string) {
   try {
-    return await Auth.forgotPasswordSubmit(email, code, newPassword);
+    return await amplifyConfirmResetPassword({
+      username: email,
+      confirmationCode: code,
+      newPassword
+    });
   } catch (error) {
     console.error('Error confirming new password:', error);
     throw error;
@@ -104,8 +124,10 @@ export async function confirmResetPassword(email: string, code: string, newPassw
 // Change password for authenticated user
 export async function changePassword(oldPassword: string, newPassword: string) {
   try {
-    const user = await Auth.currentAuthenticatedUser();
-    return await Auth.changePassword(user, oldPassword, newPassword);
+    return await updatePassword({
+      oldPassword,
+      newPassword
+    });
   } catch (error) {
     console.error('Error changing password:', error);
     throw error;

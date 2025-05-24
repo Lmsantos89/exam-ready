@@ -1,4 +1,4 @@
-import { API } from 'aws-amplify';
+import { client } from '../../../lib/amplifyConfig';
 import { 
   updateExistingCertification, 
   deleteExistingCertification,
@@ -6,8 +6,12 @@ import {
   deleteExistingExam
 } from '../adminService';
 
-// Mock the AWS Amplify API
-jest.mock('aws-amplify');
+// Mock the Amplify client
+jest.mock('../../../lib/amplifyConfig', () => ({
+  client: {
+    graphql: jest.fn()
+  }
+}));
 
 describe('Admin Service', () => {
   beforeEach(() => {
@@ -16,8 +20,8 @@ describe('Admin Service', () => {
 
   describe('updateExistingCertification', () => {
     it('should fetch the current version and update the certification', async () => {
-      // Mock the API.graphql responses
-      (API.graphql as jest.Mock).mockImplementation((params) => {
+      // Mock the client.graphql responses
+      (client.graphql as jest.Mock).mockImplementation((params) => {
         if (params.query.includes('GetCertification')) {
           return Promise.resolve({
             data: {
@@ -52,11 +56,11 @@ describe('Admin Service', () => {
       const result = await updateExistingCertification(certData);
 
       // Verify API was called with correct parameters
-      expect(API.graphql).toHaveBeenCalledTimes(2);
+      expect(client.graphql).toHaveBeenCalledTimes(2);
       
       // Check the second call (update call)
-      const updateCall = (API.graphql as jest.Mock).mock.calls[1][0];
-      expect(updateCall.variables.input).toEqual({
+      const updateCall = (client.graphql as jest.Mock).mock.calls[1];
+      expect(updateCall[0].variables.input).toEqual({
         id: 'test-cert-id',
         name: 'Updated Cert',
         description: 'Updated Description',
@@ -75,8 +79,8 @@ describe('Admin Service', () => {
     });
 
     it('should throw an error if certification version cannot be retrieved', async () => {
-      // Mock the API.graphql response for a failed version retrieval
-      (API.graphql as jest.Mock).mockResolvedValueOnce({
+      // Mock the client.graphql response for a failed version retrieval
+      (client.graphql as jest.Mock).mockResolvedValueOnce({
         data: {
           getCertification: null
         }
@@ -97,8 +101,8 @@ describe('Admin Service', () => {
 
   describe('deleteExistingCertification', () => {
     it('should delete associated exams and questions before deleting the certification', async () => {
-      // Mock the API.graphql responses
-      (API.graphql as jest.Mock).mockImplementation((params) => {
+      // Mock the client.graphql responses
+      (client.graphql as jest.Mock).mockImplementation((params) => {
         if (params.query.includes('GetCertification')) {
           return Promise.resolve({
             data: {
@@ -150,11 +154,11 @@ describe('Admin Service', () => {
 
       // Verify API was called the correct number of times
       // 1 for getCertification + 2 for questionsByExamID + 4 for deleteQuestion + 2 for deleteExam + 1 for deleteCertification
-      expect(API.graphql).toHaveBeenCalledTimes(10);
+      expect(client.graphql).toHaveBeenCalledTimes(10);
 
       // Check the final call (delete certification)
-      const deleteCall = (API.graphql as jest.Mock).mock.calls[9][0];
-      expect(deleteCall.variables.input).toEqual({
+      const deleteCall = (client.graphql as jest.Mock).mock.calls[9];
+      expect(deleteCall[0].variables.input).toEqual({
         id: 'test-cert-id',
         _version: 1
       });
@@ -166,8 +170,8 @@ describe('Admin Service', () => {
 
   describe('updateExistingExam', () => {
     it('should fetch the current version and update the exam', async () => {
-      // Mock the API.graphql responses
-      (API.graphql as jest.Mock).mockImplementation((params) => {
+      // Mock the client.graphql responses
+      (client.graphql as jest.Mock).mockImplementation((params) => {
         if (params.query.includes('GetExam')) {
           return Promise.resolve({
             data: {
@@ -204,11 +208,11 @@ describe('Admin Service', () => {
       const result = await updateExistingExam(examData);
 
       // Verify API was called with correct parameters
-      expect(API.graphql).toHaveBeenCalledTimes(2);
+      expect(client.graphql).toHaveBeenCalledTimes(2);
       
       // Check the second call (update call)
-      const updateCall = (API.graphql as jest.Mock).mock.calls[1][0];
-      expect(updateCall.variables.input).toEqual({
+      const updateCall = (client.graphql as jest.Mock).mock.calls[1];
+      expect(updateCall[0].variables.input).toEqual({
         id: 'test-exam-id',
         name: 'Updated Exam',
         description: 'Updated Description',
@@ -231,8 +235,8 @@ describe('Admin Service', () => {
 
   describe('deleteExistingExam', () => {
     it('should delete associated questions before deleting the exam', async () => {
-      // Mock the API.graphql responses
-      (API.graphql as jest.Mock).mockImplementation((params) => {
+      // Mock the client.graphql responses
+      (client.graphql as jest.Mock).mockImplementation((params) => {
         if (params.query.includes('GetExam')) {
           return Promise.resolve({
             data: {
@@ -272,11 +276,11 @@ describe('Admin Service', () => {
 
       // Verify API was called the correct number of times
       // 1 for getExam + 1 for questionsByExamID + 2 for deleteQuestion + 1 for deleteExam
-      expect(API.graphql).toHaveBeenCalledTimes(5);
+      expect(client.graphql).toHaveBeenCalledTimes(5);
 
       // Check the final call (delete exam)
-      const deleteCall = (API.graphql as jest.Mock).mock.calls[4][0];
-      expect(deleteCall.variables.input).toEqual({
+      const deleteCall = (client.graphql as jest.Mock).mock.calls[4];
+      expect(deleteCall[0].variables.input).toEqual({
         id: 'test-exam-id',
         _version: 1
       });

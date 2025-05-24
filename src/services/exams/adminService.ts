@@ -91,10 +91,50 @@ export const updateExistingCertification = async (certification: any) => {
 
 export const deleteExistingCertification = async (id: string) => {
   try {
+    // First, get the certification and its associated exams
+    const getCertification = await API.graphql(graphqlOperation(
+      queries.getCertification,
+      { id }
+    ));
+    
+    const certification = getCertification.data.getCertification;
+    if (!certification) {
+      throw new Error('Certification not found');
+    }
+    
+    // Delete all questions associated with each exam
+    if (certification.exams && certification.exams.items) {
+      for (const exam of certification.exams.items) {
+        // Get all questions for this exam
+        const questionsResponse = await API.graphql(graphqlOperation(
+          queries.listQuestions,
+          { filter: { examID: { eq: exam.id } } }
+        ));
+        
+        const questions = questionsResponse.data.listQuestions.items;
+        
+        // Delete each question
+        for (const question of questions) {
+          await API.graphql(graphqlOperation(
+            mutations.deleteQuestion,
+            { input: { id: question.id } }
+          ));
+        }
+        
+        // Delete the exam
+        await API.graphql(graphqlOperation(
+          mutations.deleteExam,
+          { input: { id: exam.id } }
+        ));
+      }
+    }
+    
+    // Finally, delete the certification
     const response = await API.graphql(graphqlOperation(
       mutations.deleteCertification,
       { input: { id } }
     ));
+    
     return response.data.deleteCertification;
   } catch (error) {
     console.error('Error deleting certification:', error);
@@ -141,10 +181,28 @@ export const updateExistingExam = async (exam: any) => {
 
 export const deleteExistingExam = async (id: string) => {
   try {
+    // Get all questions for this exam
+    const questionsResponse = await API.graphql(graphqlOperation(
+      queries.listQuestions,
+      { filter: { examID: { eq: id } } }
+    ));
+    
+    const questions = questionsResponse.data.listQuestions.items;
+    
+    // Delete each question
+    for (const question of questions) {
+      await API.graphql(graphqlOperation(
+        mutations.deleteQuestion,
+        { input: { id: question.id } }
+      ));
+    }
+    
+    // Finally, delete the exam
     const response = await API.graphql(graphqlOperation(
       mutations.deleteExam,
       { input: { id } }
     ));
+    
     return response.data.deleteExam;
   } catch (error) {
     console.error('Error deleting exam:', error);
