@@ -6,7 +6,14 @@ import * as mutations from '../../graphql/mutations';
 export const getCurrentUser = async () => {
   try {
     const user = await Auth.currentAuthenticatedUser();
-    return user;
+    
+    // Get user data from the database
+    const response = await API.graphql(graphqlOperation(
+      queries.getUser,
+      { id: user.username }
+    ));
+    
+    return response.data.getUser;
   } catch (error) {
     console.error('Error getting current user:', error);
     return null;

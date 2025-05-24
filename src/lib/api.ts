@@ -1,27 +1,53 @@
-import { generateClient } from 'aws-amplify/api';
-import { Schema } from '../../amplify/data/resource';
+import { API, graphqlOperation } from 'aws-amplify';
+import * as queries from '../graphql/queries';
+import * as mutations from '../graphql/mutations';
 
-// Create a client to interact with the AppSync GraphQL API
-export const client = generateClient<Schema>();
-
-// Function to call the Lambda function for generating questions
-export async function generateExamQuestions(topic: string, count: number = 5, difficulty: string = 'medium') {
+// Generic function to fetch data using GraphQL queries
+export async function fetchData(query: any, variables?: any) {
   try {
-    // In development, use the local sandbox endpoint
-    const apiName = 'generateQuestions';
-    const path = '/generate';
-    const options = {
-      body: {
-        topic,
-        count,
-        difficulty
-      }
-    };
-    
-    const response = await client.functions.post(apiName, path, options);
-    return response.questions;
+    const response = await API.graphql(graphqlOperation(query, variables));
+    return response.data;
   } catch (error) {
-    console.error('Error generating questions:', error);
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+
+// Generic function to create data using GraphQL mutations
+export async function createData(mutation: any, input: any) {
+  try {
+    const response = await API.graphql(
+      graphqlOperation(mutation, { input })
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error creating data:', error);
+    throw error;
+  }
+}
+
+// Generic function to update data using GraphQL mutations
+export async function updateData(mutation: any, input: any) {
+  try {
+    const response = await API.graphql(
+      graphqlOperation(mutation, { input })
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error updating data:', error);
+    throw error;
+  }
+}
+
+// Generic function to delete data using GraphQL mutations
+export async function deleteData(mutation: any, id: string) {
+  try {
+    const response = await API.graphql(
+      graphqlOperation(mutation, { input: { id } })
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting data:', error);
     throw error;
   }
 }

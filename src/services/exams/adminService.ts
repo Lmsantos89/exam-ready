@@ -1,6 +1,6 @@
 import { API, graphqlOperation } from 'aws-amplify';
-import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
+import * as mutations from '../../graphql/mutations';
 
 // Provider functions
 export const getProviders = async () => {

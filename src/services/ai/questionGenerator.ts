@@ -17,6 +17,10 @@ export interface GeneratedQuestion {
   options: QuestionOption[];
   correctAnswer: string;
   explanation: string;
+  difficulty: string;
+  examID: string;
+  isAIGenerated: boolean;
+  topic: string;
 }
 
 export const generateQuestion = async (params: QuestionGenerationParams): Promise<GeneratedQuestion> => {

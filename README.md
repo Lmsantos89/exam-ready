@@ -2,53 +2,75 @@
 
 A platform for exam preparation and certification training.
 
-## Local Development with DynamoDB Local
+## Environments
 
-This project can use a local DynamoDB instance to replicate the production database for development.
+This application supports multiple environments:
 
-### Setup Instructions
+- **Staging**: For testing and QA
+- **Production**: For live deployment
+
+## Deployment
+
+### Prerequisites
+
+1. Install the AWS Amplify CLI:
+   ```bash
+   npm install -g @aws-amplify/cli
+   ```
+
+2. Configure AWS credentials:
+   ```bash
+   amplify configure
+   ```
+
+### Deploying to Staging
+
+```bash
+npx ampx deploy --environment staging
+```
+
+### Deploying to Production
+
+```bash
+npx ampx deploy --environment production
+```
+
+## Local Development
 
 1. Install dependencies:
    ```bash
    npm install
    ```
 
-2. Start the local development environment with DynamoDB:
+2. Start the development server:
    ```bash
-   npm run dev:local-db
+   npm run dev
    ```
-
-   This will:
-   - Start a local DynamoDB instance on port 8000
-   - Create tables matching the production schema
-   - Import sample data from the sample-data directory
-   - Start the Next.js development server with local DB configuration
 
 3. Access the application at http://localhost:3000
 
-### Importing Production Data
+## Backend Resources
 
-To import real production data:
+The application uses the following AWS resources:
 
-1. Export data from your production DynamoDB tables:
-   ```bash
-   aws dynamodb scan --table-name Exam > sample-data/exams.json
-   aws dynamodb scan --table-name Question > sample-data/questions.json
-   # Export other tables as needed
-   ```
+- **Authentication**: Amazon Cognito User Pool
+- **Database**: Amazon DynamoDB with AppSync GraphQL API
+- **AI Question Generation**: AWS Lambda function with Amazon Bedrock (Claude 3)
 
-2. Format the exported data if necessary (remove AWS-specific attributes)
+## Data Schema
 
-3. Run the setup script:
-   ```bash
-   npm run dynamodb:setup
-   ```
+The application uses the following data models:
 
-### Available Scripts
+- **Provider**: Certification providers (e.g., AWS, Microsoft)
+- **Certification**: Certification programs offered by providers
+- **Exam**: Practice exams for certifications
+- **Question**: Questions within exams
+- **User**: Application users
+- **ExamAttempt**: User attempts at exams
+
+## Available Scripts
 
 - `npm run dev` - Start Next.js development server
-- `npm run dev:local-db` - Start development with local DynamoDB
-- `npm run dynamodb:start` - Start just the DynamoDB Local instance
-- `npm run dynamodb:setup` - Create tables and import data
 - `npm run build` - Build the application
 - `npm run start` - Start the production server
+- `npm run lint` - Run linting checks

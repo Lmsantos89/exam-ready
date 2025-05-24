@@ -1,16 +1,14 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import AuthWrapper from '../components/AuthWrapper';
-import '../lib/amplifyConfig'; // Import the Amplify configuration
+import { useEffect } from 'react';
+import '../lib/amplifyConfig'; // Import Amplify configuration
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return (
-    <div className="flex flex-col min-h-screen">
-      <AuthWrapper>
-        <Component {...pageProps} />
-      </AuthWrapper>
-    </div>
-  );
+  useEffect(() => {
+    // Any app initialization can go here
+  }, []);
+
+  return <Component {...pageProps} />;
 }
 
 export default MyApp;

@@ -1,3 +1,7 @@
 {
-  "type": "module"
+  "name": "examready-backend",
+  "version": "1.0.0",
+  "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.523.0"
+  }
 }

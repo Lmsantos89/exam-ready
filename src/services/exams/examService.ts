@@ -106,9 +106,9 @@ export const getQuestionsByExamId = async (examID: string) => {
       queries.listQuestions,
       { filter: { examID: { eq: examID } } }
     ));
-    return response.data.listQuestions.items;
+    return response.data.listQuestions.items || [];
   } catch (error) {
-    console.error('Error fetching questions by exam:', error);
+    console.error(`Error fetching questions for exam ${examID}:`, error);
     throw error;
   }
 };
